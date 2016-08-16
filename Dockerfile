@@ -3,7 +3,8 @@ MAINTAINER Florian Geigl <florian.geigl@gmail.com>
 
 # install graph-tool
 # RUN pip install pycairo
-RUN add-apt-repository ppa:boost-latest/ppa && \
+RUN apt-get install python-software-properties &&\
+    add-apt-repository ppa:boost-latest/ppa && \
     apt-get update && \
     apt-get install -y libboost-all-dev expat libcgal-dev libsparsehash-dev
 RUN cd /usr/local/src && git clone https://git.skewed.de/count0/graph-tool.git && \
