@@ -3,7 +3,7 @@ MAINTAINER Florian Geigl <florian.geigl@gmail.com>
 
 # install graph-tool
 # RUN pip install pycairo
-RUN apt-get install software-properties-common && \
+RUN apt-get install software-properties-common -y && \
     add-apt-repository ppa:boost-latest/ppa && \
     apt-get update && \
     apt-get install -y libboost-all-dev expat libcgal-dev libsparsehash-dev
