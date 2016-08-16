@@ -2,7 +2,7 @@ FROM kaggle/python:latest
 MAINTAINER Florian Geigl <florian.geigl@gmail.com>
 
 # install graph-tool
-RUN pip install cairomm pycairo
+RUN pip install pycairo
 RUN apt-get install -y libboost-all-dev expat libcgal-dev sparsehash
 RUN cd /usr/local/src && git clone https://git.skewed.de/count0/graph-tool.git && \
     git fetch --tags && \
