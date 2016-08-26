@@ -21,3 +21,4 @@ RUN cd /usr/local/src && \
     make install && \
     cd ../ && \
     rm -r graph-tool
+RUN pip install tabulate ftfy pyflux
