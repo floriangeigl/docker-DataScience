@@ -1,27 +1,18 @@
 FROM kaggle/python:latest
 MAINTAINER Florian Geigl <florian.geigl@gmail.com>
 
-# install graph-tool
-RUN echo "deb http://ftp.debian.org/debian/ stretch main" >> /etc/apt/sources.list && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends libtool automake build-essential \
-        libboost-all-dev expat libcgal-dev libsparsehash-dev && \
-    apt autoremove -y && apt clean
+# Install graph-tool
+RUN apt-key adv --keyserver pgp.skewed.de --recv-key 98507F25 && \
+    touch /etc/apt/sources.list.d/graph-tool.list && \
+    echo 'deb http://downloads.skewed.de/apt/xenial xenial universe' >> /etc/apt/sources.list.d/graph-tool.list && \
+    echo 'deb-src http://downloads.skewed.de/apt/xenial xenial universe' >> /etc/apt/sources.list.d/graph-tool.list && \
+    apt-get update && apt-get install -y --no-install-recommends python-graph-tool && \
+    ln -s /usr/lib/python2.7/dist-packages/graph_tool /opt/conda/lib/python2.7/site-packages/graph_tool && \
+    apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
+
+# Install conda libs
 RUN conda install pycairo cairomm libiconv jupyterlab -c conda-forge -c floriangeigl -y && \
     conda clean -i -l -t -y
-RUN cd /usr/local/src && \
-    git clone https://github.com/count0/graph-tool.git && \
-    cd graph-tool && \
-    git fetch --tags && \
-    latestTag=$(git describe --tags `git rev-list --tags --max-count=1`) && \
-    git checkout $latestTag && \
-    ./autogen.sh && \
-    ./configure --prefix=/opt/conda/include/ CPPFLAGS=-I$(find /opt/conda/pkgs -regextype posix-extended \
-        -regex ".*py[0-9]?cairo.*/include" -type d | head -1) --enable-silent-rules --enable-openmp \
-        PKG_CONFIG_PATH=/opt/conda/lib/pkgconfig/ && \
-    echo "Use $(nproc) cpus to build graph-tool" && \
-    make -j $(nproc) && \
-    make install && \
-    cd ../ && \
-    rm -r graph-tool
+
+# Install pip libs
 RUN pip install tabulate ftfy pyflux cookiecutter segtok gensim
