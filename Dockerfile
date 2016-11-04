@@ -13,7 +13,8 @@ RUN apt-get update && \
 
 # Install other apt stuff
 RUN apt-get update && \
-    apt-get install bash-completion vim screen htop less git mercurial subversion \ # add more packages here
+    apt-get install bash-completion vim screen htop less git mercurial subversion \ 
+    # add more packages here \
     -y --no-install-recommends && \ 
     apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
