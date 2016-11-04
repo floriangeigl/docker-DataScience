@@ -19,9 +19,9 @@ RUN apt-get update && \
     apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
 # Install conda libs
-RUN conda update -y conda conda-build pip && \
-    conda install pycairo cairomm libiconv jupyterlab -c conda-forge -c floriangeigl -y && \
+RUN conda install pycairo cairomm libiconv jupyterlab -c conda-forge -c floriangeigl -y && \
     conda clean -i -l -t -y
+# conda update -y conda conda-build pip && \
 
 # Install pip libs
 RUN pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply
