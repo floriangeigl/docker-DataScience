@@ -8,7 +8,7 @@ RUN apt-get update && \
     echo 'deb http://downloads.skewed.de/apt/jessie jessie main' >> /etc/apt/sources.list.d/graph-tool.list && \
     echo 'deb-src http://downloads.skewed.de/apt/jessie jessie main' >> /etc/apt/sources.list.d/graph-tool.list && \
     apt-get update && apt-get install -y --no-install-recommends python3-graph-tool && \
-    ln -s /usr/lib/python3/dist-packages/graph_tool /opt/conda/lib/python3/site-packages/graph_tool && \
+    ln -s /usr/lib/python3/dist-packages/graph_tool /opt/conda/lib/python3.5/site-packages/graph_tool && \
     apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
 # Install other apt stuff
