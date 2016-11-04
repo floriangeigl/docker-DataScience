@@ -23,5 +23,5 @@ RUN conda install pycairo cairomm libiconv jupyterlab -c conda-forge -c floriang
     conda clean -i -l -t -y
 
 # Install pip libs
-RUN pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob
+RUN pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply
 # python -m textblob.download_corpora
