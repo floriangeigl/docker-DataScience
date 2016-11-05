@@ -13,19 +13,24 @@ RUN apt-get update && \
 
 # Install python2.7 for conda
 RUN conda create -n py27 python=2.7 anaconda -y && \
+    source activate py27 && \
+    # add python2.7 packages here \
+    conda install seaborn -y && \
+    source deactivate py27 && \
     conda clean -i -l -t -y
     
 # Install R for conda
 RUN conda create -n r-env -c r r-essentials -y && \
     source activate r-env && \
-    conda install DiagrammeR mefa gridSVG rgeos rgdal rARPACK Amelia prevR -y && \
+    # add R packages here \
+    conda install DiagrammeR mefa gridSVG rgeos rgdal rARPACK Amelia prevR -y && \ 
     source deactivate r-env && \
     conda clean -i -l -t -y
 
 # Install other apt stuff
 RUN apt-get update && \
-    apt-get install bash-completion vim screen htop less git mercurial subversion \ 
     # add more packages here \
+    apt-get install bash-completion vim screen htop less git mercurial subversion \ 
     -y --no-install-recommends && \ 
     apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
@@ -35,5 +40,6 @@ RUN conda install pycairo cairomm libiconv jupyterlab -c conda-forge -c floriang
 # conda update -y conda conda-build pip && \
 
 # Install pip libs
-RUN pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply
+# add python3 packages here
+RUN pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply 
 # python -m textblob.download_corpora
