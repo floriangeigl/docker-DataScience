@@ -11,6 +11,17 @@ RUN apt-get update && \
     ln -s /usr/lib/python3/dist-packages/graph_tool /opt/conda/lib/python3.5/site-packages/graph_tool && \
     apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
+# Install python2.7 for conda
+RUN conda create -n py27 python=2.7 anaconda -y && \
+    conda clean -i -l -t -y
+    
+# Install R for conda
+RUN conda create -n r-env -c r r-essentials -y && \
+    source activate r-env && \
+    conda install DiagrammeR mefa gridSVG rgeos rgdal rARPACK Amelia prevR -y && \
+    source deactivate r-env && \
+    conda clean -i -l -t -y
+
 # Install other apt stuff
 RUN apt-get update && \
     apt-get install bash-completion vim screen htop less git mercurial subversion \ 
