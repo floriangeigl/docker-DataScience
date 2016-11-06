@@ -18,7 +18,8 @@ RUN conda create -n py27 python=2.7 anaconda seaborn -y && \
     
 # Install R for conda
 # add R packages here
-RUN conda create -n r-env -c r r-essentials r-DiagrammeR r-mefa r-gridSVG r-rgeos r-rgdal r-rARPACK r-Amelia r-prevR -y && \
+RUN conda create -n r-env -c r r-essentials \
+    -c omgarcia r-diagrammer r-rgeos r-rgdal -y && \
     conda clean -i -l -t -y
 
 # Install other apt stuff
