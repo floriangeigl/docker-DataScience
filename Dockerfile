@@ -12,19 +12,13 @@ RUN apt-get update && \
     apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
 # Install python2.7 for conda
-RUN conda create -n py27 python=2.7 anaconda -y && \
-    source activate py27 && \
-    # add python2.7 packages here \
-    conda install seaborn -y && \
-    source deactivate py27 && \
+# add python2.7 packages here
+RUN conda create -n py27 python=2.7 anaconda seaborn -y && \
     conda clean -i -l -t -y
     
 # Install R for conda
-RUN conda create -n r-env -c r r-essentials -y && \
-    source activate r-env && \
-    # add R packages here \
-    conda install DiagrammeR mefa gridSVG rgeos rgdal rARPACK Amelia prevR -y && \ 
-    source deactivate r-env && \
+# add R packages here
+RUN conda create -n r-env -c r r-essentials r-DiagrammeR r-mefa r-gridSVG r-rgeos r-rgdal r-rARPACK r-Amelia r-prevR -y && \
     conda clean -i -l -t -y
 
 # Install other apt stuff
