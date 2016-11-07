@@ -38,3 +38,15 @@ RUN conda install pycairo cairomm libiconv jupyterlab -c conda-forge -c floriang
 # add python3 packages here
 RUN pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply 
 # python -m textblob.download_corpora
+
+# Expose Jupyter port.
+EXPOSE 8888
+
+# Start Jupyter at container start
+CMD ["startup.sh"]
+
+# Copy Jupyter start script into the container.
+COPY start-notebook.sh /usr/local/bin/
+
+# Copy startup script into the container.
+COPY startup.sh /usr/local/bin/
