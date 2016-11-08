@@ -50,3 +50,6 @@ COPY start-notebook.sh /usr/local/bin/
 
 # Copy startup script into the container.
 COPY startup.sh /usr/local/bin/
+
+# Fix permissions
+RUN chmod +x /usr/local/bin/start-notebook.sh && chmod +x /usr/local/bin/startup.sh
