@@ -14,6 +14,7 @@ RUN apt-get update && \
 # Install python2.7 for conda
 # add python2.7 packages here
 RUN conda create -n py27 python=2.7 anaconda seaborn -y && \
+    pip install influxdb && \
     conda clean -i -l -t -y
     
 # Install R for conda
@@ -36,7 +37,7 @@ RUN conda install pycairo cairomm libiconv jupyterlab -c conda-forge -c floriang
 
 # Install pip libs
 # add python3 packages here
-RUN pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply 
+RUN pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb
 # python -m textblob.download_corpora
 
 # Expose Jupyter port.
