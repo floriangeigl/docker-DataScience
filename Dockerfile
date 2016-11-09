@@ -20,7 +20,7 @@ RUN conda create -n py27 python=2.7 anaconda seaborn -y && \
 # Install R for conda
 # add R packages here
 # -c omgarcia r-diagrammer r-rgeos r-rgdal -y && \
-RUN conda create -n r-env -c r r-essentials r-irkernel && \
+RUN conda install -c r r-essentials r-irkernel -y && \
     conda clean -i -l -t -y
 
 # Install other apt stuff
@@ -30,7 +30,7 @@ RUN apt-get update && \
     -y --no-install-recommends && \ 
     apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
-# Install conda libs
+# Install conda python3 libs
 RUN conda install pycairo cairomm libiconv jupyterlab -c conda-forge -c floriangeigl -y && \
     conda clean -i -l -t -y
 # conda update -y conda conda-build pip && \
