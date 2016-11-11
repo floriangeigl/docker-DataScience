@@ -40,6 +40,11 @@ RUN conda install pycairo cairomm libiconv jupyterlab -c conda-forge -c floriang
 RUN pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb
 # python -m textblob.download_corpora
 
+#install julia
+RUN apt-get update && apt-get install julia libzmq3-dev -y --no-install-recommends && \
+    echo 'Pkg.add("IJulia")' | julia && \
+    apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
+    
 # Expose Jupyter port.
 EXPOSE 8888
 
