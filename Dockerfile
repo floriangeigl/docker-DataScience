@@ -26,7 +26,7 @@ RUN conda create -n py27 python=2.7 anaconda seaborn flake8 -y && \
     
 # Install R 
 RUN apt-get update && \
-    apt-get install r-base r-cran-rodbc -y \
+    apt-get install r-base r-cran-rodbc -y && \
     apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
     
 # Install RStudio-Server
