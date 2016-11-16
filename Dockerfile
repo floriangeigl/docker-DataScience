@@ -13,7 +13,7 @@ RUN apt-get update && \
 
 # Install python2.7 for conda
 # add python2.7 packages here
-RUN conda create -n py27 python=2.7 anaconda seaborn -y && \
+RUN conda create -n py27 python=2.7 anaconda seaborn flake8 -y && \
     pip install influxdb && \
     conda clean -i -l -t -y
     
