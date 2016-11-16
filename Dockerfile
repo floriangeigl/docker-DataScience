@@ -81,6 +81,7 @@ RUN apt-get update && apt-get install julia libzmq3-dev -y --no-install-recommen
     
 # Expose Jupyter port.
 EXPOSE 8888
+EXPOSE 8787
 
 # Start Jupyter at container start
 CMD ["startup.sh"]
