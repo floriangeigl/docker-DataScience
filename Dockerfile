@@ -9,14 +9,14 @@ RUN apt-get update && \
     echo 'deb-src http://downloads.skewed.de/apt/jessie jessie main' >> /etc/apt/sources.list.d/graph-tool.list && \
     apt-get update && apt-get install -y --no-install-recommends python3-graph-tool && \
     ln -s /usr/lib/python3/dist-packages/graph_tool /opt/conda/lib/python3.5/site-packages/graph_tool && \
-    apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
+    apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
     
 # Install other apt stuff
 RUN apt-get update && \
     # add more packages here \
     apt-get install bash-completion vim screen htop less git mercurial subversion \ 
     -y --no-install-recommends && \ 
-    apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
+    apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 
 # Install python2.7 for conda
 # add python2.7 packages here
@@ -27,7 +27,7 @@ RUN conda create -n py27 python=2.7 anaconda seaborn flake8 -y && \
 # Install R 
 RUN apt-get update && \
     apt-get install r-base r-cran-rodbc -y \
-    apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
+    apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
     
 # Install RStudio-Server
 RUN apt-get update && \
@@ -77,7 +77,7 @@ RUN pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-
 #install julia
 RUN apt-get update && apt-get install julia libzmq3-dev -y --no-install-recommends && \
     echo 'Pkg.add("IJulia")' | julia && \
-    apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
+    apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
     
 # Expose Jupyter port.
 EXPOSE 8888
