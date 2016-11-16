@@ -1,2 +1,4 @@
 #!/bin/bash
-/usr/lib/rstudio-server/bin/rserver --server-daemonize 0
+mkdir -p /tmp/notebooks_tmp/
+cd /tmp/notebooks_tmp/
+exec screen -dmS rserver /usr/lib/rstudio-server/bin/rserver --server-daemonize 0
