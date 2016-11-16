@@ -57,12 +57,8 @@ RUN apt-get update && \
     && rm -rf /var/lib/apt/lists/
     
 # create r-user and default-credentials
-RUN usermod -l rstudio docker \
-  && usermod -m -d /home/rstudio rstudio \
-  && groupmod -n rstudio docker \
-  && echo '"\e[5~": history-search-backward' >> /etc/inputrc \
-  && echo '"\e[6~": history-search-backward' >> /etc/inputrc \
-  && echo "rstudio:rstudio" | chpasswd
+RUN useradd -m rstudio && \
+    echo "rstudio:rstudio" | chpasswd
 
 # Install conda python3 libs
 RUN conda install pycairo cairomm libiconv jupyterlab flake8 -c conda-forge -c floriangeigl -y && \
