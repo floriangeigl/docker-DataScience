@@ -10,6 +10,13 @@ RUN apt-get update && \
     apt-get update && apt-get install -y --no-install-recommends python3-graph-tool && \
     ln -s /usr/lib/python3/dist-packages/graph_tool /opt/conda/lib/python3.5/site-packages/graph_tool && \
     apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
+    
+# Install other apt stuff
+RUN apt-get update && \
+    # add more packages here \
+    apt-get install bash-completion vim screen htop less git mercurial subversion \ 
+    -y --no-install-recommends && \ 
+    apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
 # Install python2.7 for conda
 # add python2.7 packages here
@@ -17,18 +24,45 @@ RUN conda create -n py27 python=2.7 anaconda seaborn flake8 -y && \
     pip install influxdb && \
     conda clean -i -l -t -y
     
-# Install R for conda
-# add R packages here
-# -c omgarcia r-diagrammer r-rgeos r-rgdal -y && \
-RUN conda install -c r r-essentials r-irkernel -y && \
-    conda clean -i -l -t -y
-
-# Install other apt stuff
+# Install R 
 RUN apt-get update && \
-    # add more packages here \
-    apt-get install bash-completion vim screen htop less git mercurial subversion \ 
-    -y --no-install-recommends && \ 
+    apt-get install r-base r-cran-rodbc -y \
     apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
+    
+# Install RStudio-Server
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    ca-certificates \
+    file \
+    git \
+    libapparmor1 \
+    libedit2 \
+    libcurl4-openssl-dev \
+    libssl-dev \
+    lsb-release \
+    psmisc \
+    python-setuptools \
+    sudo \
+    && VER=$(wget --no-check-certificate -qO- https://s3.amazonaws.com/rstudio-server/current.ver) \
+    && wget -q http://download2.rstudio.org/rstudio-server-${VER}-amd64.deb \
+    && dpkg -i rstudio-server-${VER}-amd64.deb \
+    && rm rstudio-server-*-amd64.deb \
+    && ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc /usr/local/bin \
+    && ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc-citeproc /usr/local/bin \
+    && wget https://github.com/jgm/pandoc-templates/archive/1.15.0.6.tar.gz \
+    && mkdir -p /opt/pandoc/templates && tar zxf 1.15.0.6.tar.gz \
+    && cp -r pandoc-templates*/* /opt/pandoc/templates && rm -rf pandoc-templates* \
+    && mkdir /root/.pandoc && ln -s /opt/pandoc/templates /root/.pandoc/templates \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/
+    
+# create r-user and default-credentials
+RUN usermod -l rstudio docker \
+  && usermod -m -d /home/rstudio rstudio \
+  && groupmod -n rstudio docker \
+  && echo '"\e[5~": history-search-backward' >> /etc/inputrc \
+  && echo '"\e[6~": history-search-backward' >> /etc/inputrc \
+  && echo "rstudio:rstudio" | chpasswd
 
 # Install conda python3 libs
 RUN conda install pycairo cairomm libiconv jupyterlab flake8 -c conda-forge -c floriangeigl -y && \
