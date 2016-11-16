@@ -31,7 +31,7 @@ RUN apt-get update && \
     apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
 # Install conda python3 libs
-RUN conda install pycairo cairomm libiconv jupyterlab -c conda-forge -c floriangeigl -y && \
+RUN conda install pycairo cairomm libiconv jupyterlab flake8 -c conda-forge -c floriangeigl -y && \
     conda clean -i -l -t -y
 # conda update -y conda conda-build pip && \
 
