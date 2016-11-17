@@ -31,22 +31,24 @@ RUN conda create -n py27 python=2.7 anaconda seaborn flake8 -y && \
     conda clean -i -l -t -y
     
 # Install R & packages (use apt-get r-cran-* packages or add your packages to package_install.r)
-COPY package_install.r /tmp/ 
+COPY package_install.r /tmp/
+COPY r_default_mirror.txt /tmp/
 RUN apt-key update && \
     apt-get update && \
-    gpg --keyserver keyserver.ubuntu.com --recv-key E084DAB9 && \
-    gpg -a --export E084DAB9 | apt-key add - && \
-    echo "deb http://cran.rstudio.com/bin/linux/ubuntu xenial/" >> /etc/apt/sources.list.d/r-cran.list && \
+    apt-key adv --keyserver keys.gnupg.net --recv-key 6212B7B7931C4BB16280BA1306F90DE5381BA480 && \
+    echo "deb http://cloud.r-project.org/bin/linux/debian jessie-cran3/" >> /etc/apt/sources.list.d/r-cran.list && \
     apt-key update && \
     apt-get update && \
-    apt-get install r-base r-cran-rodbc r-cran-ggplot2 r-cran-gtools r-cran-xml r-cran-getopt r-cran-plyr \
-    r-cran-rcurl -y --no-install-recommends --allow-unauthenticated && \
-    Rscript /tmp/package_install.r && \
+    apt-get install r-base r-recommended r-cran-rodbc r-cran-ggplot2 r-cran-gtools r-cran-xml r-cran-getopt r-cran-plyr \
+	r-cran-rcurl -y --allow-unauthenticated --no-install-recommends && \
+	cat /tmp/r_default_mirror.txt >> /etc/R/Rprofile.site && \
+	Rscript /tmp/package_install.r && \
     apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
-    
-    
-# Install RStudio-Server
+      
+# Install RStudio-Server & create r-user and default-credentials
 RUN apt-key update && apt-get update && \
+	useradd -m rstudio && \
+    echo "rstudio:rstudio" | chpasswd && \
     apt-get install -y --no-install-recommends \
     ca-certificates \
     file \
@@ -58,24 +60,20 @@ RUN apt-key update && apt-get update && \
     lsb-release \
     psmisc \
     python-setuptools \
-    sudo \
-    && VER=$(wget --no-check-certificate -qO- https://s3.amazonaws.com/rstudio-server/current.ver) \
-    && wget -q http://download2.rstudio.org/rstudio-server-${VER}-amd64.deb \
-    && dpkg -i rstudio-server-${VER}-amd64.deb \
-    && rm rstudio-server-*-amd64.deb \
-    && ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc /usr/local/bin \
-    && ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc-citeproc /usr/local/bin \
-    && wget https://github.com/jgm/pandoc-templates/archive/1.15.0.6.tar.gz \
-    && mkdir -p /opt/pandoc/templates && tar zxf 1.15.0.6.tar.gz \
-    && cp -r pandoc-templates*/* /opt/pandoc/templates && rm -rf pandoc-templates* \
-    && mkdir /root/.pandoc && ln -s /opt/pandoc/templates /root/.pandoc/templates \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/
+    sudo && \
+    VER=$(wget --no-check-certificate -qO- https://s3.amazonaws.com/rstudio-server/current.ver) && \
+    wget -q http://download2.rstudio.org/rstudio-server-${VER}-amd64.deb && \
+    dpkg -i rstudio-server-${VER}-amd64.deb && \
+    rm rstudio-server-*-amd64.deb && \
+    ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc /usr/local/bin && \
+    ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc-citeproc /usr/local/bin && \
+    wget https://github.com/jgm/pandoc-templates/archive/1.15.0.6.tar.gz && \
+    mkdir -p /opt/pandoc/templates && tar zxf 1.15.0.6.tar.gz && \
+    cp -r pandoc-templates*/* /opt/pandoc/templates && rm -rf pandoc-templates* && \
+    mkdir /root/.pandoc && ln -s /opt/pandoc/templates /root/.pandoc/templates && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/
     
-# create r-user and default-credentials
-RUN useradd -m rstudio && \
-    echo "rstudio:rstudio" | chpasswd
-
 # Install conda python3 libs
 RUN conda install pycairo cairomm libiconv jupyterlab flake8 -c conda-forge -c floriangeigl -y && \
     jupyter serverextension enable --py jupyterlab --sys-prefix && \
