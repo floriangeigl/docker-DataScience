@@ -31,8 +31,10 @@ RUN conda create -n py27 python=2.7 anaconda seaborn flake8 -y && \
     conda clean -i -l -t -y
     
 # Install R 
-RUN gpg --keyserver keyserver.ubuntu.com --recv-key E084DAB9 && \
-    gpg -a --export E084DAB9 | sudo apt-key add - && \
+RUN apt-key update && \
+    apt-get update && \
+    gpg --keyserver keyserver.ubuntu.com --recv-key E084DAB9 && \
+    gpg -a --export E084DAB9 | apt-key add - && \
     echo "deb http://cran.rstudio.com/bin/linux/ubuntu xenial/" >> /etc/apt/sources.list.d/r-cran.list && \
     apt-key update && \
     apt-get update && \
