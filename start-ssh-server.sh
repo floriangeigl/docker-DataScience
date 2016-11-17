@@ -1,2 +1,2 @@
 #!/bin/bash
-/usr/sbin/sshd -D
+exec screen -dmS ssh-server /usr/sbin/sshd -D
