@@ -14,10 +14,16 @@ RUN apt-key update && apt-get update && \
 # Install other apt stuff
 RUN apt-key update && apt-get update && \
     # add more packages here \
-    apt-get install bash-completion vim screen htop less git mercurial subversion \ 
+    apt-get install bash-completion vim screen htop less git mercurial subversion openssh-server \ 
     -y --no-install-recommends && \ 
     apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 
+# Setup ssh access
+RUN mkdir /var/run/sshd && \
+    echo 'root:root' | chpasswd && \
+    sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+    sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+    
 # Install python2.7 for conda
 # add python2.7 packages here
 RUN conda create -n py27 python=2.7 anaconda seaborn flake8 -y && \
@@ -78,6 +84,7 @@ RUN apt-get update && apt-get install julia libzmq3-dev -y --no-install-recommen
 # Expose Jupyter port.
 EXPOSE 8888
 EXPOSE 8787
+EXPOSE 22
 
 # Start Jupyter at container start
 CMD ["startup.sh"]
@@ -85,9 +92,13 @@ CMD ["startup.sh"]
 # Copy Jupyter start script into the container.
 COPY start-notebook.sh /usr/local/bin/
 COPY start-r-server.sh /usr/local/bin/
+COPY start-ssh-server.sh /usr/local/bin/
 
 # Copy startup script into the container.
 COPY startup.sh /usr/local/bin/
 
 # Fix permissions
-RUN chmod +x /usr/local/bin/start-notebook.sh && chmod +x /usr/local/bin/startup.sh && chmod +x /usr/local/bin/start-r-server.sh
+RUN chmod +x /usr/local/bin/start-notebook.sh && \
+    chmod +x /usr/local/bin/startup.sh && \
+    chmod +x /usr/local/bin/start-r-server.sh && \
+    chmod +x /usr/local/bin/start-ssh-server.sh
