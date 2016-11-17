@@ -90,12 +90,6 @@ RUN apt-get update && apt-get install julia libzmq3-dev -y --no-install-recommen
     julia /tmp/package_install.jl && \
     apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
     
-# Expose jupyter notebook, jupyter labs, r-studio-server and ss port.
-EXPOSE 8888 8889 8787 22
-
-# Start Jupyter at container start
-CMD ["startup.sh"]
-
 # Copy Jupyter start script into the container.
 COPY start-notebook.sh /usr/local/bin/
 COPY start-r-server.sh /usr/local/bin/
@@ -115,3 +109,9 @@ RUN chmod +x /usr/local/bin/start-notebook.sh && \
     chmod +x /usr/local/bin/start-r-server.sh && \
     chmod +x /usr/local/bin/start-ssh-server.sh && \
     chmod +x /usr/local/bin/export_environment.sh
+    
+# Expose jupyter notebook, jupyter labs, r-studio-server and ss port.
+EXPOSE 8888 8889 8787 22
+
+# Start all scripts
+CMD ["startup.sh"]
