@@ -94,6 +94,10 @@ COPY start-notebook.sh /usr/local/bin/
 COPY start-r-server.sh /usr/local/bin/
 COPY start-ssh-server.sh /usr/local/bin/
 
+# fix bash-completion for apt
+COPY bash_completion_fix.sh /tmp/
+RUN cat /tmp/bash_completion_fix.sh >> /etc/bash.bashrc
+
 # Copy startup script into the container.
 COPY startup.sh /usr/local/bin/
 
