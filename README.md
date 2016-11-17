@@ -6,6 +6,9 @@ Dockerfile containing lots of tools for Data Science (python2/3, Julia, jupyter,
 docker run --rm -i -t -p 8888:8888 -p 8787:8787 -p 2222:22 -v "${pwd}:/tmp/notebooks_tmp/" --name dsdocker floriangeigl/datascience
 ```
 
+# Ports
+After starting the container you should be able to access jupyter (python2/3, julia & R) over http://localhost:8888. Furthermore, you can access an r-studio-server at http://localhost:8787. If you want to ssh into the container simply use port 2222.
+
 # Windows Shortcut
 Open a powershell and open your profile-file using the follwing command.
 ```
