@@ -92,10 +92,8 @@ RUN apt-get update && apt-get install julia libzmq3-dev -y --no-install-recommen
     julia /tmp/package_install.jl && \
     apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
     
-# Expose Jupyter port.
-EXPOSE 8888
-EXPOSE 8787
-EXPOSE 22
+# Expose jupyter notebook, jupyter labs, r-studio-server and ss port.
+EXPOSE 8888 8889 8787 22
 
 # Start Jupyter at container start
 CMD ["startup.sh"]
