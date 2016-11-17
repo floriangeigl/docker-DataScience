@@ -36,7 +36,8 @@ RUN gpg --keyserver keyserver.ubuntu.com --recv-key E084DAB9 && \
     echo "deb http://cran.rstudio.com/bin/linux/ubuntu xenial/" >> /etc/apt/sources.list.d/r-cran.list && \
     apt-key update && \
     apt-get update && \
-    apt-get install r-base -y --no-install-recommends --allow-unauthenticated && \
+    apt-get install r-base r-cran-rodbc r-cran-ggplot2 r-cran-gtools r-cran-xml r-cran-getopt r-cran-plyr \
+    r-cran-rcurl -y --no-install-recommends --allow-unauthenticated && \
     apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
     
 #install additional r packages
