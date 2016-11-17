@@ -78,6 +78,7 @@ RUN useradd -m rstudio && \
 
 # Install conda python3 libs
 RUN conda install pycairo cairomm libiconv jupyterlab flake8 -c conda-forge -c floriangeigl -y && \
+    jupyter serverextension enable --py jupyterlab --sys-prefix && \
     conda clean -i -l -t -y
 
 # Install pip libs
