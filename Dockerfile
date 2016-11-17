@@ -103,6 +103,7 @@ CMD ["startup.sh"]
 COPY start-notebook.sh /usr/local/bin/
 COPY start-r-server.sh /usr/local/bin/
 COPY start-ssh-server.sh /usr/local/bin/
+COPY export_environment.sh /usr/local/bin/
 
 # fix bash-completion for apt
 COPY bash_completion_fix.sh /tmp/
@@ -115,4 +116,5 @@ COPY startup.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/start-notebook.sh && \
     chmod +x /usr/local/bin/startup.sh && \
     chmod +x /usr/local/bin/start-r-server.sh && \
-    chmod +x /usr/local/bin/start-ssh-server.sh
+    chmod +x /usr/local/bin/start-ssh-server.sh && \
+    chmod +x /usr/local/bin/export_environment.sh
