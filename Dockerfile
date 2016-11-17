@@ -2,7 +2,7 @@ FROM kaggle/python:latest
 MAINTAINER Florian Geigl <florian.geigl@gmail.com>
 
 # Install graph-tool
-RUN apt-get update && \
+RUN apt-key update && apt-get update && \
     apt-key adv --keyserver pgp.skewed.de --recv-key 98507F25 && \
     touch /etc/apt/sources.list.d/graph-tool.list && \
     echo 'deb http://downloads.skewed.de/apt/jessie jessie main' >> /etc/apt/sources.list.d/graph-tool.list && \
@@ -12,7 +12,7 @@ RUN apt-get update && \
     apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
     
 # Install other apt stuff
-RUN apt-get update && \
+RUN apt-key update && apt-get update && \
     # add more packages here \
     apt-get install bash-completion vim screen htop less git mercurial subversion \ 
     -y --no-install-recommends && \ 
@@ -25,12 +25,12 @@ RUN conda create -n py27 python=2.7 anaconda seaborn flake8 -y && \
     conda clean -i -l -t -y
     
 # Install R 
-RUN apt-get update && \
+RUN apt-key update && apt-get update && \
     apt-get install r-base r-cran-rodbc -y && \
     apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
     
 # Install RStudio-Server
-RUN apt-get update && \
+RUN apt-key update && apt-get update && \
     apt-get install -y --no-install-recommends \
     ca-certificates \
     file \
