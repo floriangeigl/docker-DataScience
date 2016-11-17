@@ -30,7 +30,8 @@ RUN conda create -n py27 python=2.7 anaconda seaborn flake8 -y && \
     pip install influxdb && \
     conda clean -i -l -t -y
     
-# Install R 
+# Install R & packages (add your packages to package_install.r)
+COPY package_install.r /tmp/ 
 RUN apt-key update && \
     apt-get update && \
     gpg --keyserver keyserver.ubuntu.com --recv-key E084DAB9 && \
@@ -40,11 +41,8 @@ RUN apt-key update && \
     apt-get update && \
     apt-get install r-base r-cran-rodbc r-cran-ggplot2 r-cran-gtools r-cran-xml r-cran-getopt r-cran-plyr \
     r-cran-rcurl -y --no-install-recommends --allow-unauthenticated && \
-    apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
-    
-#install additional r packages
-COPY package_install.r /tmp/
-RUN Rscript /tmp/package_install.r
+    apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/* && \
+    Rscript /tmp/package_install.r
     
 # Install RStudio-Server
 RUN apt-key update && apt-get update && \
@@ -80,16 +78,16 @@ RUN useradd -m rstudio && \
 # Install conda python3 libs
 RUN conda install pycairo cairomm libiconv jupyterlab flake8 -c conda-forge -c floriangeigl -y && \
     conda clean -i -l -t -y
-# conda update -y conda conda-build pip && \
 
 # Install pip libs
 # add python3 packages here
 RUN pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb
 # python -m textblob.download_corpora
 
-#install julia
+#install julia & packages (add your packages to package_install.jl)
+COPY package_install.jl /tmp/
 RUN apt-get update && apt-get install julia libzmq3-dev -y --no-install-recommends && \
-    echo 'Pkg.add("IJulia")' | julia && \
+    julia /tmp/package_install.jl && \
     apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
     
 # Expose Jupyter port.
