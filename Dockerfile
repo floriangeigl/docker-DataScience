@@ -31,6 +31,8 @@ RUN conda create -n py27 python=2.7 anaconda seaborn flake8 -y && \
     conda clean -i -l -t -y
     
 # Install R & packages (use apt-get r-cran-* packages or add your packages to package_install.r)
+# r-cran-rodbc r-cran-ggplot2 r-cran-gtools r-cran-xml r-cran-getopt r-cran-plyr \
+    #r-cran-rcurl
 COPY package_install.r /tmp/ 
 RUN apt-key update && \
     apt-get update && \
@@ -39,8 +41,7 @@ RUN apt-key update && \
     echo "deb http://cran.rstudio.com/bin/linux/ubuntu xenial/" >> /etc/apt/sources.list.d/r-cran.list && \
     apt-key update && \
     apt-get update && \
-    apt-get install r-base r-cran-rodbc r-cran-ggplot2 r-cran-gtools r-cran-xml r-cran-getopt r-cran-plyr \
-    r-cran-rcurl -y --no-install-recommends --allow-unauthenticated && \
+    apt-get install r-base -y --no-install-recommends --allow-unauthenticated && \
     Rscript /tmp/package_install.r && \
     apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
     
