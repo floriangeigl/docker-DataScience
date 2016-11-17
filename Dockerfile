@@ -39,6 +39,10 @@ RUN gpg --keyserver keyserver.ubuntu.com --recv-key E084DAB9 && \
     apt-get install r-base -y --no-install-recommends --allow-unauthenticated && \
     apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
     
+#install additional r packages
+COPY package_install.r /tmp/
+RUN Rscript /tmp/package_install.r
+    
 # Install RStudio-Server
 RUN apt-key update && apt-get update && \
     apt-get install -y --no-install-recommends \
