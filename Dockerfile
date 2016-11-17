@@ -30,7 +30,7 @@ RUN conda create -n py27 python=2.7 anaconda seaborn flake8 -y && \
     pip install influxdb && \
     conda clean -i -l -t -y
     
-# Install R & packages (add your packages to package_install.r)
+# Install R & packages (use apt-get r-cran-* packages or add your packages to package_install.r)
 COPY package_install.r /tmp/ 
 RUN apt-key update && \
     apt-get update && \
@@ -41,8 +41,9 @@ RUN apt-key update && \
     apt-get update && \
     apt-get install r-base r-cran-rodbc r-cran-ggplot2 r-cran-gtools r-cran-xml r-cran-getopt r-cran-plyr \
     r-cran-rcurl -y --no-install-recommends --allow-unauthenticated && \
-    apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/* && \
-    Rscript /tmp/package_install.r
+    Rscript /tmp/package_install.r && \
+    apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
+    
     
 # Install RStudio-Server
 RUN apt-key update && apt-get update && \
