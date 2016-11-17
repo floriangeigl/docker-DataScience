@@ -1,4 +1,4 @@
 #!/bin/bash
-mkdir -p /tmp/notebooks_tmp/
-cd /tmp/notebooks_tmp/
+mkdir -p /data/
+cd /data/
 exec screen -dmS ipython jupyter notebook --ip='*' --port 8888 --no-browser
