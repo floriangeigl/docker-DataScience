@@ -9,14 +9,14 @@ RUN apt-key update && apt-get update && \
     echo 'deb-src http://downloads.skewed.de/apt/jessie jessie main' >> /etc/apt/sources.list.d/graph-tool.list && \
     apt-get update && apt-get install -y --no-install-recommends python3-graph-tool && \
     ln -s /usr/lib/python3/dist-packages/graph_tool /opt/conda/lib/python3.5/site-packages/graph_tool && \
-    apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
+    apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
     
 # Install other apt stuff
 RUN apt-key update && apt-get update && \
     # add more packages here \
     apt-get install bash-completion vim screen htop less git mercurial subversion openssh-server \ 
         -y --no-install-recommends && \ 
-    apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
+    apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
 
 # Setup ssh access
 RUN mkdir /var/run/sshd && \
@@ -43,7 +43,7 @@ RUN apt-key update && \
 	r-cran-rcurl -y --allow-unauthenticated --no-install-recommends && \
     cat /tmp/r_defaults.txt >> /etc/R/Rprofile.site && \
     Rscript /tmp/package_install.r && \
-    apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
+    apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
       
 # Install RStudio-Server & create r-user and default-credentials
 RUN apt-key update && apt-get update && \
@@ -71,8 +71,7 @@ RUN apt-key update && apt-get update && \
     mkdir -p /opt/pandoc/templates && tar zxf 1.15.0.6.tar.gz && \
     cp -r pandoc-templates*/* /opt/pandoc/templates && rm -rf pandoc-templates* && \
     mkdir /root/.pandoc && ln -s /opt/pandoc/templates /root/.pandoc/templates && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/
+    apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
     
 # Install conda python3 libs
 RUN conda install pycairo cairomm libiconv jupyterlab flake8 -c conda-forge -c floriangeigl -y && \
@@ -81,14 +80,14 @@ RUN conda install pycairo cairomm libiconv jupyterlab flake8 -c conda-forge -c f
 
 # Install pip libs
 # add python3 packages here
+# 	python -m textblob.download_corpora
 RUN pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb
-# python -m textblob.download_corpora
 
 #install julia & packages (add your packages to package_install.jl)
 COPY package_install.jl /tmp/
 RUN apt-get update && apt-get install julia libzmq3-dev -y --no-install-recommends && \
     julia /tmp/package_install.jl && \
-    apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
+    apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
     
 # Copy Jupyter start script into the container.
 COPY start-notebook.sh /usr/local/bin/
@@ -99,7 +98,7 @@ COPY export_environment.sh /usr/local/bin/
 
 # fix bash-completion for apt
 COPY bash_completion_fix.sh /tmp/
-RUN cat /tmp/bash_completion_fix.sh >> /etc/bash.bashrc
+RUN cat /tmp/bash_completion_fix.sh >> /etc/bash.bashrc && rm -rf /tmp/*
 
 # Copy startup script into the container.
 COPY startup.sh /usr/local/bin/
