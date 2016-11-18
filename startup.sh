@@ -8,6 +8,7 @@ then
 fi
 
 start-notebook.sh
+start_jupyterlabs.sh
 start-r-server.sh
 start-ssh-server.sh
 /bin/bash
