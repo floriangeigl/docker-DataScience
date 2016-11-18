@@ -39,6 +39,7 @@ RUN apt-key adv --keyserver keys.gnupg.net --recv-key 6212B7B7931C4BB16280BA1306
     apt-key update && apt-get update && \
     apt-get install r-base r-base-dev r-recommended r-cran-rodbc r-cran-ggplot2 r-cran-gtools r-cran-xml r-cran-getopt r-cran-plyr \
 	r-cran-rcurl r-cran-data.table r-cran-knitr r-cran-dplyr -y --allow-unauthenticated && \
+    ldconfig && \
     cat /tmp/r_defaults.txt >> /etc/R/Rprofile.site && \
     Rscript /tmp/package_install.r && \
     apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
