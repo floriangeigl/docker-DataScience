@@ -33,13 +33,10 @@ RUN conda create -n py27 python=2.7 anaconda seaborn flake8 -y && \
 # Install R & packages (use apt-get r-cran-* packages or add your packages to package_install.r)
 COPY package_install.r /tmp/
 COPY r_defaults.txt /tmp/
-RUN echo "deb http://ftp.debian.org/debian jessie-backports main" > /etc/apt/sources.list.d/backports.list && \
-    apt-key update && \
-    apt-get update && \
-    apt-key adv --keyserver keys.gnupg.net --recv-key 6212B7B7931C4BB16280BA1306F90DE5381BA480 && \
+RUN apt-key adv --keyserver keys.gnupg.net --recv-key 6212B7B7931C4BB16280BA1306F90DE5381BA480 && \
     echo "deb http://cloud.r-project.org/bin/linux/debian jessie-cran3/" >> /etc/apt/sources.list.d/r-cran.list && \
-    apt-key update && \
-    apt-get update && \
+    echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list.d/jessie-backports.list && \
+    apt-key update && apt-get update && \
     apt-get install r-base r-recommended r-cran-rodbc r-cran-ggplot2 r-cran-gtools r-cran-xml r-cran-getopt r-cran-plyr \
 	r-cran-rcurl r-cran-data.table r-cran-knitr r-cran-dplyr -y --allow-unauthenticated --no-install-recommends && \
     cat /tmp/r_defaults.txt >> /etc/R/Rprofile.site && \
