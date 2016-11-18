@@ -49,6 +49,8 @@ RUN apt-key update && \
 RUN apt-key update && apt-get update && \
     useradd -m rstudio && \
     echo "rstudio:rstudio" | chpasswd && \
+    echo 'setwd("/data/")' >> /home/rstudio/.Rprofile && chown -R rstudio /home/rstudio/ && chgrp -R rstudio /home/rstudio/ && \
+    echo 'setwd("/data/")' >> /root/.Rprofile && \
     apt-get install -y --no-install-recommends \
         ca-certificates \
         file \
