@@ -15,7 +15,7 @@ RUN apt-key update && apt-get update && \
 RUN apt-key update && apt-get update && \
     # add more packages here \
     apt-get install bash-completion vim screen htop less git mercurial subversion openssh-server \ 
-    -y --no-install-recommends && \ 
+        -y --no-install-recommends && \ 
     apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 
 # Setup ssh access
@@ -32,7 +32,7 @@ RUN conda create -n py27 python=2.7 anaconda seaborn flake8 -y && \
     
 # Install R & packages (use apt-get r-cran-* packages or add your packages to package_install.r)
 COPY package_install.r /tmp/
-COPY r_default_mirror.txt /tmp/
+COPY r_defaults.txt /tmp/
 RUN apt-key update && \
     apt-get update && \
     apt-key adv --keyserver keys.gnupg.net --recv-key 6212B7B7931C4BB16280BA1306F90DE5381BA480 && \
@@ -41,26 +41,26 @@ RUN apt-key update && \
     apt-get update && \
     apt-get install r-base r-recommended r-cran-rodbc r-cran-ggplot2 r-cran-gtools r-cran-xml r-cran-getopt r-cran-plyr \
 	r-cran-rcurl -y --allow-unauthenticated --no-install-recommends && \
-	cat /tmp/r_default_mirror.txt >> /etc/R/Rprofile.site && \
-	Rscript /tmp/package_install.r && \
+    cat /tmp/r_defaults.txt >> /etc/R/Rprofile.site && \
+    Rscript /tmp/package_install.r && \
     apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
       
 # Install RStudio-Server & create r-user and default-credentials
 RUN apt-key update && apt-get update && \
-	useradd -m rstudio && \
+    useradd -m rstudio && \
     echo "rstudio:rstudio" | chpasswd && \
     apt-get install -y --no-install-recommends \
-    ca-certificates \
-    file \
-    git \
-    libapparmor1 \
-    libedit2 \
-    libcurl4-openssl-dev \
-    libssl-dev \
-    lsb-release \
-    psmisc \
-    python-setuptools \
-    sudo && \
+        ca-certificates \
+        file \
+        git \
+        libapparmor1 \
+        libedit2 \
+        libcurl4-openssl-dev \
+        libssl-dev \
+        lsb-release \
+        psmisc \
+        python-setuptools \
+        sudo && \
     VER=$(wget --no-check-certificate -qO- https://s3.amazonaws.com/rstudio-server/current.ver) && \
     wget -q http://download2.rstudio.org/rstudio-server-${VER}-amd64.deb && \
     dpkg -i rstudio-server-${VER}-amd64.deb && \
