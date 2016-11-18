@@ -92,6 +92,7 @@ RUN apt-get update && apt-get install julia libzmq3-dev -y --no-install-recommen
     
 # Copy Jupyter start script into the container.
 COPY start-notebook.sh /usr/local/bin/
+COPY start_jupyterlabs.sh /usr/local/bin/
 COPY start-r-server.sh /usr/local/bin/
 COPY start-ssh-server.sh /usr/local/bin/
 COPY export_environment.sh /usr/local/bin/
@@ -105,6 +106,7 @@ COPY startup.sh /usr/local/bin/
 
 # Fix permissions
 RUN chmod +x /usr/local/bin/start-notebook.sh && \
+    chmod +x /usr/local/bin/start_jupyterlabs.sh && \
     chmod +x /usr/local/bin/startup.sh && \
     chmod +x /usr/local/bin/start-r-server.sh && \
     chmod +x /usr/local/bin/start-ssh-server.sh && \
