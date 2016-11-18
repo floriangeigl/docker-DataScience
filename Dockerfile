@@ -36,8 +36,9 @@ COPY r_defaults.txt /tmp/
 RUN apt-key adv --keyserver keys.gnupg.net --recv-key 6212B7B7931C4BB16280BA1306F90DE5381BA480 && \
     echo "deb http://cloud.r-project.org/bin/linux/debian jessie-cran3/" >> /etc/apt/sources.list.d/r-cran.list && \
     echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list.d/jessie-backports.list && \
+    echo "deb http://http.debian.net/debian sid main" > /etc/apt/sources.list.d/debian-unstable.list && \
     apt-key update && apt-get update && \
-    apt-get install libpng12-dev r-base r-base-dev r-recommended r-cran-rodbc r-cran-ggplot2 r-cran-gtools r-cran-xml r-cran-getopt r-cran-plyr \
+    apt-get install libpng16-16 r-base r-base-dev r-recommended r-cran-rodbc r-cran-ggplot2 r-cran-gtools r-cran-xml r-cran-getopt r-cran-plyr \
 	r-cran-rcurl r-cran-data.table r-cran-knitr r-cran-dplyr -y --allow-unauthenticated && \
     ldconfig && \
     cat /tmp/r_defaults.txt >> /etc/R/Rprofile.site && \
