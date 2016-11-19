@@ -78,9 +78,10 @@ RUN conda install pycairo cairomm libiconv jupyterlab flake8 -c conda-forge -c f
 
 #install julia & packages (add your packages to package_install.jl)
 COPY package_install.jl /tmp/
-RUN apt-get update && apt-get install julia libzmq3-dev -y --no-install-recommends && \
+RUN conda install julia \
+      -c bioconda && \
     julia /tmp/package_install.jl && \
-    apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
+    conda clean -i -l -t -y
     
 # Copy Jupyter start script into the container.
 COPY start-notebook.sh /usr/local/bin/
