@@ -1,7 +1,7 @@
 #install.packages(c('repr', 'IRdisplay', 'evaluate', 'crayon', 'pbdZMQ', 'devtools', 'uuid', 'digest'))
 #devtools::install_github('IRkernel/IRkernel')
 #IRkernel::installspec()
-install.packages("rodbc")
+install.packages("RODBC")
 install.packages("getopt")
 install.packages("tools")
 install.packages("ggmap")
