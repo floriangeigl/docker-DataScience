@@ -78,7 +78,7 @@ RUN apt-key update && apt-get update && \
       gfortran m4 cmake libssl-dev libcurl4-openssl-dev libzmq3-dev && \
     conda install julia \
       -c bioconda -y && \
-    julia /tmp/package_install.jl && \
+    julia /tmp/package_install.jl &> /var/log/julia_pkg_installs.log && \
     conda clean -i -l -t -y
     
 # Copy Jupyter start script into the container.
