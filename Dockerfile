@@ -42,11 +42,11 @@ COPY r_defaults.txt /tmp/
 #	r-cran-rcurl r-cran-data.table r-cran-knitr r-cran-dplyr -y --allow-unauthenticated --no-install-recommends && \
 #    ldconfig && \
 RUN conda install r r-base r-recommended r-ggplot2 r-gtools r-xml r-xml2 r-plyr r-rcurl \
-    r-data.table r-knitr r-dplyr \
-    -c bioconda -c r -c BioBuilds && \
+    r-data.table r-knitr r-dplyr r-rjsonio \
+    -c bioconda -c r -c BioBuilds -y && \
     cat /tmp/r_defaults.txt >> /etc/R/Rprofile.site && \
     Rscript /tmp/package_install.r && \
-    apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
+    conda clean -i -l -t -y
       
 # Install RStudio-Server & create r-user and default-credentials
 RUN apt-key update && apt-get update && \
