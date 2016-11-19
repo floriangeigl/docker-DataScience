@@ -33,14 +33,17 @@ RUN conda create -n py27 python=2.7 anaconda seaborn flake8 -y && \
 # Install R & packages (use apt-get r-cran-* packages or add your packages to package_install.r)
 COPY package_install.r /tmp/
 COPY r_defaults.txt /tmp/
-RUN apt-key adv --keyserver keys.gnupg.net --recv-key 6212B7B7931C4BB16280BA1306F90DE5381BA480 && \
-    echo "deb http://cloud.r-project.org/bin/linux/debian jessie-cran3/" >> /etc/apt/sources.list.d/r-cran.list && \
-    echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list.d/jessie-backports.list && \
-    echo "deb http://http.debian.net/debian sid main" > /etc/apt/sources.list.d/debian-unstable.list && \
-    apt-key update && apt-get update && \
-    apt-get install libpng16-16 r-base r-base-dev r-recommended r-cran-rodbc r-cran-ggplot2 r-cran-gtools r-cran-xml r-cran-getopt r-cran-plyr \
-	r-cran-rcurl r-cran-data.table r-cran-knitr r-cran-dplyr -y --allow-unauthenticated --no-install-recommends && \
-    ldconfig && \
+#RUN apt-key adv --keyserver keys.gnupg.net --recv-key 6212B7B7931C4BB16280BA1306F90DE5381BA480 && \
+#    echo "deb http://cloud.r-project.org/bin/linux/debian jessie-cran3/" >> /etc/apt/sources.list.d/r-cran.list && \
+#    echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list.d/jessie-backports.list && \
+#    echo "deb http://http.debian.net/debian sid main" > /etc/apt/sources.list.d/debian-unstable.list && \
+#    apt-key update && apt-get update && \
+#    apt-get install libpng16-16 r-base r-base-dev r-recommended r-cran-rodbc r-cran-ggplot2 r-cran-gtools r-cran-xml r-cran-getopt r-cran-plyr \#
+#	r-cran-rcurl r-cran-data.table r-cran-knitr r-cran-dplyr -y --allow-unauthenticated --no-install-recommends && \
+#    ldconfig && \
+RUN conda install r r-base r-recommended r-ggplot2 r-gtools r-xml r-xml2 r-plyr r-rcurl \
+    r-data.table r-knitr r-dplyr \
+    -c bioconda -c r -c BioBuilds && \
     cat /tmp/r_defaults.txt >> /etc/R/Rprofile.site && \
     Rscript /tmp/package_install.r && \
     apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
@@ -49,20 +52,12 @@ RUN apt-key adv --keyserver keys.gnupg.net --recv-key 6212B7B7931C4BB16280BA1306
 RUN apt-key update && apt-get update && \
     useradd -m rstudio && \
     echo "rstudio:rstudio" | chpasswd && \
-    echo 'setwd("/data/")' >> /home/rstudio/.Rprofile && chown -R rstudio /home/rstudio/ && chgrp -R rstudio /home/rstudio/ && \
+    echo 'setwd("/data/")' >> /home/rstudio/.Rprofile && \
+    chown -R rstudio /home/rstudio/ && \
+    chgrp -R rstudio /home/rstudio/ && \
     echo 'setwd("/data/")' >> /root/.Rprofile && \
-    apt-get install -y --no-install-recommends \
-        ca-certificates \
-        file \
-        git \
-        libapparmor1 \
-        libedit2 \
-        libcurl4-openssl-dev \
-        libssl-dev \
-        lsb-release \
-        psmisc \
-        python-setuptools \
-        sudo && \
+    apt-get install -y --no-install-recommends ca-certificates file git libapparmor1 libedit2 \
+        libcurl4-openssl-dev libssl-dev lsb-release psmisc python-setuptools sudo && \
     VER=$(wget --no-check-certificate -qO- https://s3.amazonaws.com/rstudio-server/current.ver) && \
     wget -q http://download2.rstudio.org/rstudio-server-${VER}-amd64.deb && \
     dpkg -i rstudio-server-${VER}-amd64.deb && \
