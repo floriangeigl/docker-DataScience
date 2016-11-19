@@ -40,20 +40,21 @@ RUN apt-key update && apt-get update && \
       r-data.table r-knitr r-dplyr r-rjsonio r-nmf r-igraph r-dendextend r-plotly \
       r-zoo r-gdata r-catools r-lmtest r-gplots r-htmltools r-htmlwidgets r-scatterplot3d r-dt \
       -c bioconda -c r -c BioBuilds -y && \
-    cat /tmp/Rprofile >> /opt/conda/lib/R/library/base/R/Rprofile && \
+    cat /tmp/Rprofile >> /root/.Rprofile && \
     echo "Install packages from package_install.r..." && \
     Rscript /tmp/package_install.r >> /var/log/r_pkg_installs.log 2>&1 && \
     conda clean -i -l -t -y && \
     apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
       
 # Install RStudio-Server & create r-user and default-credentials
+COPY Rprofile /tmp/
 RUN apt-key update && apt-get update && \
     useradd -m rstudio && \
     echo "rstudio:rstudio" | chpasswd && \
-    echo 'setwd("/data/")' >> /home/rstudio/.Rprofile && \
-    chown -R rstudio /home/rstudio/ && \
-    chgrp -R rstudio /home/rstudio/ && \
     echo 'setwd("/data/")' >> /root/.Rprofile && \
+    echo 'setwd("/data/")' >> /home/rstudio/.Rprofile && \
+    cat /tmp/Rprofile >> /home/rstudio/.Rprofile && \
+    chown -R rstudio /home/rstudio/ && chgrp -R rstudio /home/rstudio/ && \
     apt-get install -y --no-install-recommends ca-certificates file git libapparmor1 libedit2 \
         libcurl4-openssl-dev libssl-dev lsb-release psmisc python-setuptools sudo && \
     VER=$(wget --no-check-certificate -qO- https://s3.amazonaws.com/rstudio-server/current.ver) && \
