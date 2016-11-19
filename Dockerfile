@@ -33,6 +33,7 @@ RUN conda create -n py27 python=2.7 anaconda seaborn flake8 -y && \
     
 # Install R & packages (use apt-get r-cran-* packages or add your packages to package_install.r)
 COPY package_install.r /tmp/
+COPY Rprofile /tmp/
 #RUN apt-key adv --keyserver keys.gnupg.net --recv-key 6212B7B7931C4BB16280BA1306F90DE5381BA480 && \
 #    echo "deb http://cloud.r-project.org/bin/linux/debian jessie-cran3/" >> /etc/apt/sources.list.d/r-cran.list && \
 #    echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list.d/jessie-backports.list && \
@@ -44,6 +45,7 @@ COPY package_install.r /tmp/
 RUN conda install r r-base r-recommended r-ggplot2 r-gtools r-xml r-xml2 r-plyr r-rcurl \
       r-data.table r-knitr r-dplyr r-rjsonio \
       -c bioconda -c r -c BioBuilds -y && \
+    cat /tmp/Rprofile >> /opt/conda/lib/R/library/base/R/Rprofile && \
     Rscript /tmp/package_install.r && \
     conda clean -i -l -t -y
       
