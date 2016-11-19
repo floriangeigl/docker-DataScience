@@ -75,7 +75,7 @@ RUN conda install pycairo cairomm libiconv jupyterlab flake8 -c conda-forge -c f
 COPY package_install.jl /tmp/
 RUN apt-key update && apt-get update && \
     apt-get install -y --no-install-recommends gettext hdf5-tools libpcre3-dev build-essential \
-      gfortran m4 cmake libssl-dev libcurl4-openssl-dev && \
+      gfortran m4 cmake libssl-dev libcurl4-openssl-dev libzmq3-dev && \
     conda install julia \
       -c bioconda -y && \
     julia /tmp/package_install.jl && \
