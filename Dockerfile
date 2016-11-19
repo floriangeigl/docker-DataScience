@@ -38,7 +38,7 @@ RUN conda install r r-base r-recommended r-ggplot2 r-gtools r-xml r-xml2 r-plyr 
       r-data.table r-knitr r-dplyr r-rjsonio r-nmf r-igraph r-dendextend r-plotly \
       -c bioconda -c r -c BioBuilds -y && \
     cat /tmp/Rprofile >> /opt/conda/lib/R/library/base/R/Rprofile && \
-    Rscript /tmp/package_install.r && \
+    Rscript /tmp/package_install.r &> /var/log/r_pkg_installs.log && \
     conda clean -i -l -t -y
       
 # Install RStudio-Server & create r-user and default-credentials
