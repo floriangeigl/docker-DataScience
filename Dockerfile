@@ -27,8 +27,9 @@ RUN mkdir /var/run/sshd && \
 # Install python2.7 for conda
 # add python2.7 packages here
 RUN conda create -n py27 python=2.7 anaconda seaborn flake8 -y && \
+    conda clean -i -l -t -y && \
     pip install influxdb && \
-    conda clean -i -l -t -y
+    rm -rf ~/.cache/pip
     
 # Install R & packages (use apt-get r-cran-* packages or add your packages to package_install.r)
 COPY package_install.r /tmp/
@@ -42,8 +43,8 @@ COPY r_defaults.txt /tmp/
 #	r-cran-rcurl r-cran-data.table r-cran-knitr r-cran-dplyr -y --allow-unauthenticated --no-install-recommends && \
 #    ldconfig && \
 RUN conda install r r-base r-recommended r-ggplot2 r-gtools r-xml r-xml2 r-plyr r-rcurl \
-    r-data.table r-knitr r-dplyr r-rjsonio \
-    -c bioconda -c r -c BioBuilds -y && \
+      r-data.table r-knitr r-dplyr r-rjsonio \
+      -c bioconda -c r -c BioBuilds -y && \
     cat /tmp/r_defaults.txt >> /etc/R/Rprofile.site && \
     Rscript /tmp/package_install.r && \
     conda clean -i -l -t -y
@@ -70,15 +71,12 @@ RUN apt-key update && apt-get update && \
     mkdir /root/.pandoc && ln -s /opt/pandoc/templates /root/.pandoc/templates && \
     apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
     
-# Install conda python3 libs
+# Install conda/pip python3 libs
 RUN conda install pycairo cairomm libiconv jupyterlab flake8 -c conda-forge -c floriangeigl -y && \
     jupyter serverextension enable --py jupyterlab --sys-prefix && \
-    conda clean -i -l -t -y
-
-# Install pip libs
-# add python3 packages here
-# 	python -m textblob.download_corpora
-RUN pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb
+    conda clean -i -l -t -y && \
+    pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb && \
+    rm -rf ~/.cache/pip
 
 #install julia & packages (add your packages to package_install.jl)
 COPY package_install.jl /tmp/
