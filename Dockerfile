@@ -39,7 +39,7 @@ RUN conda install r r-base r-recommended r-ggplot2 r-gtools r-xml r-xml2 r-plyr 
       r-zoo r-gdata r-catools r-lmtest r-gplots r-htmltools r-htmlwidgets r-scatterplot3d r-dt \
       -c bioconda -c r -c BioBuilds -y && \
     cat /tmp/Rprofile >> /opt/conda/lib/R/library/base/R/Rprofile && \
-    Rscript /tmp/package_install.r &> /var/log/r_pkg_installs.log && \
+    Rscript /tmp/package_install.r >> /var/log/r_pkg_installs.log 2>&1 && \
     conda clean -i -l -t -y
       
 # Install RStudio-Server & create r-user and default-credentials
@@ -78,7 +78,7 @@ RUN apt-key update && apt-get update && \
       gfortran m4 cmake libssl-dev libcurl4-openssl-dev libzmq3-dev && \
     conda install julia \
       -c bioconda -y && \
-    julia /tmp/package_install.jl &> /var/log/julia_pkg_installs.log && \
+    julia /tmp/package_install.jl >> /var/log/julia_pkg_installs.log 2>&1 && \
     conda clean -i -l -t -y
     
 # Copy Jupyter start script into the container.
