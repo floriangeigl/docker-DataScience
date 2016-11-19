@@ -26,7 +26,8 @@ RUN mkdir /var/run/sshd && \
     
 # Install python2.7 for conda
 # add python2.7 packages here
-RUN conda create -n py27 python=2.7 anaconda seaborn flake8 -y && \
+RUN conda update conda conda-env conda-build pip -y && \
+    conda create -n py27 python=2.7 anaconda seaborn flake8 -y && \
     conda clean -i -l -t -y && \
     pip install influxdb && \
     rm -rf ~/.cache/pip
