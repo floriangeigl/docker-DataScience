@@ -97,7 +97,11 @@ COPY export_environment.sh /usr/local/bin/
 
 # fix bash-completion for apt
 COPY bash_completion_fix.sh /tmp/
-RUN cat /tmp/bash_completion_fix.sh >> /etc/bash.bashrc && rm -rf /tmp/*
+RUN cat /tmp/bash_completion_fix.sh >> /etc/bash.bashrc && \ 
+    echo "if [ -f /etc/bash_completion ]; then" >> ~/.bash_profile && \
+    echo "  . /etc/bash_completion" >> ~/.bash_profile && \
+    echo "fi" >> ~/.bash_profile && \
+    rm -rf /tmp/*
 
 # Copy startup script into the container.
 COPY startup.sh /usr/local/bin/
