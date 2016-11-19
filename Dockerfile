@@ -37,7 +37,7 @@ COPY Rprofile /tmp/
 RUN conda install r r-base r-recommended r-ggplot2 r-gtools r-xml r-xml2 r-plyr r-rcurl \
       r-data.table r-knitr r-dplyr r-rjsonio r-nmf r-igraph r-dendextend r-plotly \
       r-zoo r-gdata r-catools r-lmtest r-gplots r-htmltools r-htmlwidgets r-scatterplot3d r-dt \
-      -c bioconda -c r -c BioBuilds -y && \
+      -c bioconda -c r -c BioBuilds -y && \ 
     cat /tmp/Rprofile >> /opt/conda/lib/R/library/base/R/Rprofile && \
     Rscript /tmp/package_install.r &> /var/log/r_pkg_installs.log && \
     conda clean -i -l -t -y
