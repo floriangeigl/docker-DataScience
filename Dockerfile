@@ -73,7 +73,10 @@ RUN conda install pycairo cairomm libiconv jupyterlab flake8 -c conda-forge -c f
 
 #install julia & packages (add your packages to package_install.jl)
 COPY package_install.jl /tmp/
-RUN conda install julia \
+RUN apt-key update && apt-get update && \
+    apt-get install -y --no-install-recommends gettext hdf5-tools libpcre3-dev build-essential \
+      gfortran m4 cmake libssl-dev libcurl4-openssl-dev && \
+    conda install julia \
       -c bioconda -y && \
     julia /tmp/package_install.jl && \
     conda clean -i -l -t -y
