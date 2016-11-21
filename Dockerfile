@@ -33,8 +33,9 @@ RUN conda update conda conda-env conda-build pip -y && \
     rm -rf ~/.cache/pip
     
 # Install R & packages (use apt-get r-cran-* packages or add your packages to package_install.r)
-COPY package_install.r /tmp/
-COPY Rprofile /tmp/
+COPY package_install.r \
+    Rprofile \
+    /tmp/
 RUN apt-key update && apt-get update && \
     apt-get install -y --no-install-recommends unixodbc-dev libxtst6 && \
     conda install r r-base r-essentials r-recommended r-ggplot2 r-gtools r-xml r-xml2 r-plyr r-rcurl \
@@ -88,12 +89,13 @@ RUN apt-key update && apt-get update && \
     julia /tmp/package_install.jl >> /var/log/julia_pkg_installs.log 2>&1 && \
     conda clean -i -l -t -y
     
-# Copy Jupyter start script into the container.
-COPY start-notebook.sh /usr/local/bin/
-COPY start_jupyterlabs.sh /usr/local/bin/
-COPY start-r-server.sh /usr/local/bin/
-COPY start-ssh-server.sh /usr/local/bin/
-COPY export_environment.sh /usr/local/bin/
+# Copy some start script into the container.
+COPY start-notebook.sh  \
+    start_jupyterlabs.sh \
+    start-r-server.sh \
+    start-ssh-server.sh \
+    export_environment.sh \
+    /usr/local/bin/
 
 # fix bash-completion for apt
 COPY bash_completion_fix.sh /tmp/
