@@ -95,7 +95,16 @@ COPY start-notebook.sh  \
     start-r-server.sh \
     start-ssh-server.sh \
     export_environment.sh \
+    startup.sh \
     /usr/local/bin/
+
+# Fix permissions
+RUN chmod +x /usr/local/bin/start-notebook.sh && \
+    chmod +x /usr/local/bin/start_jupyterlabs.sh && \
+    chmod +x /usr/local/bin/startup.sh && \
+    chmod +x /usr/local/bin/start-r-server.sh && \
+    chmod +x /usr/local/bin/start-ssh-server.sh && \
+    chmod +x /usr/local/bin/export_environment.sh
 
 # fix bash-completion for apt
 COPY bash_completion_fix.sh /tmp/
@@ -105,17 +114,6 @@ RUN cat /tmp/bash_completion_fix.sh >> /etc/bash.bashrc && \
     echo "fi" >> ~/.bash_profile && \
     rm -rf /tmp/*
 
-# Copy startup script into the container.
-COPY startup.sh /usr/local/bin/
-
-# Fix permissions
-RUN chmod +x /usr/local/bin/start-notebook.sh && \
-    chmod +x /usr/local/bin/start_jupyterlabs.sh && \
-    chmod +x /usr/local/bin/startup.sh && \
-    chmod +x /usr/local/bin/start-r-server.sh && \
-    chmod +x /usr/local/bin/start-ssh-server.sh && \
-    chmod +x /usr/local/bin/export_environment.sh
-    
 # Expose jupyter notebook, jupyter labs, r-studio-server and ss port.
 EXPOSE 8888 8889 8787 22
 
