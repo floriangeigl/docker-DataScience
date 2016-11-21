@@ -81,8 +81,9 @@ RUN apt-key update && apt-get update && \
     apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
         
 # Install conda/pip python3 libs
-RUN conda install pycairo cairomm libiconv jupyterlab flake8 -c conda-forge -c floriangeigl -y && \
-      jupyter serverextension enable --py jupyterlab --sys-prefix && \
+RUN conda install pycairo cairomm libiconv jupyterlab flake8 librabbitmq \
+      -c conda-forge -c floriangeigl -y && \
+    jupyter serverextension enable --py jupyterlab --sys-prefix && \
     conda clean -i -l -t -y && \
     pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb && \
     rm -rf ~/.cache/pip
