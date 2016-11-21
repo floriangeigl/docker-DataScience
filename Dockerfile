@@ -82,7 +82,7 @@ RUN apt-key update && apt-get update && \
         
 # Install conda/pip python3 libs
 # waiting for python3 support: librabbitmq
-RUN conda install pycairo cairomm libiconv jupyterlab flake8 \
+RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika \
       -c conda-forge -c floriangeigl -y && \
     jupyter serverextension enable --py jupyterlab --sys-prefix && \
     conda clean -i -l -t -y && \
