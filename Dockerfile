@@ -3,7 +3,7 @@ MAINTAINER Florian Geigl <florian.geigl@gmail.com>
 
 # Install apt stuff, graph-tool, setup ssh, set timezone and update conda
 RUN echo "Europe/Vienna" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata && \
-    cp /etc/timezone /tz/ && cp /etc/localtime /tz/ && \
+    # cp /etc/timezone /tz/ && cp /etc/localtime /tz/ && \
     apt-key update && apt-get update && \
     # add more packages here \
     apt-get install bash-completion vim screen htop less git mercurial subversion openssh-server \ 
