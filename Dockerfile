@@ -88,7 +88,7 @@ RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-ven
       -c conda-forge -c floriangeigl -y && \
     jupyter serverextension enable --py jupyterlab --sys-prefix && \
     conda clean -i -l -t -y && \
-    pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb && \
+    pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython && \
     rm -rf ~/.cache/pip
     
 # Copy some start script into the container.
