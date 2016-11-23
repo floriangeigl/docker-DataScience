@@ -87,8 +87,23 @@ RUN apt-key update && apt-get update && \
 RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-venn jupyter_contrib_nbextensions \
       -c conda-forge -c floriangeigl -y && \
     jupyter serverextension enable --py jupyterlab --sys-prefix && \
-    jupyter contrib nbextension install --sys-prefix && \
-    # jupyter nbextension enable codefolding/main && \
+        jupyter contrib nbextension install --sys-prefix && \
+        jupyter nbextension enable codefolding/main && \
+        jupyter nbextension enable code_font_size/main && \
+        jupyter nbextension enable toc2/main && \
+        jupyter nbextension enable autosavetime/main && \
+        jupyter nbextension enable code_prettify/main && \
+        jupyter nbextension enable hinterland/main && \
+        jupyter nbextension enable scratchpad/main && \
+        jupyter nbextension enable limit_output/main && \
+        jupyter nbextension enable search-replace/main && \
+        jupyter nbextension enable spellchecker/main && \
+        jupyter nbextension enable toggle_all_line_numbers/main && \
+        jupyter nbextension enable chrome-clipboard/main && \
+        jupyter nbextension enable execute_time/main && \
+        jupyter nbextension enable notify/main && \
+        jupyter nbextension enable tree-filter/main && \        
+        jupyter nbextension enable printview/main && \    
     conda clean -i -l -t -y && \
     pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython && \
     rm -rf ~/.cache/pip
