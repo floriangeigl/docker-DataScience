@@ -84,9 +84,11 @@ RUN apt-key update && apt-get update && \
         
 # Install conda/pip python3 libs
 # waiting for python3 support: librabbitmq
-RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-venn \
+RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-venn jupyter_contrib_nbextensions \
       -c conda-forge -c floriangeigl -y && \
     jupyter serverextension enable --py jupyterlab --sys-prefix && \
+    jupyter contrib nbextension install --sys-prefix && \
+    # jupyter nbextension enable codefolding/main && \
     conda clean -i -l -t -y && \
     pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython && \
     rm -rf ~/.cache/pip
