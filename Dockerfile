@@ -92,7 +92,7 @@ RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-ven
         code_prettify/code_prettify scratchpad/main limit_output/main search-replace/main \
         spellchecker/main toggle_all_line_numbers chrome-clipboard/main execute_time/ExecuteTime \
         notify/notify tree-filter/index printview/main " \
-            | xargs -n1 -I@ jupyter nbextension enable && \
+            | xargs -n1 -I@ jupyter nbextension enable @ && \
     conda clean -i -l -t -y && \
     pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython && \
     rm -rf ~/.cache/pip
