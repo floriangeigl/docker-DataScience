@@ -102,7 +102,8 @@ RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-ven
             | xargs -n1 jupyter nbextension enable && \
     # currently not working: limit_output/main
     conda clean -i -l -t -y && \
-    pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython implicit && \
+    pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython implicit \
+        jupyterthemes && \
     rm -rf ~/.cache/pip
     
 # Copy some start script into the container.
