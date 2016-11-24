@@ -95,6 +95,7 @@ RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-ven
         code_prettify/code_prettify scratchpad/main search-replace/main comment-uncomment/main select_keymap/main \
         spellchecker/main toggle_all_line_numbers/main chrome-clipboard/main execute_time/ExecuteTime \
         notify/notify tree-filter/index printview/main table_beautifier/main highlighter/highlighter \
+        navigation-hotkeys/main \
         # calysto
         calysto/cell-tools/main " \
         # install cmd
