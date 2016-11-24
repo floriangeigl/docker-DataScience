@@ -85,14 +85,14 @@ RUN apt-key update && apt-get update && \
 # Install conda/pip python3 libs and notebook extensions
 # waiting for python3 support: librabbitmq
 RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-venn jupyter_contrib_nbextensions \
-      yapf \
-      -c conda-forge -c floriangeigl -y && \
-    jupyter serverextension enable --py jupyterlab --sys-prefix && \
-    jupyter contrib nbextension install --sys-prefix && \
+      yapf anaconda-nb-extensions \
+      -c conda-forge -c floriangeigl -c anaconda-nb-extensions -y && \
+    jupyter serverextension enable --py jupyterlab --sys-prefix --symlink && \
+    jupyter contrib nbextension install --sys-prefix --symlink && \
     echo "codefolding/main code_font_size/code_font_size hinterland/hinterland toc2/main autosavetime/main \
-        code_prettify/code_prettify scratchpad/main search-replace/main \
+        code_prettify/code_prettify scratchpad/main search-replace/main comment-uncomment/main select_keymap/main \
         spellchecker/main toggle_all_line_numbers/main chrome-clipboard/main execute_time/ExecuteTime \
-        notify/notify tree-filter/index printview/main" \
+        notify/notify tree-filter/index printview/main table_beautifier/main highlighter/highlighter" \
             | xargs -n1 jupyter nbextension enable && \
     # currently not working: limit_output/main
     conda clean -i -l -t -y && \
