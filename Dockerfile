@@ -88,9 +88,9 @@ RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-ven
       -c conda-forge -c floriangeigl -y && \
     jupyter serverextension enable --py jupyterlab --sys-prefix && \
     jupyter contrib nbextension install --sys-prefix && \
-    echo "codefolding/main  code_font_size/main hinterland/hinterland toc2/main autosavetime/main \
+    echo "codefolding/main code_font_size/code_font_size hinterland/hinterland toc2/main autosavetime/main \
         code_prettify/code_prettify scratchpad/main limit_output/main search-replace/main \
-        spellchecker/main toggle_all_line_numbers chrome-clipboard/main execute_time/ExecuteTime \
+        spellchecker/main toggle_all_line_numbers/main chrome-clipboard/main execute_time/ExecuteTime \
         notify/notify tree-filter/index printview/main" \
             | xargs -n1 jupyter nbextension enable && \
     conda clean -i -l -t -y && \
