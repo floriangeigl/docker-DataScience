@@ -113,7 +113,7 @@ RUN chmod +x /usr/local/bin/start-notebook.sh && \
     chmod +x /usr/local/bin/startup.sh && \
     chmod +x /usr/local/bin/start-r-server.sh && \
     chmod +x /usr/local/bin/start-ssh-server.sh && \
-    chmod +x /usr/local/bin/export_environment.sh
+    chmod +x /usr/local/bin/export_environment.sh && \
     cat /tmp/bash_completion_fix.sh >> /etc/bash.bashrc && \ 
     echo "if [ -f /etc/bash_completion ]; then" >> ~/.bash_profile && \
     echo "  . /etc/bash_completion" >> ~/.bash_profile && \
