@@ -106,17 +106,15 @@ COPY start-notebook.sh  \
     startup.sh \
     /usr/local/bin/
 
-# Fix permissions
+# Fix permissions and bash-completion
+COPY bash_completion_fix.sh /tmp/
 RUN chmod +x /usr/local/bin/start-notebook.sh && \
     chmod +x /usr/local/bin/start_jupyterlabs.sh && \
     chmod +x /usr/local/bin/startup.sh && \
     chmod +x /usr/local/bin/start-r-server.sh && \
     chmod +x /usr/local/bin/start-ssh-server.sh && \
     chmod +x /usr/local/bin/export_environment.sh
-
-# fix bash-completion for apt
-COPY bash_completion_fix.sh /tmp/
-RUN cat /tmp/bash_completion_fix.sh >> /etc/bash.bashrc && \ 
+    cat /tmp/bash_completion_fix.sh >> /etc/bash.bashrc && \ 
     echo "if [ -f /etc/bash_completion ]; then" >> ~/.bash_profile && \
     echo "  . /etc/bash_completion" >> ~/.bash_profile && \
     echo "fi" >> ~/.bash_profile && \
