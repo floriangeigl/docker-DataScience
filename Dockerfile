@@ -82,7 +82,7 @@ RUN apt-key update && apt-get update && \
     # cleanup
     apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
         
-# Install conda/pip python3 libs
+# Install conda/pip python3 libs and notebook extensions
 # waiting for python3 support: librabbitmq
 RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-venn jupyter_contrib_nbextensions \
       -c conda-forge -c floriangeigl -y && \
@@ -94,7 +94,7 @@ RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-ven
         notify/notify tree-filter/index printview/main" \
             | xargs -n1 jupyter nbextension enable && \
     conda clean -i -l -t -y && \
-    pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython && \
+    pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython implicit && \
     rm -rf ~/.cache/pip
     
 # Copy some start script into the container.
