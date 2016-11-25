@@ -91,7 +91,7 @@ RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-ven
     jupyter contrib nbextension install --sys-prefix && \
     git clone https://github.com/Calysto/notebook-extensions.git /opt/calysto_notebook-extensions && \
         cd /opt/calysto_notebook-extensions && jupyter nbextension install calysto --sys-prefix && \
-    echo "codefolding/main code_font_size/code_font_size hinterland/hinterland toc2/main autosavetime/main \
+    echo "codefolding/main code_font_size/code_font_size toc2/main autosavetime/main \
         code_prettify/code_prettify scratchpad/main search-replace/main comment-uncomment/main select_keymap/main \
         spellchecker/main toggle_all_line_numbers/main chrome-clipboard/main execute_time/ExecuteTime \
         notify/notify tree-filter/index printview/main table_beautifier/main highlighter/highlighter \
@@ -100,7 +100,7 @@ RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-ven
         calysto/cell-tools/main " \
         # install cmd
             | xargs -n1 jupyter nbextension enable && \
-    # currently not working: limit_output/main
+    # currently not working: limit_output/main hinterland/hinterland
     conda clean -i -l -t -y && \
     pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython implicit \
         jupyterthemes && \
