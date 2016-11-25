@@ -105,7 +105,7 @@ RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-ven
     pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython implicit \
         jupyterthemes && \
     # set default notebook theme, font etc.
-    jt -t chesterish -f sourcemed -T -N && \        
+    jt -t grade3 -f sourcemed -T -N && \        
     rm -rf ~/.cache/pip
     
 # Copy some start script into the container.
