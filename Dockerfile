@@ -1,8 +1,11 @@
 FROM kaggle/python:latest
 MAINTAINER Florian Geigl <florian.geigl@gmail.com>
 
+COPY layer_cleanup.sh /usr/local/bin/
+
 # Install apt stuff, graph-tool, setup ssh, set timezone and update conda
-RUN echo "Europe/Vienna" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata && \
+RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
+    echo "Europe/Vienna" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata && \
     # cp /etc/timezone /tz/ && cp /etc/localtime /tz/ && \
     apt-key update && apt-get update && \
     # add more packages here \
@@ -15,14 +18,14 @@ RUN echo "Europe/Vienna" > /etc/timezone && dpkg-reconfigure -f noninteractive t
     echo 'deb-src http://downloads.skewed.de/apt/jessie jessie main' >> /etc/apt/sources.list.d/graph-tool.list && \
     apt-get update && apt-get install -y --no-install-recommends python3-graph-tool && \
     ln -s /usr/lib/python3/dist-packages/graph_tool /opt/conda/lib/python3.5/site-packages/graph_tool && \
-    apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/* && \
     # setup ssh
     mkdir /var/run/sshd && \
     echo 'root:root' | chpasswd && \
     sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
     sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
     # update conda
-    conda update conda conda-env conda-build pip -y
+    conda update conda conda-env conda-build pip -y && \
+    layer_cleanup.sh
 
 #install julia & packages (add your packages to package_install.jl)
 COPY package_install.jl /tmp/
@@ -37,14 +40,14 @@ RUN apt-key update && apt-get update && \
     # install julia-packages
     julia /tmp/package_install.jl >> /var/log/julia_pkg_installs.log 2>&1 && \
     # cleanup
-    conda clean -i -l -t -y
+    layer_cleanup.sh
 
 # Install python2.7 for conda
 # add python2.7 packages here
 RUN conda create -n py27 python=2.7 anaconda seaborn flake8 -y && \
     conda clean -i -l -t -y && \
     pip install influxdb && \
-    rm -rf ~/.cache/pip
+    layer_cleanup.sh
     
 # Install R, R-packages and r-server (use conda install r-cran-* packages or add your packages to package_install.r)
 COPY package_install.r \
@@ -59,7 +62,6 @@ RUN apt-key update && apt-get update && \
     cat /tmp/Rprofile >> /root/.Rprofile && \
     echo "Install packages from package_install.r..." && \
     Rscript /tmp/package_install.r >> /var/log/r_pkg_installs.log 2>&1 && \
-    conda clean -i -l -t -y && \
     # install r-server
     useradd -m rstudio && \
     echo "rstudio:rstudio" | chpasswd && \
@@ -80,7 +82,7 @@ RUN apt-key update && apt-get update && \
     cp -r pandoc-templates*/* /opt/pandoc/templates && rm -rf pandoc-templates* && \
     mkdir /root/.pandoc && ln -s /opt/pandoc/templates /root/.pandoc/templates && \
     # cleanup
-    apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
+    layer_cleanup.sh
         
 # Install conda/pip python3 libs and notebook extensions
 # waiting for python3 support: librabbitmq
@@ -101,12 +103,11 @@ RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-ven
         # install cmd
             | xargs -n1 jupyter nbextension enable && \
     # currently not working: limit_output/main hinterland/hinterland
-    conda clean -i -l -t -y && \
     pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython implicit \
         jupyterthemes && \
     # set default notebook theme, font etc.
     jt -t grade3 -f sourcemed -T -N -cellw 1200 && \        
-    rm -rf ~/.cache/pip
+    layer_cleanup.sh
     
 # Copy some start script into the container.
 COPY start-notebook.sh  \
@@ -129,7 +130,7 @@ RUN chmod +x /usr/local/bin/start-notebook.sh && \
     echo "if [ -f /etc/bash_completion ]; then" >> ~/.bash_profile && \
     echo "  . /etc/bash_completion" >> ~/.bash_profile && \
     echo "fi" >> ~/.bash_profile && \
-    rm -rf /tmp/*
+    layer_cleanup.sh
 
 # Expose jupyter notebook, jupyter labs, r-studio-server and ss port.
 EXPOSE 8888 8889 8787 22
