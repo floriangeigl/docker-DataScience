@@ -7,7 +7,7 @@ then
   conda env create -f environment.yml
 fi
 echo "args: $@"
-if [ $# -eq 0 ]
+if [[ "$@" -eq "" ]]
   then
     echo "No arguments supplied"
     /usr/bin/supervisord
