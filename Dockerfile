@@ -141,4 +141,4 @@ EXPOSE 8888 8889 8787 22
 
 # Start all scripts
 VOLUME ["/data"]
-CMD ["startup.sh && /usr/bin/supervisord"]
+CMD ["startup.sh"]
