@@ -6,7 +6,15 @@ if [ -f environment.yml ];
 then
   conda env create -f environment.yml
 fi
-/usr/bin/supervisord
+if [ $# -eq 0 ]
+  then
+    echo "No arguments supplied"
+    /usr/bin/supervisord
+else
+  /usr/bin/supervisord &>> /log/supervisord.log &
+  exec "$@"
+fi
+
 
 #start-notebook.sh
 #start_jupyterlabs.sh
