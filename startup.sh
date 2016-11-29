@@ -6,6 +6,7 @@ if [ -f environment.yml ];
 then
   conda env create -f environment.yml
 fi
+echo "args: $@"
 if [ $# -eq 0 ]
   then
     echo "No arguments supplied"
