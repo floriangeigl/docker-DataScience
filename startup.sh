@@ -11,7 +11,7 @@ if [ $# -eq 0 ]
     echo "No arguments supplied"
     /usr/bin/supervisord
 else
-  /usr/bin/supervisord &>> /var/log/supervisord.log &
+  /usr/bin/supervisord >> /var/log/supervisord.log 2>&1 &
   exec "$@"
 fi
 
