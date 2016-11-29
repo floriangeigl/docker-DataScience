@@ -138,5 +138,5 @@ EXPOSE 8888 8889 8787 22
 
 # Start all scripts
 VOLUME ["/data"]
-ENTRYPOINT ["startup.sh"]
-# CMD [""]
+# ENTRYPOINT ["startup.sh"]
+CMD ["startup.sh"]
