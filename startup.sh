@@ -6,6 +6,7 @@ if [ -f environment.yml ];
 then
   conda env create -f environment.yml
 fi
+/usr/bin/supervisord
 
 #start-notebook.sh
 #start_jupyterlabs.sh
