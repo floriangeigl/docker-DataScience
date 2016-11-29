@@ -9,7 +9,7 @@ RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
     # cp /etc/timezone /tz/ && cp /etc/localtime /tz/ && \
     apt-key update && apt-get update && \
     # add more packages here \
-    apt-get install bash-completion vim screen htop less git mercurial subversion openssh-server \ 
+    apt-get install bash-completion vim screen htop less git mercurial subversion openssh-server supervisor \ 
         -y --no-install-recommends && \ 
     # install graph-tool
     apt-key adv --keyserver pgp.skewed.de --recv-key 98507F25 && \
@@ -133,10 +133,13 @@ RUN chmod +x /usr/local/bin/start-notebook.sh && \
     echo "fi" >> ~/.bash_profile && \
     layer_cleanup.sh
 
+# copy supervisor conf
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
 # Expose jupyter notebook, jupyter labs, r-studio-server and ss port.
 EXPOSE 8888 8889 8787 22
 
 # Start all scripts
 VOLUME ["/data"]
-# ENTRYPOINT ["startup.sh"]
-CMD ["startup.sh && /bin/bash"]
+CMD ["/usr/bin/supervisord"]
+# CMD ["startup.sh && /bin/bash"]
