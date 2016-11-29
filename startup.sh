@@ -7,7 +7,7 @@ then
   conda env create -f environment.yml
 fi
 
-start-notebook.sh
-start_jupyterlabs.sh
-start-r-server.sh
-start-ssh-server.sh
+#start-notebook.sh
+#start_jupyterlabs.sh
+#start-r-server.sh
+#start-ssh-server.sh
