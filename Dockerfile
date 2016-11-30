@@ -116,14 +116,14 @@ COPY start-notebook.sh  \
     start-r-server.sh \
     start-ssh-server.sh \
     export_environment.sh \
-    startup.sh \
+    init.sh \
     /usr/local/bin/
 
 # Fix permissions and bash-completion
 COPY bash_completion_fix.sh /tmp/
 RUN chmod +x /usr/local/bin/start-notebook.sh && \
     chmod +x /usr/local/bin/start_jupyterlabs.sh && \
-    chmod +x /usr/local/bin/startup.sh && \
+    chmod +x /usr/local/bin/init.sh && \
     chmod +x /usr/local/bin/start-r-server.sh && \
     chmod +x /usr/local/bin/start-ssh-server.sh && \
     chmod +x /usr/local/bin/export_environment.sh && \
@@ -141,5 +141,5 @@ EXPOSE 8888 8889 8787 22
 
 # Start all scripts
 VOLUME ["/data"]
-ENTRYPOINT ["startup.sh"]
+ENTRYPOINT ["init.sh"]
 CMD [""]
