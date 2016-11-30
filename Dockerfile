@@ -111,21 +111,13 @@ RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-ven
     layer_cleanup.sh
     
 # Copy some start script into the container.
-COPY start-notebook.sh  \
-    start_jupyterlabs.sh \
-    start-r-server.sh \
-    start-ssh-server.sh \
-    export_environment.sh \
+COPY export_environment.sh \
     init.sh \
     /usr/local/bin/
 
 # Fix permissions and bash-completion
 COPY bash_completion_fix.sh /tmp/
-RUN chmod +x /usr/local/bin/start-notebook.sh && \
-    chmod +x /usr/local/bin/start_jupyterlabs.sh && \
-    chmod +x /usr/local/bin/init.sh && \
-    chmod +x /usr/local/bin/start-r-server.sh && \
-    chmod +x /usr/local/bin/start-ssh-server.sh && \
+RUN chmod +x /usr/local/bin/init.sh && \
     chmod +x /usr/local/bin/export_environment.sh && \
     cat /tmp/bash_completion_fix.sh >> /etc/bash.bashrc && \ 
     echo "if [ -f /etc/bash_completion ]; then" >> ~/.bash_profile && \
