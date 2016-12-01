@@ -102,7 +102,7 @@ RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-ven
         calysto/cell-tools/main " \
         # install cmd
             | xargs -n1 jupyter nbextension enable && \
-        # jupyter nbextension enable --py --sys-prefix widgetsnbextension && \
+        jupyter nbextension enable --py --sys-prefix widgetsnbextension && \
     # currently not working: limit_output/main hinterland/hinterland
     pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython implicit \
         jupyterthemes && \
