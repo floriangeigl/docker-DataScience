@@ -9,7 +9,7 @@ RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
     # cp /etc/timezone /tz/ && cp /etc/localtime /tz/ && \
     apt-key update && apt-get update && \
     # add more packages here \
-    apt-get install bash-completion vim screen htop less git mercurial subversion openssh-server supervisor xvfb \ 
+    apt-get install bash-completion vim screen htop less git mercurial subversion openssh-server supervisor xvfb locate \ 
         -y --no-install-recommends && \ 
     # install graph-tool
     apt-key adv --keyserver pgp.skewed.de --recv-key 98507F25 && \
