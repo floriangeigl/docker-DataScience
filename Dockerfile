@@ -9,7 +9,8 @@ RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
     # cp /etc/timezone /tz/ && cp /etc/localtime /tz/ && \
     apt-key update && apt-get update && \
     # add more packages here \
-    apt-get install bash-completion vim screen htop less git mercurial subversion openssh-server supervisor xvfb locate \ 
+    apt-get install bash-completion vim screen htop less git mercurial subversion openssh-server supervisor xvfb locate \
+        fonts-texgyre gsfonts libcairo2 libjpeg62-turbo libpango-1.0-0 libpangocairo-1.0-0 libpng12-0 libtiff5 \
         -y --no-install-recommends && \ 
     # install graph-tool
     apt-key adv --keyserver pgp.skewed.de --recv-key 98507F25 && \
