@@ -78,10 +78,7 @@ RUN apt-key update && apt-get update && \
     ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc /usr/local/bin && \
     ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc-citeproc /usr/local/bin && \
     # configure FreeTDS Driver (r-odbc sql driver)
-    echo "
-        [FreeTDS]
-        Description = FreeTDS Driver
-        Driver = /usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so" >> /etc/odbcinst.ini && \
+    echo $"\n[FreeTDS]\n\tDescription = FreeTDS Driver\n\tDriver = /usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so" >> /etc/odbcinst.ini && \
     wget https://github.com/jgm/pandoc-templates/archive/1.15.0.6.tar.gz && \
     mkdir -p /opt/pandoc/templates && tar zxf 1.15.0.6.tar.gz && \
     cp -r pandoc-templates*/* /opt/pandoc/templates && rm -rf pandoc-templates* && \
