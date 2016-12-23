@@ -54,7 +54,7 @@ COPY package_install.r \
     Rprofile \
     /tmp/
 RUN apt-key update && apt-get update && \
-    apt-get install -y --no-install-recommends unixodbc-dev libxtst6 tdsodbc && \
+    apt-get install -y --no-install-recommends unixodbc-dev unixodbc libxtst6 tdsodbc && \
     conda install r r-base r-essentials r-recommended r-ggplot2 r-gtools r-xml r-xml2 r-plyr r-rcurl \
       r-data.table r-knitr r-dplyr r-rjsonio r-nmf r-igraph r-dendextend r-plotly \
       r-zoo r-gdata r-catools r-lmtest r-gplots r-htmltools r-htmlwidgets r-scatterplot3d r-dt \
@@ -78,7 +78,7 @@ RUN apt-key update && apt-get update && \
     ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc /usr/local/bin && \
     ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc-citeproc /usr/local/bin && \
     # configure FreeTDS Driver (r-odbc sql driver)
-    echo $"\n[FreeTDS]\n\tDescription = FreeTDS Driver\n\tDriver = /usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so" >> /etc/odbcinst.ini && \
+    echo "\n[FreeTDS]\n  Description = FreeTDS Driver\n  Driver = /usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so" >> /etc/odbcinst.ini && \
     wget https://github.com/jgm/pandoc-templates/archive/1.15.0.6.tar.gz && \
     mkdir -p /opt/pandoc/templates && tar zxf 1.15.0.6.tar.gz && \
     cp -r pandoc-templates*/* /opt/pandoc/templates && rm -rf pandoc-templates* && \
