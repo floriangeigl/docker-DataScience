@@ -127,13 +127,15 @@ RUN chmod +x /usr/local/bin/init.sh && \
     echo "fi" >> ~/.bash_profile && \
     layer_cleanup.sh
 
-# copy supervisor conf
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
 # Expose jupyter notebook, jupyter labs, r-studio-server and ss port.
 EXPOSE 8888 8889 8787 22
 
-# Start all scripts
+# Define mount volumne
 VOLUME ["/data"]
+
+# copy supervisor conf
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Start all scripts
 ENTRYPOINT ["init.sh"]
 CMD [""]
