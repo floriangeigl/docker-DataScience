@@ -10,7 +10,7 @@ RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
     apt-key update && apt-get update && \
     # add more packages here \
     apt-get install bash-completion vim screen htop less git mercurial subversion openssh-server supervisor xvfb locate \
-        fonts-texgyre gsfonts libcairo2 libjpeg62-turbo libpango-1.0-0 libpangocairo-1.0-0 libpng12-0 libtiff5 \
+        fonts-texgyre gsfonts libcairo2 libjpeg62-turbo libpango-1.0-0 libpangocairo-1.0-0 libpng12-0 libtiff5 dos2unix \
         -y --no-install-recommends && \ 
     # install graph-tool
     apt-key adv --keyserver pgp.skewed.de --recv-key 98507F25 && \
@@ -55,7 +55,7 @@ COPY package_install.r \
     Rprofile \
     /tmp/
 RUN apt-key update && apt-get update && \
-    apt-get install -y --no-install-recommends unixodbc-dev libxtst6 && \
+    apt-get install -y --no-install-recommends unixodbc-dev unixodbc libxtst6 tdsodbc && \
     conda install r r-base r-essentials r-recommended r-ggplot2 r-gtools r-xml r-xml2 r-plyr r-rcurl \
       r-data.table r-knitr r-dplyr r-rjsonio r-nmf r-igraph r-dendextend r-plotly r-cairo rstudio \
       r-zoo r-gdata r-catools r-lmtest r-gplots r-htmltools r-htmlwidgets r-scatterplot3d r-dt \
@@ -79,6 +79,8 @@ RUN apt-key update && apt-get update && \
     rm rstudio-server-*-amd64.deb && \
     ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc /usr/local/bin && \
     ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc-citeproc /usr/local/bin && \
+    # configure FreeTDS Driver (r-odbc sql driver)
+    echo "[FreeTDS]\nDescription = FreeTDS Driver\nDriver = /usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so" >> /etc/odbcinst.ini && \
     wget https://github.com/jgm/pandoc-templates/archive/1.15.0.6.tar.gz && \
     mkdir -p /opt/pandoc/templates && tar zxf 1.15.0.6.tar.gz && \
     cp -r pandoc-templates*/* /opt/pandoc/templates && rm -rf pandoc-templates* && \
@@ -89,7 +91,7 @@ RUN apt-key update && apt-get update && \
 # Install conda/pip python3 libs and notebook extensions
 # waiting for python3 support: librabbitmq
 RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-venn jupyter_contrib_nbextensions \
-      yapf anaconda-nb-extensions ipywidgets pandasql \
+      yapf anaconda-nb-extensions ipywidgets pandasql pathos dask distributed \
       -c conda-forge -c floriangeigl -c anaconda-nb-extensions -y && \
     jupyter serverextension enable --py jupyterlab --sys-prefix && \
     jupyter contrib nbextension install --sys-prefix && \
@@ -127,13 +129,15 @@ RUN chmod +x /usr/local/bin/init.sh && \
     echo "fi" >> ~/.bash_profile && \
     layer_cleanup.sh
 
-# copy supervisor conf
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
 # Expose jupyter notebook, jupyter labs, r-studio-server and ss port.
 EXPOSE 8888 8889 8787 22
 
-# Start all scripts
+# Define mount volumne
 VOLUME ["/data"]
+
+# copy supervisor conf
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Start all scripts
 ENTRYPOINT ["init.sh"]
 CMD [""]
