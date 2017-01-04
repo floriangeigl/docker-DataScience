@@ -89,7 +89,7 @@ RUN apt-key update && apt-get update && \
 # Install conda/pip python3 libs and notebook extensions
 # waiting for python3 support: librabbitmq
 RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-venn jupyter_contrib_nbextensions \
-      yapf anaconda-nb-extensions ipywidgets pandasql pathos dask distributed tpot \
+      yapf anaconda-nb-extensions ipywidgets pandasql pathos dask distributed tpot pyodbc \
       -c conda-forge -c floriangeigl -c anaconda-nb-extensions -y && \
     jupyter serverextension enable --py jupyterlab --sys-prefix && \
     jupyter contrib nbextension install --sys-prefix && \
