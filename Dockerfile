@@ -50,9 +50,7 @@ RUN conda create -n py27 python=2.7 anaconda seaborn flake8 -y && \
     layer_cleanup.sh
     
 # Install R, R-packages and r-server (use conda install r-cran-* packages or add your packages to package_install.r)
-COPY package_install.r \
-    Rprofile \
-    /tmp/
+COPY Rprofile /tmp/
 RUN apt-key update && apt-get update && \
     apt-get install -y --no-install-recommends unixodbc-dev unixodbc libxtst6 tdsodbc && \
     conda install r r-base r-essentials r-recommended r-ggplot2 r-gtools r-xml r-xml2 r-plyr r-rcurl \
@@ -60,7 +58,10 @@ RUN apt-key update && apt-get update && \
       r-zoo r-gdata r-catools r-lmtest r-gplots r-htmltools r-htmlwidgets r-scatterplot3d r-dt \
       -c bioconda -c r -c BioBuilds -y && \
     cat /tmp/Rprofile >> /root/.Rprofile && \
-    echo "Install packages from package_install.r..." && \
+    layer_cleanup.sh
+
+COPY package_install.r /tmp/
+RUN echo "Install packages from package_install.r..." && \
     Rscript /tmp/package_install.r 2>&1 | tee /var/log/r_pkg_installs.log && \
     # install r-server
     useradd -m rstudio && \
