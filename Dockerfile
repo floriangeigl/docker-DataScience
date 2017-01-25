@@ -5,6 +5,7 @@ COPY layer_cleanup.sh /usr/local/bin/
 
 # Install apt stuff, graph-tool, setup ssh, set timezone and update conda
 RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
+    mkdir -p /data/ && \
     echo "Europe/Vienna" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata && \
     # cp /etc/timezone /tz/ && cp /etc/localtime /tz/ && \
     apt-key update && apt-get update && \
@@ -39,7 +40,7 @@ RUN apt-key update && apt-get update && \
       -c bioconda -y && \
     echo "Install packages from package_install.jl..." && \
     # install julia-packages
-    julia /tmp/package_install.jl >> /var/log/julia_pkg_installs.log 2>&1 && \
+    julia /tmp/package_install.jl 2>&1 | tee /var/log/julia_pkg_installs.log  && \
     # cleanup
     layer_cleanup.sh
 
@@ -51,24 +52,20 @@ RUN conda create -n py27 python=2.7 anaconda seaborn flake8 -y && \
     layer_cleanup.sh
     
 # Install R, R-packages and r-server (use conda install r-cran-* packages or add your packages to package_install.r)
-COPY package_install.r \
-    Rprofile \
-    /tmp/
+COPY package_install.r Rprofile /tmp/
 RUN apt-key update && apt-get update && \
     apt-get install -y --no-install-recommends unixodbc-dev unixodbc libxtst6 tdsodbc && \
-    conda install r r-base r-essentials r-recommended r-ggplot2 r-gtools r-xml r-xml2 r-plyr r-rcurl \
-      r-data.table r-knitr r-dplyr r-rjsonio r-nmf r-igraph r-dendextend r-plotly r-cairo rstudio \
-      r-zoo r-gdata r-catools r-lmtest r-gplots r-htmltools r-htmlwidgets r-scatterplot3d r-dt \
-      -c bioconda -c r -c BioBuilds -y && \
-    conda update r-base -c rdonnellyr -y && \
+    conda install r r-base r-essentials r-recommended -c r -y && \
     cat /tmp/Rprofile >> /root/.Rprofile && \
+    conda install r-ggplot2 r-gtools r-xml r-xml2 r-plyr r-rcurl \
+      r-data.table r-knitr r-dplyr r-rjsonio r-nmf r-igraph r-dendextend r-plotly r-futile.logger \
+      r-zoo r-gdata r-catools r-lmtest r-gplots r-htmltools r-htmlwidgets r-scatterplot3d r-dt \
+      -c bioconda -c r -c BioBuilds -c conda-forge -y && \
     echo "Install packages from package_install.r..." && \
-    Rscript /tmp/package_install.r >> /var/log/r_pkg_installs.log 2>&1 && \
+    /opt/conda/bin/Rscript /tmp/package_install.r 2>&1 | tee /var/log/r_pkg_installs.log && \
     # install r-server
     useradd -m rstudio && \
     echo "rstudio:rstudio" | chpasswd && \
-    echo 'setwd("/data/")' >> /root/.Rprofile && \
-    echo 'setwd("/data/")' >> /home/rstudio/.Rprofile && \
     cat /tmp/Rprofile >> /home/rstudio/.Rprofile && \
     chown -R rstudio /home/rstudio/ && chgrp -R rstudio /home/rstudio/ && \
     apt-get install -y --no-install-recommends ca-certificates file git libapparmor1 libedit2 \
@@ -91,7 +88,7 @@ RUN apt-key update && apt-get update && \
 # Install conda/pip python3 libs and notebook extensions
 # waiting for python3 support: librabbitmq
 RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-venn jupyter_contrib_nbextensions \
-      yapf anaconda-nb-extensions ipywidgets pandasql pathos dask distributed tpot \
+      yapf anaconda-nb-extensions ipywidgets pandasql pathos dask distributed tpot pyodbc pymc3 geopy \
       -c conda-forge -c floriangeigl -c anaconda-nb-extensions -y && \
     jupyter serverextension enable --py jupyterlab --sys-prefix && \
     jupyter contrib nbextension install --sys-prefix && \
@@ -109,7 +106,7 @@ RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-ven
         jupyter nbextension enable --py --sys-prefix widgetsnbextension && \
     # currently not working: limit_output/main hinterland/hinterland
     pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython implicit \
-        jupyterthemes cassandra-driver sklearn-pandas && \
+        jupyterthemes cassandra-driver sklearn-pandas geocoder && \
     git clone https://github.com/hyperopt/hyperopt-sklearn.git /tmp/hyperopt-sklearn && \
         cd /tmp/hyperopt-sklearn && pip install -e . && cd - && \
     # set default notebook theme, font etc.
