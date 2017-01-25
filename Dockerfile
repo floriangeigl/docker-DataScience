@@ -5,6 +5,7 @@ COPY layer_cleanup.sh /usr/local/bin/
 
 # Install apt stuff, graph-tool, setup ssh, set timezone and update conda
 RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
+    mkdir -p /data/ && \
     echo "Europe/Vienna" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata && \
     # cp /etc/timezone /tz/ && cp /etc/localtime /tz/ && \
     apt-key update && apt-get update && \
@@ -53,12 +54,12 @@ RUN conda create -n py27 python=2.7 anaconda seaborn flake8 -y && \
 COPY Rprofile /tmp/
 RUN apt-key update && apt-get update && \
     apt-get install -y --no-install-recommends unixodbc-dev unixodbc libxtst6 tdsodbc && \
-    conda install r r-base r-essentials r-recommended r-irkernel r-ggplot2 r-gtools r-xml r-xml2 r-plyr r-rcurl \
+    conda install r r-base r-essentials r-recommended -c r -y && \
+    cat /tmp/Rprofile >> /root/.Rprofile && \
+    conda install r-ggplot2 r-gtools r-xml r-xml2 r-plyr r-rcurl \
       r-data.table r-knitr r-dplyr r-rjsonio r-nmf r-igraph r-dendextend r-plotly r-futile.logger \
       r-zoo r-gdata r-catools r-lmtest r-gplots r-htmltools r-htmlwidgets r-scatterplot3d r-dt \
       -c bioconda -c r -c BioBuilds -c conda-forge -y && \
-    conda update r -c r -c conda-forge -y && \
-    cat /tmp/Rprofile >> /root/.Rprofile && \
     echo "Install packages from package_install.r..." && \
     /opt/conda/bin/Rscript /tmp/package_install.r 2>&1 | tee /var/log/r_pkg_installs.log && \
     # install r-server
