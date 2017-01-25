@@ -51,7 +51,7 @@ RUN conda create -n py27 python=2.7 anaconda seaborn flake8 -y && \
     layer_cleanup.sh
     
 # Install R, R-packages and r-server (use conda install r-cran-* packages or add your packages to package_install.r)
-COPY Rprofile /tmp/
+COPY package_install.r Rprofile /tmp/
 RUN apt-key update && apt-get update && \
     apt-get install -y --no-install-recommends unixodbc-dev unixodbc libxtst6 tdsodbc && \
     conda install r r-base r-essentials r-recommended -c r -y && \
