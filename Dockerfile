@@ -59,17 +59,13 @@ RUN apt-key update && apt-get update && \
       -c bioconda -c r -c BioBuilds -c conda-forge -y && \
     conda update r -c r -c conda-forge -y && \
     cat /tmp/Rprofile >> /root/.Rprofile && \
-    layer_cleanup.sh
-
-COPY Rprofile package_install.r /tmp/
-RUN echo "Install packages from package_install.r..." && \
-    Rscript /tmp/package_install.r 2>&1 | tee /var/log/r_pkg_installs.log && \
+    echo "Install packages from package_install.r..." && \
+    /opt/conda/bin/Rscript /tmp/package_install.r 2>&1 | tee /var/log/r_pkg_installs.log && \
     # install r-server
     useradd -m rstudio && \
     echo "rstudio:rstudio" | chpasswd && \
     cat /tmp/Rprofile >> /home/rstudio/.Rprofile && \
     chown -R rstudio /home/rstudio/ && chgrp -R rstudio /home/rstudio/ && \
-    apt-key update && apt-get update && \
     apt-get install -y --no-install-recommends ca-certificates file git libapparmor1 libedit2 \
         libcurl4-openssl-dev libssl-dev lsb-release psmisc python-setuptools sudo && \
     VER=$(wget --no-check-certificate -qO- https://s3.amazonaws.com/rstudio-server/current.ver) && \
