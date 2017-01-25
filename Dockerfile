@@ -69,6 +69,7 @@ RUN echo "Install packages from package_install.r..." && \
     echo "rstudio:rstudio" | chpasswd && \
     cat /tmp/Rprofile >> /home/rstudio/.Rprofile && \
     chown -R rstudio /home/rstudio/ && chgrp -R rstudio /home/rstudio/ && \
+    apt-key update && apt-get update && \
     apt-get install -y --no-install-recommends ca-certificates file git libapparmor1 libedit2 \
         libcurl4-openssl-dev libssl-dev lsb-release psmisc python-setuptools sudo && \
     VER=$(wget --no-check-certificate -qO- https://s3.amazonaws.com/rstudio-server/current.ver) && \
