@@ -53,7 +53,7 @@ RUN conda create -n py27 python=2.7 anaconda seaborn flake8 -y && \
 COPY Rprofile /tmp/
 RUN apt-key update && apt-get update && \
     apt-get install -y --no-install-recommends unixodbc-dev unixodbc libxtst6 tdsodbc && \
-    conda install r r-base r-essentials r-recommended r-ggplot2 r-gtools r-xml r-xml2 r-plyr r-rcurl \
+    conda install r r-base r-essentials r-recommended r-irkernel r-ggplot2 r-gtools r-xml r-xml2 r-plyr r-rcurl \
       r-data.table r-knitr r-dplyr r-rjsonio r-nmf r-igraph r-dendextend r-plotly r-futile.logger \
       r-zoo r-gdata r-catools r-lmtest r-gplots r-htmltools r-htmlwidgets r-scatterplot3d r-dt \
       -c bioconda -c r -c BioBuilds -c conda-forge -y && \
