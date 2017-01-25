@@ -38,7 +38,7 @@ RUN apt-key update && apt-get update && \
       -c bioconda -y && \
     echo "Install packages from package_install.jl..." && \
     # install julia-packages
-    julia /tmp/package_install.jl >> /var/log/julia_pkg_installs.log 2>&1 && \
+    julia /tmp/package_install.jl 2>&1 | tee /var/log/julia_pkg_installs.log  && \
     # cleanup
     layer_cleanup.sh
 
@@ -61,7 +61,7 @@ RUN apt-key update && apt-get update && \
       -c bioconda -c r -c BioBuilds -y && \
     cat /tmp/Rprofile >> /root/.Rprofile && \
     echo "Install packages from package_install.r..." && \
-    Rscript /tmp/package_install.r >> /var/log/r_pkg_installs.log 2>&1 && \
+    Rscript /tmp/package_install.r 2>&1 | tee /var/log/r_pkg_installs.log && \
     # install r-server
     useradd -m rstudio && \
     echo "rstudio:rstudio" | chpasswd && \
