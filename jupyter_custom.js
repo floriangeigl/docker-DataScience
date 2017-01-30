@@ -1,3 +1,4 @@
+// default init cells for new notebooks
 define([
     'base/js/namespace'
 ], function(
@@ -13,3 +14,18 @@ define([
         load_ipython_extension: load_ipython_extension
     };
 });
+
+// auto-save
+define([
+    'base/js/namespace',
+    'base/js/events'
+    ],
+    function(IPython, events) {
+        events.on("notebook_loaded.Notebook",
+        	function () {
+  				IPython.notebook.set_autosave_interval(3600000); //1H
+			}
+  		);
+        //may include additional events.on() statements
+    }
+);
