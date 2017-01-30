@@ -13,7 +13,7 @@ RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
     apt-get install bash-completion vim screen htop less git mercurial subversion openssh-server supervisor dos2unix \ 
         -y --no-install-recommends && \ 
     # install graph-tool
-    apt-key adv --keyserver pgp.skewed.de --recv-key 612DEFB798507F25 && \
+    apt-key adv --keyserver pool.sks-keyservers.net --recv-key 612DEFB798507F25 && \
     touch /etc/apt/sources.list.d/graph-tool.list && \
     echo 'deb http://downloads.skewed.de/apt/jessie jessie main' >> /etc/apt/sources.list.d/graph-tool.list && \
     echo 'deb-src http://downloads.skewed.de/apt/jessie jessie main' >> /etc/apt/sources.list.d/graph-tool.list && \
