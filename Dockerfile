@@ -105,8 +105,8 @@ RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-ven
         # install cmd
             | xargs -n1 jupyter nbextension enable && \
         jupyter nbextension enable --py --sys-prefix widgetsnbextension && \
-    mkdir -p /home/root/.jupyter/custom/ && \
-    cat /tmp/jupyter_custom.js >> /home/root/.jupyter/custom/custom.js && \
+    mkdir -p /root/.jupyter/custom/ && \
+    cat /tmp/jupyter_custom.js >> /root/.jupyter/custom/custom.js && \
     # currently not working: limit_output/main hinterland/hinterland
     pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython implicit \
         jupyterthemes cassandra-driver sklearn-pandas geocoder && \
