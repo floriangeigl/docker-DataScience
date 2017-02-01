@@ -87,7 +87,7 @@ RUN apt-key update && apt-get update && \
         
 # Install conda/pip python3 libs and notebook extensions
 # waiting for python3 support: librabbitmq
-COPY jupyter_custom.js /tmp/
+COPY jupyter_custom.js py_default_imports.js /tmp/
 RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-venn jupyter_contrib_nbextensions \
       yapf anaconda-nb-extensions ipywidgets pandasql pathos dask distributed tpot pyodbc pymc3 geopy \
       -c conda-forge -c floriangeigl -c anaconda-nb-extensions -y && \
@@ -105,8 +105,13 @@ RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-ven
         # install cmd
             | xargs -n1 jupyter nbextension enable && \
         jupyter nbextension enable --py --sys-prefix widgetsnbextension && \
+    # install custom jss & default imports extension
     mkdir -p /root/.jupyter/custom/ && \
     cat /tmp/jupyter_custom.js >> /root/.jupyter/custom/custom.js && \
+    mkdir -p /tmp/py_default_imports/ && \
+    mv /tmp/py_default_imports.js /tmp/py_default_imports/main.js && \
+    jupyter nbextension install --sys-prefix /tmp/py_default_imports && \
+    jupyter nbextension enable --sys-prefix py_default_imports/main && \
     # currently not working: limit_output/main hinterland/hinterland
     pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython implicit \
         jupyterthemes cassandra-driver sklearn-pandas geocoder && \
