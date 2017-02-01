@@ -10,7 +10,8 @@ RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
     # cp /etc/timezone /tz/ && cp /etc/localtime /tz/ && \
     apt-key update && apt-get update && \
     # add more packages here \
-    apt-get install bash-completion vim screen htop less git mercurial subversion openssh-server supervisor dos2unix \ 
+    apt-get install bash-completion vim screen htop less git mercurial subversion openssh-server supervisor xvfb locate \
+        fonts-texgyre gsfonts libcairo2 libjpeg62-turbo libpango-1.0-0 libpangocairo-1.0-0 libpng12-0 libtiff5 dos2unix \
         -y --no-install-recommends && \ 
     # install graph-tool
     apt-key adv --keyserver pool.sks-keyservers.net --recv-key 612DEFB798507F25 && \
@@ -86,6 +87,7 @@ RUN apt-key update && apt-get update && \
         
 # Install conda/pip python3 libs and notebook extensions
 # waiting for python3 support: librabbitmq
+COPY jupyter_custom.js py_default_imports.js /tmp/
 RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-venn jupyter_contrib_nbextensions \
       yapf anaconda-nb-extensions ipywidgets pandasql pathos dask distributed tpot pyodbc pymc3 geopy \
       -c conda-forge -c floriangeigl -c anaconda-nb-extensions -y && \
@@ -103,6 +105,13 @@ RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-ven
         # install cmd
             | xargs -n1 jupyter nbextension enable && \
         jupyter nbextension enable --py --sys-prefix widgetsnbextension && \
+    # install custom jss & default imports extension
+    mkdir -p /root/.jupyter/custom/ && \
+    cat /tmp/jupyter_custom.js >> /root/.jupyter/custom/custom.js && \
+    mkdir -p /tmp/py_default_imports/ && \
+    mv /tmp/py_default_imports.js /tmp/py_default_imports/main.js && \
+    jupyter nbextension install --sys-prefix /tmp/py_default_imports && \
+    jupyter nbextension enable --sys-prefix py_default_imports/main && \
     # currently not working: limit_output/main hinterland/hinterland
     pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython implicit \
         jupyterthemes cassandra-driver sklearn-pandas geocoder && \
