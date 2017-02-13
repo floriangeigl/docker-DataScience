@@ -26,6 +26,7 @@ RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
     sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
     sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
     # update conda
+    conda install conda-build pip -y && \
     conda update conda conda-env conda-build pip -y && \
     layer_cleanup.sh
 
