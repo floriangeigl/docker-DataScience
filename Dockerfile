@@ -19,13 +19,14 @@ RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
     echo 'deb http://downloads.skewed.de/apt/jessie jessie main' >> /etc/apt/sources.list.d/graph-tool.list && \
     echo 'deb-src http://downloads.skewed.de/apt/jessie jessie main' >> /etc/apt/sources.list.d/graph-tool.list && \
     apt-get update && apt-get install -y --no-install-recommends python3-graph-tool && \
-    ln -s /usr/lib/python3/dist-packages/graph_tool /opt/conda/lib/python3.5/site-packages/graph_tool && \
+    ln -s /usr/lib/python3/dist-packages/graph_tool $(find /opt/conda/lib/python* -type d -name "site-packages")/graph_tool && \
     # setup ssh
     mkdir /var/run/sshd && \
     echo 'root:root' | chpasswd && \
     sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
     sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
     # update conda
+    conda install conda-build pip -y && \
     conda update conda conda-env conda-build pip -y && \
     layer_cleanup.sh
 
