@@ -147,8 +147,9 @@ RUN conda install cairomm jupyterlab flake8 jupyter_contrib_nbextensions yapf ip
     jupyter nbextension enable --sys-prefix py_default_imports/main && \
     # currently not working: limit_output/main hinterland/hinterland
     pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython implicit \
-        jupyterthemes cassandra-driver sklearn-pandas geocoder readchar lightfm scikit-optimize pycairo \
+        jupyterthemes cassandra-driver sklearn-pandas geocoder readchar lightfm scikit-optimize \
         matplotlib-venn pathos pika tpot && \
+        # pycairo
     git clone https://github.com/hyperopt/hyperopt-sklearn.git /tmp/hyperopt-sklearn && \
         cd /tmp/hyperopt-sklearn && pip install -e . && cd - && \
     # set default notebook theme, font etc.
