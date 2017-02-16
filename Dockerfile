@@ -89,9 +89,8 @@ RUN apt-key update && apt-get update && \
 # Install conda/pip python3 libs and notebook extensions
 # waiting for python3 support: librabbitmq
 COPY jupyter_custom.js py_default_imports.js /tmp/
-RUN conda install cairomm libiconv jupyterlab flake8 pika matplotlib-venn jupyter_contrib_nbextensions \
-      yapf anaconda-nb-extensions ipywidgets pandasql pathos dask distributed tpot pyodbc pymc3 geopy \
-      -c conda-forge -c floriangeigl -c anaconda-nb-extensions -y && \
+RUN conda install cairomm jupyterlab flake8 jupyter_contrib_nbextensions yapf ipywidgets pandasql \
+    dask distributed pyodbc pymc3 geopy -c conda-forge -y && \
     jupyter serverextension enable --py jupyterlab --sys-prefix && \
     jupyter contrib nbextension install --sys-prefix && \
     git clone https://github.com/Calysto/notebook-extensions.git /opt/calysto_notebook-extensions && \
@@ -115,7 +114,8 @@ RUN conda install cairomm libiconv jupyterlab flake8 pika matplotlib-venn jupyte
     jupyter nbextension enable --sys-prefix py_default_imports/main && \
     # currently not working: limit_output/main hinterland/hinterland
     pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython implicit \
-        jupyterthemes cassandra-driver sklearn-pandas geocoder readchar lightfm scikit-optimize pycairo && \
+        jupyterthemes cassandra-driver sklearn-pandas geocoder readchar lightfm scikit-optimize pycairo \
+        matplotlib-venn pathos pika tpot && \
     git clone https://github.com/hyperopt/hyperopt-sklearn.git /tmp/hyperopt-sklearn && \
         cd /tmp/hyperopt-sklearn && pip install -e . && cd - && \
     # set default notebook theme, font etc.
