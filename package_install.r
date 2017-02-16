@@ -9,4 +9,5 @@ install.packages("compiler")
 install.packages("arules")
 install.packages("arulesViz")
 install.packages("xgboost")
+install.packages("scatterplot3d")
 
