@@ -11,4 +11,4 @@ install.packages("arulesViz")
 install.packages("xgboost")
 install.packages("scatterplot3d")
 install.packages("dendextend")
-
+install.packages("r-plotly")
