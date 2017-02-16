@@ -91,7 +91,7 @@ RUN apt-key update && apt-get update && \
 COPY jupyter_custom.js py_default_imports.js /tmp/
 RUN conda config --add channels conda-forge && \
     conda install cairomm jupyterlab flake8 jupyter_contrib_nbextensions yapf ipywidgets pandasql \
-    dask distributed pyodbc pymc3 geopy hdf5 h5py -y && \
+    dask distributed pyodbc pymc3 geopy hdf5 h5py ffmpeg -y && \
     jupyter serverextension enable --py jupyterlab --sys-prefix && \
     jupyter contrib nbextension install --sys-prefix && \
     git clone https://github.com/Calysto/notebook-extensions.git /opt/calysto_notebook-extensions && \
