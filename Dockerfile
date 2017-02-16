@@ -92,7 +92,7 @@ RUN apt-key update && apt-get update && \
     conda install r r-base r-essentials r-recommended -c r -y && \
     cat /tmp/Rprofile >> /root/.Rprofile && \
     conda install r-ggplot2 r-gtools r-xml r-xml2 r-plyr r-rcurl \
-      r-data.table r-knitr r-dplyr r-rjsonio r-nmf r-igraph r-dendextend r-plotly r-futile.logger \
+      r-data.table r-knitr r-dplyr r-rjsonio r-nmf r-igraph r-futile.logger \
       r-zoo r-gdata r-catools r-lmtest r-gplots r-htmltools r-htmlwidgets r-dt \
       -c bioconda -c r -c BioBuilds -c conda-forge -y && \
     echo "Install packages from package_install.r..." && \
@@ -122,9 +122,8 @@ RUN apt-key update && apt-get update && \
 # Install conda/pip python3 libs and notebook extensions
 # waiting for python3 support: librabbitmq
 COPY jupyter_custom.js py_default_imports.js /tmp/
-RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-venn jupyter_contrib_nbextensions \
-      yapf anaconda-nb-extensions ipywidgets pandasql pathos dask distributed tpot pyodbc pymc3 geopy \
-      -c conda-forge -c floriangeigl -c anaconda-nb-extensions -y && \
+RUN conda install cairomm jupyterlab flake8 jupyter_contrib_nbextensions yapf ipywidgets pandasql \
+    dask distributed pyodbc pymc3 geopy -c conda-forge -y && \
     jupyter serverextension enable --py jupyterlab --sys-prefix && \
     jupyter contrib nbextension install --sys-prefix && \
     git clone https://github.com/Calysto/notebook-extensions.git /opt/calysto_notebook-extensions && \
@@ -148,7 +147,8 @@ RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-ven
     jupyter nbextension enable --sys-prefix py_default_imports/main && \
     # currently not working: limit_output/main hinterland/hinterland
     pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython implicit \
-        jupyterthemes cassandra-driver sklearn-pandas geocoder readchar && \
+        jupyterthemes cassandra-driver sklearn-pandas geocoder readchar lightfm scikit-optimize pycairo \
+        matplotlib-venn pathos pika tpot && \
     git clone https://github.com/hyperopt/hyperopt-sklearn.git /tmp/hyperopt-sklearn && \
         cd /tmp/hyperopt-sklearn && pip install -e . && cd - && \
     # set default notebook theme, font etc.
