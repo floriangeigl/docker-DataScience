@@ -60,7 +60,7 @@ RUN apt-key update && apt-get update && \
     cat /tmp/Rprofile >> /root/.Rprofile && \
     conda install r-ggplot2 r-gtools r-xml r-xml2 r-plyr r-rcurl \
       r-data.table r-knitr r-dplyr r-rjsonio r-nmf r-igraph r-dendextend r-plotly r-futile.logger \
-      r-zoo r-gdata r-catools r-lmtest r-gplots r-htmltools r-htmlwidgets r-scatterplot3d r-dt \
+      r-zoo r-gdata r-catools r-lmtest r-gplots r-htmltools r-htmlwidgets r-dt \
       -c bioconda -c r -c BioBuilds -c conda-forge -y && \
     echo "Install packages from package_install.r..." && \
     /opt/conda/bin/Rscript /tmp/package_install.r 2>&1 | tee /var/log/r_pkg_installs.log && \
