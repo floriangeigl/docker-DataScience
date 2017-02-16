@@ -89,7 +89,7 @@ RUN apt-key update && apt-get update && \
 # Install conda/pip python3 libs and notebook extensions
 # waiting for python3 support: librabbitmq
 COPY jupyter_custom.js py_default_imports.js /tmp/
-RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-venn jupyter_contrib_nbextensions \
+RUN conda install cairomm libiconv jupyterlab flake8 pika matplotlib-venn jupyter_contrib_nbextensions \
       yapf anaconda-nb-extensions ipywidgets pandasql pathos dask distributed tpot pyodbc pymc3 geopy \
       -c conda-forge -c floriangeigl -c anaconda-nb-extensions -y && \
     jupyter serverextension enable --py jupyterlab --sys-prefix && \
@@ -115,7 +115,7 @@ RUN conda install pycairo cairomm libiconv jupyterlab flake8 pika matplotlib-ven
     jupyter nbextension enable --sys-prefix py_default_imports/main && \
     # currently not working: limit_output/main hinterland/hinterland
     pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython implicit \
-        jupyterthemes cassandra-driver sklearn-pandas geocoder readchar lightfm scikit-optimize && \
+        jupyterthemes cassandra-driver sklearn-pandas geocoder readchar lightfm scikit-optimize pycairo && \
     git clone https://github.com/hyperopt/hyperopt-sklearn.git /tmp/hyperopt-sklearn && \
         cd /tmp/hyperopt-sklearn && pip install -e . && cd - && \
     # set default notebook theme, font etc.
