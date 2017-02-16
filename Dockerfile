@@ -90,7 +90,7 @@ RUN apt-key update && apt-get update && \
 # waiting for python3 support: librabbitmq
 COPY jupyter_custom.js py_default_imports.js /tmp/
 RUN conda install cairomm jupyterlab flake8 jupyter_contrib_nbextensions yapf ipywidgets pandasql \
-    dask distributed pyodbc pymc3 geopy -c conda-forge -y && \
+    dask distributed pyodbc pymc3 geopy ffmpeg -c conda-forge -y && \
     jupyter serverextension enable --py jupyterlab --sys-prefix && \
     jupyter contrib nbextension install --sys-prefix && \
     git clone https://github.com/Calysto/notebook-extensions.git /opt/calysto_notebook-extensions && \
