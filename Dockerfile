@@ -123,7 +123,7 @@ RUN apt-key update && apt-get update && \
 # waiting for python3 support: librabbitmq
 COPY jupyter_custom.js py_default_imports.js /tmp/
 RUN conda install cairomm jupyterlab flake8 jupyter_contrib_nbextensions yapf ipywidgets pandasql \
-    dask distributed pyodbc pymc3 geopy -c conda-forge -y && \
+    dask distributed pyodbc pymc3 geopy ffmpeg -c conda-forge -y && \
     jupyter serverextension enable --py jupyterlab --sys-prefix && \
     jupyter contrib nbextension install --sys-prefix && \
     git clone https://github.com/Calysto/notebook-extensions.git /opt/calysto_notebook-extensions && \
@@ -153,7 +153,9 @@ RUN conda install cairomm jupyterlab flake8 jupyter_contrib_nbextensions yapf ip
     git clone https://github.com/hyperopt/hyperopt-sklearn.git /tmp/hyperopt-sklearn && \
         cd /tmp/hyperopt-sklearn && pip install -e . && cd - && \
     # set default notebook theme, font etc.
-    jt -t grade3 -f sourcemed -T -N -cellw 1200 && \        
+    jt -t grade3 -f sourcemed -T -N -cellw 1200 && \
+    # disable notebook authentication
+    echo "c.NotebookApp.token = ''\nc.NotebookApp.password = ''\n" >> /root/.jupyter/jupyter_notebook_config.py && \
     layer_cleanup.sh
     
 # Copy some start script into the container.

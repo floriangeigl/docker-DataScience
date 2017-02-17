@@ -6,7 +6,7 @@ if [ -f environment.yml ]; then
   conda env create -f environment.yml
 fi
 
-echo "args: $@"
+jupyter notebook list
 if [[ "$@" != "" ]]; then
   /usr/bin/supervisord >> /var/log/supervisord.log 2>&1 &
   exec "$@"  
