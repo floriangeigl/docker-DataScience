@@ -120,7 +120,9 @@ RUN conda install cairomm jupyterlab flake8 jupyter_contrib_nbextensions yapf ip
     git clone https://github.com/hyperopt/hyperopt-sklearn.git /tmp/hyperopt-sklearn && \
         cd /tmp/hyperopt-sklearn && pip install -e . && cd - && \
     # set default notebook theme, font etc.
-    jt -t grade3 -f sourcemed -T -N -cellw 1200 && \        
+    jt -t grade3 -f sourcemed -T -N -cellw 1200 && \
+    # disable notebook authentication
+    echo "c.NotebookApp.token = ''\nc.NotebookApp.password = ''\n" >> /root/.jupyter/jupyter_notebook_config.py && \
     layer_cleanup.sh
     
 # Copy some start script into the container.
