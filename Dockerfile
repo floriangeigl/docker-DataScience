@@ -91,18 +91,18 @@ RUN apt-key update && apt-get update && \
 COPY jupyter_custom.js py_default_imports.js /tmp/
 RUN conda config --add channels conda-forge && \
     conda install cairomm jupyterlab flake8 jupyter_contrib_nbextensions yapf ipywidgets pandasql \
-    dask distributed pyodbc pymc3 geopy hdf5 h5py ffmpeg -y && \
+    dask distributed pyodbc pymc3 geopy hdf5 h5py ffmpeg autopep8 -y && \
     jupyter serverextension enable --py jupyterlab --sys-prefix && \
     jupyter contrib nbextension install --sys-prefix && \
     git clone https://github.com/Calysto/notebook-extensions.git /opt/calysto_notebook-extensions && \
         cd /opt/calysto_notebook-extensions && jupyter nbextension install calysto --sys-prefix && \
     echo "codefolding/main code_font_size/code_font_size toc2/main autosavetime/main \
-        code_prettify/code_prettify scratchpad/main search-replace/main comment-uncomment/main select_keymap/main \
+        code_prettify/autopep8 scratchpad/main search-replace/main comment-uncomment/main select_keymap/main \
         spellchecker/main toggle_all_line_numbers/main chrome-clipboard/main execute_time/ExecuteTime \
         notify/notify tree-filter/index printview/main table_beautifier/main highlighter/highlighter \
-        navigation-hotkeys/main \
+        navigation-hotkeys/main addbefore/main snippets_menu/main datestamper/main help_panel/help_panel \
         # calysto
-        calysto/cell-tools/main " \
+        calysto/cell-tools/main calysto/document-tools/main" \
         # install cmd
             | xargs -n1 jupyter nbextension enable && \
         jupyter nbextension enable --py --sys-prefix widgetsnbextension && \
