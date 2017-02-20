@@ -6,7 +6,7 @@ if [ -f environment.yml ]; then
   conda env create -f environment.yml
 fi
 
-jupyter notebook list
+echo "start notebooks"
 if [[ "$@" != "" ]]; then
   /usr/bin/supervisord >> /var/log/supervisord.log 2>&1 &
   exec "$@"  
@@ -14,4 +14,5 @@ else
   echo "No arguments supplied"
   /usr/bin/supervisord
 fi
+jupyter notebook list
 
