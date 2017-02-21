@@ -9,10 +9,9 @@ fi
 echo "start notebooks"
 if [[ "$@" != "" ]]; then
   /usr/bin/supervisord >> /var/log/supervisord.log 2>&1 &
-  exec "$@"  
+  exec "$@"
 else
   echo "No arguments supplied"
   /usr/bin/supervisord
 fi
-jupyter notebook list
 
