@@ -18,6 +18,7 @@ RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" && \
     echo "plugins=(git autopep8 python screen jsontools colorize colored-man-pages)\n" >> ~/.zshrc && \
     echo 'ZSH_THEME="gnzh"\n' >> ~/.zshrc && \
+    echo "DISABLE_AUTO_UPDATE=true\n" >> ~/.zshrc && \
     git clone https://github.com/powerline/fonts.git /tmp/powerline_fonts && \
     /bin/bash /tmp/powerline_fonts/install.sh && \
     # install graph-tool
