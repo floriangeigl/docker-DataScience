@@ -16,7 +16,7 @@ RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
         -y --no-install-recommends && \
     # install Oh My Zsh
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" && \
-    echo "plugins=(git bundler autopep8 python ruby)\n" >> ~/.zshrc && \
+    echo "plugins=(git autopep8 python screen jsontools colorize colored-man-pages)\n" >> ~/.zshrc && \
     echo 'ZSH_THEME="gnzh"\n' >> ~/.zshrc && \
     git clone https://github.com/powerline/fonts.git /tmp/powerline_fonts && \
     /bin/bash /tmp/powerline_fonts/install.sh && \
