@@ -12,7 +12,14 @@ RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
     # add more packages here \
     apt-get install bash-completion vim screen htop less git mercurial subversion openssh-server supervisor xvfb locate \
         fonts-texgyre gsfonts libcairo2 libjpeg62-turbo libpango-1.0-0 libpangocairo-1.0-0 libpng12-0 libtiff5 dos2unix \
-        -y --no-install-recommends && \ 
+	zsh \
+        -y --no-install-recommends && \
+    # install Oh My Zsh
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" && \
+    echo "plugins=(git bundler autopep8 python ruby)\n" >> ~/.zshrc && \
+    echo 'ZSH_THEME="gnzh"\n' >> ~/.zshrc && \
+    git clone https://github.com/powerline/fonts.git /tmp/powerline_fonts && \
+    /bin/bash /tmp/powerline_fonts/install.sh && \
     # install graph-tool
     apt-key adv --keyserver pool.sks-keyservers.net --recv-key 612DEFB798507F25 && \
     touch /etc/apt/sources.list.d/graph-tool.list && \
@@ -116,7 +123,7 @@ RUN conda config --add channels conda-forge && \
     # currently not working: limit_output/main hinterland/hinterland
     pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython implicit \
         jupyterthemes cassandra-driver sklearn-pandas geocoder readchar lightfm scikit-optimize \
-        matplotlib-venn pathos pika tpot && \
+        matplotlib-venn pathos pika tpot powerline-status && \
         # pycairo
     git clone https://github.com/hyperopt/hyperopt-sklearn.git /tmp/hyperopt-sklearn && \
         cd /tmp/hyperopt-sklearn && pip install -e . && cd - && \
