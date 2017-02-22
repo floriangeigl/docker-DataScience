@@ -12,9 +12,9 @@ RUN NVIDIA_GPGKEY_SUM=d1be581509378368edeec8c1eb2958702feedf3bc3d17011adbf24efac
     echo "$NVIDIA_GPGKEY_SUM  cudasign.pub" | sha256sum -c --strict - && rm cudasign.pub && \
     echo "deb http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64 /" > /etc/apt/sources.list.d/cuda.list && \
     layer_cleanup.sh
-ENV CUDA_VERSION 8.0
-LABEL com.nvidia.cuda.version="8.0"
-ENV CUDA_PKG_VERSION 8-0=8.0.61-1
+ENV CUDA_VERSION 8.0.61
+LABEL com.nvidia.cuda.version="${CUDA_VERSION}"
+ENV CUDA_PKG_VERSION 8-0=$CUDA_VERSION-1
 RUN apt-get update && apt-get install -y --no-install-recommends \
         cuda-nvrtc-$CUDA_PKG_VERSION \
         cuda-nvgraph-$CUDA_PKG_VERSION \
