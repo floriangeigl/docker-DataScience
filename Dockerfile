@@ -9,13 +9,13 @@ RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
     echo "Europe/Vienna" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata && \
     # cp /etc/timezone /tz/ && cp /etc/localtime /tz/ && \
     apt-key update && apt-get update && \
-    # add more packages here \
+    # add more packages here
     apt-get install bash-completion vim screen htop less git mercurial subversion openssh-server supervisor xvfb locate \
         fonts-texgyre gsfonts libcairo2 libjpeg62-turbo libpango-1.0-0 libpangocairo-1.0-0 libpng12-0 libtiff5 dos2unix \
 	zsh \
         -y --no-install-recommends && \
     # install Oh My Zsh (install returns 1 -> use || echo "ok" to overcome this issue)
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" ||
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" || \
     echo "ok" && \
     echo "plugins=(git autopep8 python screen jsontools colorize colored-man-pages)\n" >> ~/.zshrc && \
     echo 'ZSH_THEME="gnzh"\n' >> ~/.zshrc && \
