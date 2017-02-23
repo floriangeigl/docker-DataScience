@@ -14,8 +14,9 @@ RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
         fonts-texgyre gsfonts libcairo2 libjpeg62-turbo libpango-1.0-0 libpangocairo-1.0-0 libpng12-0 libtiff5 dos2unix \
 	zsh \
         -y --no-install-recommends && \
-    # install Oh My Zsh
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" && \
+    # install Oh My Zsh (install returns 1 -> use || echo "ok" to overcome this issue)
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" ||
+    echo "ok" && \
     echo "plugins=(git autopep8 python screen jsontools colorize colored-man-pages)\n" >> ~/.zshrc && \
     echo 'ZSH_THEME="gnzh"\n' >> ~/.zshrc && \
     echo "DISABLE_AUTO_UPDATE=true\n" >> ~/.zshrc && \
