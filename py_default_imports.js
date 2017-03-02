@@ -7,20 +7,21 @@ define([
 
         var import_all = function () {
             Jupyter.notebook.insert_cell_above('code', 0).set_text('' + 
-            'import numpy as np \n' + 
-            'import pandas as pd \n' + 
-            'import matplotlib.pyplot as plt \n' +
-            'import matplotlib as mpl \n' +
-            '%pylab inline \n' +
-            'import seaborn as sns \n' +
-            'import re \n' +
+            'import numpy as np\n' + 
+            'import pandas as pd\n' + 
+            'import matplotlib.pyplot as plt\n' +
+            'import matplotlib as mpl\n' +
+            '%pylab inline\n' +
+            'import seaborn as sns\n' +
+            'import re\n' +
             'from collections import Counter, defaultdict \n' +
-            'from operator import itemgetter \n' +
-            'from joblib import Parallel, delayed \n' +
-            'from tqdm import tqdm, tqdm_notebook \n' +
-            'from IPython.display import display \n' +
-            'import os \n' +
-            'import datetime');
+            'from operator import itemgetter\n' +
+            'from joblib import Parallel, delayed\n' +
+            'from tqdm import tqdm, tqdm_notebook\n' +
+            'from IPython.display import display\n' +
+            'import os\n' +
+            'import datetime\n' + 
+            'mpl.rcParams['pdf.fonttype'] = 42');
         };
 
         var action = {
