@@ -20,8 +20,7 @@ define([
             'from tqdm import tqdm, tqdm_notebook\n' +
             'from IPython.display import display\n' +
             'import os\n' +
-            'import datetime\n' + 
-            'mpl.rcParams["pdf.fonttype"] = 42');
+            'import datetime');
         };
 
         var action = {
