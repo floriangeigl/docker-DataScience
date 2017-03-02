@@ -14,14 +14,14 @@ define([
             '%pylab inline\n' +
             'import seaborn as sns\n' +
             'import re\n' +
-            'from collections import Counter, defaultdict \n' +
+            'from collections import Counter, defaultdict\n' +
             'from operator import itemgetter\n' +
             'from joblib import Parallel, delayed\n' +
             'from tqdm import tqdm, tqdm_notebook\n' +
             'from IPython.display import display\n' +
             'import os\n' +
             'import datetime\n' + 
-            'mpl.rcParams['pdf.fonttype'] = 42');
+            'mpl.rcParams["pdf.fonttype"] = 42');
         };
 
         var action = {
