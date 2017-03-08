@@ -9,6 +9,7 @@ define([
             Jupyter.notebook.insert_cell_above('code', 0).set_text('' + 
             'import numpy as np \n' + 
             'import pandas as pd \n' + 
+            'pd.options.display.html.table_schema = True\n' + 
             'import matplotlib.pyplot as plt \n' +
             'import matplotlib as mpl \n' +
             '%pylab inline \n' +
