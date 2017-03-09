@@ -100,7 +100,7 @@ RUN apt-key update && apt-get update && \
 COPY jupyter_custom.js py_default_imports.js /tmp/
 RUN conda config --add channels conda-forge && \
     conda install cairomm jupyterlab flake8 jupyter_contrib_nbextensions yapf ipywidgets pandasql \
-    dask distributed pyodbc pymc3 geopy hdf5 h5py ffmpeg autopep8 -y && \
+    dask distributed pyodbc pymc3 geopy hdf5 h5py ffmpeg autopep8 pythreejs -y && \
     jupyter serverextension enable --py jupyterlab --sys-prefix && \
     jupyter contrib nbextension install --sys-prefix && \
     git clone https://github.com/Calysto/notebook-extensions.git /opt/calysto_notebook-extensions && \
@@ -115,6 +115,7 @@ RUN conda config --add channels conda-forge && \
         # install cmd
             | xargs -n1 jupyter nbextension enable && \
         jupyter nbextension enable --py --sys-prefix widgetsnbextension && \
+	jupyter nbextension enable --py --sys-prefix pythreejs && \
     # install jupyter lab table (nice pandas & json formating in notebooks)
     #   -> there is currently no supported version of jupyterlab_table
     #   pip install jupyterlab_table && \
