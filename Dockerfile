@@ -116,11 +116,12 @@ RUN conda config --add channels conda-forge && \
             | xargs -n1 jupyter nbextension enable && \
         jupyter nbextension enable --py --sys-prefix widgetsnbextension && \
     # install jupyter lab table (nice pandas & json formating in notebooks)
-    pip install jupyterlab_table && \
-    jupyter nbextension install --py --sys-prefix jupyterlab_table && \
-    jupyter nbextension enable --py --sys-prefix jupyterlab_table && \
-    jupyter labextension install --py --sys-prefix jupyterlab_table && \
-    jupyter labextension enable --py --sys-prefix jupyterlab_table && \
+    #   -> there is currently no supported version of jupyterlab_table
+    #   pip install jupyterlab_table && \
+    #   jupyter nbextension install --py --sys-prefix jupyterlab_table && \
+    #   jupyter nbextension enable --py --sys-prefix jupyterlab_table && \
+    #   jupyter labextension install --py --sys-prefix jupyterlab_table && \
+    #   jupyter labextension enable --py --sys-prefix jupyterlab_table && \
     # install custom jss & default imports extension
     mkdir -p /root/.jupyter/custom/ && \
     cat /tmp/jupyter_custom.js >> /root/.jupyter/custom/custom.js && \
