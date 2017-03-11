@@ -134,7 +134,7 @@ RUN conda config --add channels conda-forge && \
     pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython implicit \
         jupyterthemes cassandra-driver sklearn-pandas geocoder readchar lightfm scikit-optimize \
         matplotlib-venn pathos pika tpot powerline-status kafka-python fbprophet xgbfir scikit-plot \
-	fire && \
+	fire pdir2 && \
         # pycairo
     git clone https://github.com/hyperopt/hyperopt-sklearn.git /tmp/hyperopt-sklearn && \
         cd /tmp/hyperopt-sklearn && pip install -e . && cd - && \
