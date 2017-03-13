@@ -14,12 +14,12 @@ RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
         fonts-texgyre gsfonts libcairo2 libjpeg62-turbo libpango-1.0-0 libpangocairo-1.0-0 libpng12-0 libtiff5 dos2unix \
         -y --no-install-recommends && \ 
     # install graph-tool
-    apt-key adv --keyserver pool.sks-keyservers.net --recv-key 612DEFB798507F25 && \
-    touch /etc/apt/sources.list.d/graph-tool.list && \
-    echo 'deb http://downloads.skewed.de/apt/stretch stretch main' >> /etc/apt/sources.list.d/graph-tool.list && \
-    echo 'deb-src http://downloads.skewed.de/apt/stretch stretch main' >> /etc/apt/sources.list.d/graph-tool.list && \
-    apt-get update && apt-get install -y --no-install-recommends python3-graph-tool && \
-    ln -s /usr/lib/python3/dist-packages/graph_tool $(find /opt/conda/lib/python* -type d -name "site-packages")/graph_tool && \
+    # apt-key adv --keyserver pool.sks-keyservers.net --recv-key 612DEFB798507F25 && \
+    # touch /etc/apt/sources.list.d/graph-tool.list && \
+    # echo 'deb http://downloads.skewed.de/apt/stretch stretch main' >> /etc/apt/sources.list.d/graph-tool.list && \
+    # echo 'deb-src http://downloads.skewed.de/apt/stretch stretch main' >> /etc/apt/sources.list.d/graph-tool.list && \
+    # apt-get update && apt-get install -y --no-install-recommends python3-graph-tool && \
+    # ln -s /usr/lib/python3/dist-packages/graph_tool $(find /opt/conda/lib/python* -type d -name "site-packages")/graph_tool && \
     # setup ssh
     mkdir /var/run/sshd && \
     echo 'root:root' | chpasswd && \
