@@ -16,8 +16,8 @@ RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
     # install graph-tool
     apt-key adv --keyserver pool.sks-keyservers.net --recv-key 612DEFB798507F25 && \
     touch /etc/apt/sources.list.d/graph-tool.list && \
-    echo 'deb http://downloads.skewed.de/apt/jessie jessie main' >> /etc/apt/sources.list.d/graph-tool.list && \
-    echo 'deb-src http://downloads.skewed.de/apt/jessie jessie main' >> /etc/apt/sources.list.d/graph-tool.list && \
+    echo 'deb http://downloads.skewed.de/apt/stretch stretch main' >> /etc/apt/sources.list.d/graph-tool.list && \
+    echo 'deb-src http://downloads.skewed.de/apt/stretch stretch main' >> /etc/apt/sources.list.d/graph-tool.list && \
     apt-get update && apt-get install -y --no-install-recommends python3-graph-tool && \
     ln -s /usr/lib/python3/dist-packages/graph_tool $(find /opt/conda/lib/python* -type d -name "site-packages")/graph_tool && \
     # setup ssh
