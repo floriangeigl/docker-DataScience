@@ -88,7 +88,7 @@ RUN apt-key update && apt-get update && \
         
 # Install conda/pip python3 libs and notebook extensions
 # waiting for python3 support: librabbitmq
-COPY jupyter_custom.js py_default_imports.js /tmp/
+COPY jupyter_custom.js py_default_imports.js odbcinst.ini /tmp/
 RUN conda config --add channels conda-forge && \
     conda install cairomm jupyterlab flake8 jupyter_contrib_nbextensions yapf ipywidgets pandasql \
     dask distributed pyodbc pymc3 geopy hdf5 h5py ffmpeg autopep8 -y && \
@@ -124,6 +124,8 @@ RUN conda config --add channels conda-forge && \
     jt -t grade3 -f sourcemed -T -N -cellw 1200 && \
     # disable notebook authentication
     echo "c.NotebookApp.token = ''\nc.NotebookApp.password = ''\n" >> /root/.jupyter/jupyter_notebook_config.py && \
+    # set freetds driver for pyodbc
+    cat /tmp/odbcinst.ini >> /opt/conda/etc/odbcinst.ini && \
     layer_cleanup.sh
     
 # Copy some start script into the container.
