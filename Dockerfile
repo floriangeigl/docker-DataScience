@@ -136,8 +136,8 @@ RUN conda config --add channels conda-forge && \
         matplotlib-venn pathos pika tpot powerline-status kafka-python fbprophet xgbfir scikit-plot \
 	fire pdir2 && \
         # pycairo
-    git clone https://github.com/hyperopt/hyperopt-sklearn.git /tmp/hyperopt-sklearn && \
-        cd /tmp/hyperopt-sklearn && pip install -e . && cd - && \
+    #git clone https://github.com/hyperopt/hyperopt-sklearn.git /tmp/hyperopt-sklearn && \
+    #    cd /tmp/hyperopt-sklearn && pip install -e . && cd - && \
     # set default notebook theme, font etc.
     jt -t grade3 -f sourcemed -T -N -cellw 1200 && \
     # disable notebook authentication
