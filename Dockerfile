@@ -42,10 +42,21 @@ RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
     echo "Europe/Vienna" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata && \
     # cp /etc/timezone /tz/ && cp /etc/localtime /tz/ && \
     apt-key update && apt-get update && \
-    # add more packages here \
+    # add more packages here
     apt-get install bash-completion vim screen htop less git mercurial subversion openssh-server supervisor xvfb locate \
         fonts-texgyre gsfonts libcairo2 libjpeg62-turbo libpango-1.0-0 libpangocairo-1.0-0 libpng12-0 libtiff5 dos2unix \
+		unixodbc-dev unixodbc libxtst6 tdsodbc freetds-dev && \
         -y --no-install-recommends && \ 
+	zsh \
+        -y --no-install-recommends && \
+    # install Oh My Zsh (install returns 1 -> use || echo "ok" to overcome this issue)
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" || \
+    echo "ok" && \
+    echo "plugins=(git autopep8 python screen jsontools colorize colored-man-pages)\n" >> ~/.zshrc && \
+    echo 'ZSH_THEME="gnzh"\n' >> ~/.zshrc && \
+    echo "DISABLE_AUTO_UPDATE=true\n" >> ~/.zshrc && \
+    git clone https://github.com/powerline/fonts.git /tmp/powerline_fonts && \
+    /bin/bash /tmp/powerline_fonts/install.sh && \
     # install graph-tool
     # apt-key adv --keyserver pool.sks-keyservers.net --recv-key 612DEFB798507F25 && \
     # touch /etc/apt/sources.list.d/graph-tool.list && \
@@ -88,7 +99,6 @@ RUN conda create -n py27 python=2.7 anaconda seaborn flake8 -y && \
 # Install R, R-packages and r-server (use conda install r-cran-* packages or add your packages to package_install.r)
 COPY package_install.r Rprofile odbcinst.ini /tmp/
 RUN apt-key update && apt-get update && \
-    apt-get install -y --no-install-recommends unixodbc-dev unixodbc libxtst6 tdsodbc && \
     conda install r r-base r-essentials r-recommended -c r -y && \
     cat /tmp/Rprofile >> /root/.Rprofile && \
     conda install r-ggplot2 r-gtools r-xml r-xml2 r-plyr r-rcurl \
@@ -124,7 +134,7 @@ RUN apt-key update && apt-get update && \
 COPY jupyter_custom.js py_default_imports.js odbcinst.ini /tmp/
 RUN conda config --add channels conda-forge && \
     conda install cairomm jupyterlab flake8 jupyter_contrib_nbextensions yapf ipywidgets pandasql \
-    dask distributed pyodbc pymc3 geopy hdf5 h5py ffmpeg autopep8 -y && \
+    dask distributed pyodbc pymc3 geopy hdf5 h5py ffmpeg autopep8 pythreejs -y && \
     jupyter serverextension enable --py jupyterlab --sys-prefix && \
     jupyter contrib nbextension install --sys-prefix && \
     git clone https://github.com/Calysto/notebook-extensions.git /opt/calysto_notebook-extensions && \
@@ -139,6 +149,14 @@ RUN conda config --add channels conda-forge && \
         # install cmd
             | xargs -n1 jupyter nbextension enable && \
         jupyter nbextension enable --py --sys-prefix widgetsnbextension && \
+	jupyter nbextension enable --py --sys-prefix pythreejs && \
+    # install jupyter lab table (nice pandas & json formating in notebooks)
+    #   -> there is currently no supported version of jupyterlab_table
+    #   pip install jupyterlab_table && \
+    #   jupyter nbextension install --py --sys-prefix jupyterlab_table && \
+    #   jupyter nbextension enable --py --sys-prefix jupyterlab_table && \
+    #   jupyter labextension install --py --sys-prefix jupyterlab_table && \
+    #   jupyter labextension enable --py --sys-prefix jupyterlab_table && \
     # install custom jss & default imports extension
     mkdir -p /root/.jupyter/custom/ && \
     cat /tmp/jupyter_custom.js >> /root/.jupyter/custom/custom.js && \
@@ -149,7 +167,12 @@ RUN conda config --add channels conda-forge && \
     # currently not working: limit_output/main hinterland/hinterland
     pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython implicit \
         jupyterthemes cassandra-driver sklearn-pandas geocoder readchar lightfm scikit-optimize \
-        matplotlib-venn pathos pika tpot && \
+<<<<<<< HEAD
+        matplotlib-venn pathos pika tpot powerline-status kafka-python fbprophet xgbfir scikit-plot \
+	fire pdir2 && \
+=======
+        matplotlib-venn pathos pika tpot pymssql && \
+>>>>>>> master
         # pycairo
     #git clone https://github.com/hyperopt/hyperopt-sklearn.git /tmp/hyperopt-sklearn && \
     #    cd /tmp/hyperopt-sklearn && pip install -e . && cd - && \
