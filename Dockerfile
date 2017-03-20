@@ -12,7 +12,7 @@ RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
     # add more packages here
     apt-get install bash-completion vim screen htop less git mercurial subversion openssh-server supervisor xvfb locate \
         fonts-texgyre gsfonts libcairo2 libjpeg62-turbo libpango-1.0-0 libpangocairo-1.0-0 libpng12-0 libtiff5 dos2unix \
-		unixodbc-dev unixodbc libxtst6 tdsodbc freetds-dev && \
+        unixodbc-dev unixodbc libxtst6 tdsodbc freetds-dev \
         -y --no-install-recommends && \ 
 	zsh \
         -y --no-install-recommends && \
@@ -134,12 +134,8 @@ RUN conda config --add channels conda-forge && \
     # currently not working: limit_output/main hinterland/hinterland
     pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython implicit \
         jupyterthemes cassandra-driver sklearn-pandas geocoder readchar lightfm scikit-optimize \
-<<<<<<< HEAD
         matplotlib-venn pathos pika tpot powerline-status kafka-python fbprophet xgbfir scikit-plot \
-	fire pdir2 && \
-=======
-        matplotlib-venn pathos pika tpot pymssql && \
->>>>>>> master
+		fire pdir2 pymssql && \
         # pycairo
     #git clone https://github.com/hyperopt/hyperopt-sklearn.git /tmp/hyperopt-sklearn && \
     #    cd /tmp/hyperopt-sklearn && pip install -e . && cd - && \
