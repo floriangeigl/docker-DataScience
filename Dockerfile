@@ -2,6 +2,7 @@ FROM kaggle/python:latest
 MAINTAINER Florian Geigl <florian.geigl@gmail.com>
 
 COPY layer_cleanup.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/layer_cleanup.sh
 
 # CUDA Stuff
 LABEL com.nvidia.volumes.needed="nvidia_driver"
@@ -33,8 +34,7 @@ ENV PATH /usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
 ENV LD_LIBRARY_PATH /usr/local/nvidia/lib:/usr/local/nvidia/lib64
 
 # Install apt stuff, graph-tool, setup ssh, set timezone and update conda
-RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
-    mkdir -p /data/ && \
+RUN mkdir -p /data/ && \
     echo "Europe/Vienna" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata && \
     # cp /etc/timezone /tz/ && cp /etc/localtime /tz/ && \
     apt-key update && apt-get update && \
