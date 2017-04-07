@@ -130,7 +130,8 @@ RUN apt-key update && apt-get update && \
 COPY jupyter_custom.js py_default_imports.js odbcinst.ini /tmp/
 RUN conda config --add channels conda-forge && \
     conda install cairomm jupyterlab flake8 jupyter_contrib_nbextensions yapf ipywidgets pandasql \
-    dask distributed pyodbc pymc3 geopy hdf5 h5py ffmpeg autopep8 pythreejs -y && \
+    dask distributed pyodbc pymc3 geopy hdf5 h5py ffmpeg autopep8 datashader \
+    bokeh pythreejs datashader -y && \
     jupyter serverextension enable --py jupyterlab --sys-prefix && \
     jupyter contrib nbextension install --sys-prefix && \
     git clone https://github.com/Calysto/notebook-extensions.git /opt/calysto_notebook-extensions && \
@@ -164,7 +165,7 @@ RUN conda config --add channels conda-forge && \
     pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython implicit \
         jupyterthemes cassandra-driver sklearn-pandas geocoder readchar lightfm scikit-optimize \
         matplotlib-venn pathos pika tpot powerline-status kafka-python fbprophet xgbfir scikit-plot \
-		fire pdir2 pymssql && \
+		fire pdir2 pymssql dask-searchcv dask-ec2 && \
         # pycairo
     #git clone https://github.com/hyperopt/hyperopt-sklearn.git /tmp/hyperopt-sklearn && \
     #    cd /tmp/hyperopt-sklearn && pip install -e . && cd - && \
