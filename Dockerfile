@@ -91,7 +91,7 @@ RUN apt-key update && apt-get update && \
 COPY jupyter_custom.js py_default_imports.js odbcinst.ini /tmp/
 RUN conda config --add channels conda-forge && \
     conda install cairomm jupyterlab flake8 jupyter_contrib_nbextensions yapf ipywidgets pandasql \
-    dask dask-searchcv dask-ec2 distributed pyodbc pymc3 geopy hdf5 h5py ffmpeg autopep8 datashader \
+    dask distributed pyodbc pymc3 geopy hdf5 h5py ffmpeg autopep8 datashader \
     bokeh -y && \
     jupyter serverextension enable --py jupyterlab --sys-prefix && \
     jupyter contrib nbextension install --sys-prefix && \
@@ -117,7 +117,7 @@ RUN conda config --add channels conda-forge && \
     # currently not working: limit_output/main hinterland/hinterland
     pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython implicit \
         jupyterthemes cassandra-driver sklearn-pandas geocoder readchar lightfm scikit-optimize \
-        matplotlib-venn pathos pika tpot pymssql && \
+        matplotlib-venn pathos pika tpot pymssql dask-searchcv dask-ec2 && \
         # pycairo
     #git clone https://github.com/hyperopt/hyperopt-sklearn.git /tmp/hyperopt-sklearn && \
     #    cd /tmp/hyperopt-sklearn && pip install -e . && cd - && \
