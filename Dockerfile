@@ -6,7 +6,7 @@ COPY layer_cleanup.sh /usr/local/bin/
 # Install apt stuff, graph-tool, setup ssh, set timezone and update conda
 RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
     mkdir -p /data/ && \
-    echo "Europe/Vienna" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata && \
+    # echo "Europe/Vienna" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata && \
     # cp /etc/timezone /tz/ && cp /etc/localtime /tz/ && \
     apt-key update && apt-get update && \
     # add more packages here \
