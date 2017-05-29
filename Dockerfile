@@ -116,7 +116,7 @@ RUN conda config --add channels conda-forge && \
     jupyter nbextension enable --sys-prefix py_default_imports/main && \
     # currently not working: limit_output/main hinterland/hinterland
     pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython implicit \
-        jupyterthemes cassandra-driver sklearn-pandas geocoder readchar lightfm scikit-optimize \
+        jupyterthemes cassandra-driver sklearn-pandas geocoder readchar lightfm scikit-optimize python-tds \
         matplotlib-venn pathos pika tpot pymssql dask-searchcv dask-ec2 libarchive pylzma hdfs cqlsh && \
         # pycairo
     #git clone https://github.com/hyperopt/hyperopt-sklearn.git /tmp/hyperopt-sklearn && \
