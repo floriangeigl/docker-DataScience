@@ -22,7 +22,8 @@ define([
             'import os\n' +
             'import datetime\n' +
             'import itertools\n' +
-            'import pprint');
+            'import pprint\n' + 
+            '%autosave 600');
         };
 
         var action = {
