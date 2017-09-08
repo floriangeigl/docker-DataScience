@@ -39,7 +39,7 @@ RUN apt-key update && apt-get update && \
       gfortran m4 cmake libssl-dev libcurl4-openssl-dev libzmq3-dev && \
     # install julia
     conda install julia \
-      -c bioconda -y && \
+      -c bioconda -c compbiocore -y && \
     echo "Install packages from package_install.jl..." && \
     # install julia-packages
     julia /tmp/package_install.jl 2>&1 | tee /var/log/julia_pkg_installs.log  && \
