@@ -36,36 +36,47 @@ ENV LD_LIBRARY_PATH /usr/local/nvidia/lib:/usr/local/nvidia/lib64
 # Install apt stuff, graph-tool, setup ssh, set timezone and update conda
 RUN mkdir -p /data/ && \
     echo "Europe/Vienna" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata && \
-    # cp /etc/timezone /tz/ && cp /etc/localtime /tz/ && \
-    apt-key update && apt-get update && \
-    # add more packages here
-    apt-get install bash-completion vim screen htop less git mercurial subversion openssh-server supervisor xvfb locate \
-        fonts-texgyre gsfonts libcairo2 libjpeg62-turbo libpango-1.0-0 libpangocairo-1.0-0 libpng12-0 libtiff5 dos2unix \
+    echo "deb http://ftp.debian.org/debian/ stretch main" >> /etc/apt/sources.list && \
+	apt-key update && apt-get update && \
+    #
+	# add more packages here
+    apt-get install bash-completion vim screen htop less git mercurial \ 
+		subversion openssh-server supervisor xvfb locate \
+        fonts-texgyre gsfonts libcairo2 libjpeg62-turbo \ 
+		libpango-1.0-0 libpangocairo-1.0-0 libpng12-0 libtiff5 dos2unix \
         unixodbc-dev unixodbc libxtst6 tdsodbc freetds-dev \
+		#
+		# graph-tool
+		libboost-all-dev expat libcgal-dev libsparsehash-dev g++-6 zsh \
         -y --no-install-recommends && \ 
-	zsh \
-        -y --no-install-recommends && \
-    # install Oh My Zsh (install returns 1 -> use || echo "ok" to overcome this issue)
+    #
+	# install Oh My Zsh (install returns 1 -> use || echo "ok" to overcome this issue)
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" || \
     echo "ok" && \
     echo "plugins=(git autopep8 python screen jsontools colorize colored-man-pages)\n" >> ~/.zshrc && \
     echo 'ZSH_THEME="gnzh"\n' >> ~/.zshrc && \
     echo "DISABLE_AUTO_UPDATE=true\n" >> ~/.zshrc && \
     git clone https://github.com/powerline/fonts.git /tmp/powerline_fonts && \
-    /bin/bash /tmp/powerline_fonts/install.sh && \
-    # install graph-tool
-    # apt-key adv --keyserver pool.sks-keyservers.net --recv-key 612DEFB798507F25 && \
-    # touch /etc/apt/sources.list.d/graph-tool.list && \
-    # echo 'deb http://downloads.skewed.de/apt/stretch stretch main' >> /etc/apt/sources.list.d/graph-tool.list && \
-    # echo 'deb-src http://downloads.skewed.de/apt/stretch stretch main' >> /etc/apt/sources.list.d/graph-tool.list && \
-    # apt-get update && apt-get install -y --no-install-recommends python3-graph-tool && \
-    # ln -s /usr/lib/python3/dist-packages/graph_tool $(find /opt/conda/lib/python* -type d -name "site-packages")/graph_tool && \
-    # setup ssh
+    /bin/bash /tmp/powerline_fonts/install.sh
+	
+COPY pycairo_install.sh /tmp/
+RUN	dos2unix /tmp/pycairo_install.sh && \
+	/bin/bash /tmp/pycairo_install.sh && \
+	apt-get update && apt-get install libcairomm-1.0-dev -y && \
+	wget -O /tmp/gt/gt.tar.bz2 https://downloads.skewed.de/graph-tool/graph-tool-2.22.tar.bz2 && \
+	cd /tmp/gt/ && tar jxf gt.tar.bz2 && cd graph-tool* && \
+	g++-6 --version && \
+	./configure CXX=g++-6 && exit 1 && make -j4 && make install && \
+	python -c "import graph-tool" && \
+	exit 1 && \	
+    #
+	# setup ssh
     mkdir /var/run/sshd && \
     echo 'root:root' | chpasswd && \
     sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
     sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
-    # update conda
+    #
+	# update conda
     conda install conda-build pip -y && \
     conda update conda conda-env conda-build pip -y && \
     layer_cleanup.sh
@@ -78,7 +89,7 @@ RUN apt-key update && apt-get update && \
       gfortran m4 cmake libssl-dev libcurl4-openssl-dev libzmq3-dev && \
     # install julia
     conda install julia \
-      -c bioconda -y && \
+      -c bioconda -c compbiocore -y && \
     echo "Install packages from package_install.jl..." && \
     # install julia-packages
     julia /tmp/package_install.jl 2>&1 | tee /var/log/julia_pkg_installs.log  && \
@@ -130,7 +141,7 @@ RUN apt-key update && apt-get update && \
 COPY jupyter_custom.js py_default_imports.js odbcinst.ini /tmp/
 RUN conda config --add channels conda-forge && \
     conda install cairomm jupyterlab flake8 jupyter_contrib_nbextensions yapf ipywidgets pandasql \
-    dask distributed pyodbc pymc3 geopy hdf5 h5py ffmpeg autopep8 datashader \
+    dask distributed pyodbc pymc3 geopy hdf5 h5py ffmpeg autopep8 datashader bqplot pyspark \
     bokeh pythreejs datashader -y && \
     jupyter serverextension enable --py jupyterlab --sys-prefix && \
     jupyter contrib nbextension install --sys-prefix && \
@@ -163,9 +174,9 @@ RUN conda config --add channels conda-forge && \
     jupyter nbextension enable --sys-prefix py_default_imports/main && \
     # currently not working: limit_output/main hinterland/hinterland
     pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython implicit \
-        jupyterthemes cassandra-driver sklearn-pandas geocoder readchar lightfm scikit-optimize \
+        jupyterthemes cassandra-driver sklearn-pandas geocoder readchar lightfm scikit-optimize python-tds \
         matplotlib-venn pathos pika tpot powerline-status kafka-python fbprophet xgbfir scikit-plot \
-		fire pdir2 pymssql dask-searchcv dask-ec2 && \
+		fire pdir2 pymssql dask-searchcv dask-ec2 libarchive pylzma hdfs cqlsh pyhive && \
         # pycairo
     #git clone https://github.com/hyperopt/hyperopt-sklearn.git /tmp/hyperopt-sklearn && \
     #    cd /tmp/hyperopt-sklearn && pip install -e . && cd - && \

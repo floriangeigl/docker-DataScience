@@ -21,7 +21,10 @@ define([
             'from tqdm import tqdm, tqdm_notebook\n' +
             'from IPython.display import display\n' +
             'import os\n' +
-            'import datetime');
+            'import datetime\n' +
+            'import itertools\n' +
+            'import pprint\n' + 
+            '%autosave 600');
         };
 
         var action = {
