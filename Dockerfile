@@ -60,7 +60,7 @@ RUN apt-key update && apt-get update && \
       gfortran m4 cmake libssl-dev libcurl4-openssl-dev libzmq3-dev && \
     # install julia
     conda install julia \
-      -c bioconda -y && \
+      -c bioconda -c compbiocore -y && \
     echo "Install packages from package_install.jl..." && \
     # install julia-packages
     julia /tmp/package_install.jl 2>&1 | tee /var/log/julia_pkg_installs.log  && \
@@ -112,7 +112,7 @@ RUN apt-key update && apt-get update && \
 COPY jupyter_custom.js py_default_imports.js odbcinst.ini /tmp/
 RUN conda config --add channels conda-forge && \
     conda install cairomm jupyterlab flake8 jupyter_contrib_nbextensions yapf ipywidgets pandasql \
-    dask distributed pyodbc pymc3 geopy hdf5 h5py ffmpeg autopep8 datashader \
+    dask distributed pyodbc pymc3 geopy hdf5 h5py ffmpeg autopep8 datashader bqplot pyspark \
     bokeh pythreejs -y && \
     jupyter serverextension enable --py jupyterlab --sys-prefix && \
     jupyter contrib nbextension install --sys-prefix && \
@@ -145,9 +145,9 @@ RUN conda config --add channels conda-forge && \
     jupyter nbextension enable --sys-prefix py_default_imports/main && \
     # currently not working: limit_output/main hinterland/hinterland
     pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython implicit \
-        jupyterthemes cassandra-driver sklearn-pandas geocoder readchar lightfm scikit-optimize \
+        jupyterthemes cassandra-driver sklearn-pandas geocoder readchar lightfm scikit-optimize python-tds \
         matplotlib-venn pathos pika tpot powerline-status kafka-python fbprophet xgbfir scikit-plot \
-		fire pdir2 pymssql dask-searchcv dask-ec2 && \
+		fire pdir2 pymssql dask-searchcv dask-ec2 libarchive pylzma hdfs cqlsh pyhive && \
         # pycairo
     #git clone https://github.com/hyperopt/hyperopt-sklearn.git /tmp/hyperopt-sklearn && \
     #    cd /tmp/hyperopt-sklearn && pip install -e . && cd - && \
