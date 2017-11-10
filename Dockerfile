@@ -12,7 +12,7 @@ RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
     # add more packages here \
     apt-get install bash-completion vim screen htop less git mercurial subversion openssh-server supervisor xvfb locate \
         fonts-texgyre gsfonts libcairo2 libjpeg62-turbo libpango-1.0-0 libpangocairo-1.0-0 libpng12-0 libtiff5 dos2unix \
-        unixodbc-dev unixodbc libxtst6 tdsodbc freetds-dev libarchive-dev mongodb-clients \
+        unixodbc-dev unixodbc libxtst6 tdsodbc freetds-dev libarchive-dev mongodb-clients texlive-latex-recommended \
         -y --no-install-recommends && \ 
     # install graph-tool
     # apt-key adv --keyserver pool.sks-keyservers.net --recv-key 612DEFB798507F25 && \
