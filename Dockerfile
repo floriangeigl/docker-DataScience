@@ -56,6 +56,7 @@ RUN conda create -n py27 python=2.7 anaconda seaborn flake8 -y && \
 # Install R, R-packages and r-server (use conda install r-cran-* packages or add your packages to package_install.r)
 COPY package_install.r Rprofile odbcinst.ini /tmp/
 RUN apt-key update && apt-get update && \
+    apt-get install unzip -y && \
     conda install r r-base r-essentials r-recommended -c r -y && \
     cat /tmp/Rprofile >> /root/.Rprofile && \
     conda install r-ggplot2 r-gtools r-xml r-xml2 r-plyr r-rcurl \
@@ -79,8 +80,8 @@ RUN apt-key update && apt-get update && \
     ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc-citeproc /usr/local/bin && \
     # configure FreeTDS Driver (r-odbc sql driver)
     cat /tmp/odbcinst.ini >> /etc/odbcinst.ini && \
-    wget https://github.com/jgm/pandoc-templates/archive/1.15.0.6.tar.gz && \
-    mkdir -p /opt/pandoc/templates && tar zxf 1.15.0.6.tar.gz && \
+    wget https://github.com/jgm/pandoc-templates/archive/master.zip && \
+    mkdir -p /opt/pandoc/templates && unzip master.zip && \
     cp -r pandoc-templates*/* /opt/pandoc/templates && rm -rf pandoc-templates* && \
     mkdir /root/.pandoc && ln -s /opt/pandoc/templates /root/.pandoc/templates && \
     # cleanup
