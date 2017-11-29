@@ -131,6 +131,9 @@ RUN conda config --add channels conda-forge && \
     cat /tmp/odbcinst.ini >> /opt/conda/etc/odbcinst.ini && \
     layer_cleanup.sh
     
+# Tmp fix for jupyter overwrite issue (https://github.com/jupyter/notebook/issues/484)
+RUN pip install notebook --pre --upgrade
+    
 # Copy some start script into the container.
 COPY export_environment.sh \
     init.sh \
