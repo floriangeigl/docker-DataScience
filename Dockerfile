@@ -155,8 +155,11 @@ RUN chmod +x /usr/local/bin/init.sh && \
 # Expose jupyter notebook, jupyter labs, r-studio-server and ss port.
 EXPOSE 8888 8889 8787 22
 
-# Define mount volumne
+# Define mount volume
 VOLUME ["/data"]
+# write logs to volume
+VOLUME ["/var/log"]
+
 
 # copy supervisor conf
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
