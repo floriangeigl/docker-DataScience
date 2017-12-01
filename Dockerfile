@@ -132,7 +132,10 @@ RUN conda config --add channels conda-forge && \
     layer_cleanup.sh
     
 # Tmp fix for jupyter overwrite issue (https://github.com/jupyter/notebook/issues/484)
-RUN pip install notebook --pre --upgrade
+# and matplotlib
+RUN pip install notebook --pre --upgrade --no-deps --force-reinstall && \
+    pip install --upgrade matplotlib --no-deps --force-reinstall && \
+    layer_cleanup.sh
     
 # Copy some start script into the container.
 COPY export_environment.sh \
