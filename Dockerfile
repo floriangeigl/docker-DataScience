@@ -1,53 +1,25 @@
 FROM kaggle/python:latest
-MAINTAINER Florian Geigl <florian.geigl@gmail.com>
+LABEL maintainer="florian.geigl@gmail.com"
 
 COPY layer_cleanup.sh /usr/local/bin/
 
 # Install apt stuff, graph-tool, setup ssh, set timezone and update conda
 RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
     mkdir -p /data/ && \
-    echo "Europe/Vienna" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata && \
-    echo "deb http://ftp.debian.org/debian/ stretch main" >> /etc/apt/sources.list && \
-	apt-key update && apt-get update && \
-    #
-	# add more packages here
-    apt-get install bash-completion vim screen htop less git mercurial \ 
-		subversion openssh-server supervisor xvfb locate \
-        fonts-texgyre gsfonts libcairo2 libjpeg62-turbo \ 
-		libpango-1.0-0 libpangocairo-1.0-0 libpng12-0 libtiff5 dos2unix \
-        unixodbc-dev unixodbc libxtst6 tdsodbc freetds-dev \
-		#
-		# graph-tool
-		libboost-all-dev expat libcgal-dev libsparsehash-dev g++-6 zsh \
+    # echo "Europe/Vienna" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata && \
+    # cp /etc/timezone /tz/ && cp /etc/localtime /tz/ && \
+    apt-key update && apt-get update && \
+    # add more packages here \
+    apt-get install bash-completion vim screen htop less git mercurial subversion openssh-server supervisor xvfb locate \
+        fonts-texgyre gsfonts libcairo2 libjpeg62-turbo libpango-1.0-0 libpangocairo-1.0-0 libpng12-0 libtiff5 dos2unix \
+        unixodbc-dev unixodbc libxtst6 tdsodbc freetds-dev libarchive-dev mongodb-clients texlive-latex-recommended \
         -y --no-install-recommends && \ 
-    #
-	# install Oh My Zsh (install returns 1 -> use || echo "ok" to overcome this issue)
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" || \
-    echo "ok" && \
-    echo "plugins=(git autopep8 python screen jsontools colorize colored-man-pages)\n" >> ~/.zshrc && \
-    echo 'ZSH_THEME="gnzh"\n' >> ~/.zshrc && \
-    echo "DISABLE_AUTO_UPDATE=true\n" >> ~/.zshrc && \
-    git clone https://github.com/powerline/fonts.git /tmp/powerline_fonts && \
-    /bin/bash /tmp/powerline_fonts/install.sh
-	
-COPY pycairo_install.sh /tmp/
-RUN	dos2unix /tmp/pycairo_install.sh && \
-	/bin/bash /tmp/pycairo_install.sh && \
-	apt-get update && apt-get install libcairomm-1.0-dev -y && \
-	wget -O /tmp/gt/gt.tar.bz2 https://downloads.skewed.de/graph-tool/graph-tool-2.22.tar.bz2 && \
-	cd /tmp/gt/ && tar jxf gt.tar.bz2 && cd graph-tool* && \
-	g++-6 --version && \
-	./configure CXX=g++-6 && exit 1 && make -j4 && make install && \
-	python -c "import graph-tool" && \
-	exit 1 && \	
-    #
-	# setup ssh
+    # setup ssh
     mkdir /var/run/sshd && \
     echo 'root:root' | chpasswd && \
     sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
     sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
-    #
-	# update conda
+    # update conda
     conda install conda-build pip -y && \
     conda update conda conda-env conda-build pip -y && \
     layer_cleanup.sh
@@ -67,16 +39,10 @@ RUN apt-key update && apt-get update && \
     # cleanup
     layer_cleanup.sh
 
-# Install python2.7 for conda
-# add python2.7 packages here
-RUN conda create -n py27 python=2.7 anaconda seaborn flake8 -y && \
-    conda clean -i -l -t -y && \
-    pip install influxdb && \
-    layer_cleanup.sh
-    
 # Install R, R-packages and r-server (use conda install r-cran-* packages or add your packages to package_install.r)
 COPY package_install.r Rprofile odbcinst.ini /tmp/
 RUN apt-key update && apt-get update && \
+    apt-get install unzip -y && \
     conda install r r-base r-essentials r-recommended -c r -y && \
     cat /tmp/Rprofile >> /root/.Rprofile && \
     conda install r-ggplot2 r-gtools r-xml r-xml2 r-plyr r-rcurl \
@@ -100,8 +66,8 @@ RUN apt-key update && apt-get update && \
     ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc-citeproc /usr/local/bin && \
     # configure FreeTDS Driver (r-odbc sql driver)
     cat /tmp/odbcinst.ini >> /etc/odbcinst.ini && \
-    wget https://github.com/jgm/pandoc-templates/archive/1.15.0.6.tar.gz && \
-    mkdir -p /opt/pandoc/templates && tar zxf 1.15.0.6.tar.gz && \
+    wget https://github.com/jgm/pandoc-templates/archive/master.zip && \
+    mkdir -p /opt/pandoc/templates && unzip master.zip && \
     cp -r pandoc-templates*/* /opt/pandoc/templates && rm -rf pandoc-templates* && \
     mkdir /root/.pandoc && ln -s /opt/pandoc/templates /root/.pandoc/templates && \
     # cleanup
@@ -110,10 +76,11 @@ RUN apt-key update && apt-get update && \
 # Install conda/pip python3 libs and notebook extensions
 # waiting for python3 support: librabbitmq
 COPY jupyter_custom.js py_default_imports.js odbcinst.ini /tmp/
-RUN conda config --add channels conda-forge && \
+RUN apt-get update && apt-get upgrade libev4 libev-dev -y && \
+    conda config --add channels conda-forge && \
     conda install cairomm jupyterlab flake8 jupyter_contrib_nbextensions yapf ipywidgets pandasql \
     dask distributed pyodbc pymc3 geopy hdf5 h5py ffmpeg autopep8 datashader bqplot pyspark \
-    bokeh pythreejs -y && \
+    bokeh pythreejs python-snappy lz4 boost scipy numpy expat cgal sparsehash cairomm gxx_linux-64 -y && \
     jupyter serverextension enable --py jupyterlab --sys-prefix && \
     jupyter contrib nbextension install --sys-prefix && \
     git clone https://github.com/Calysto/notebook-extensions.git /opt/calysto_notebook-extensions && \
@@ -143,14 +110,12 @@ RUN conda config --add channels conda-forge && \
     mv /tmp/py_default_imports.js /tmp/py_default_imports/main.js && \
     jupyter nbextension install --sys-prefix /tmp/py_default_imports && \
     jupyter nbextension enable --sys-prefix py_default_imports/main && \
+    # cassandra driver performance stuff
+    pip install scales && \
     # currently not working: limit_output/main hinterland/hinterland
     pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython implicit \
         jupyterthemes cassandra-driver sklearn-pandas geocoder readchar lightfm scikit-optimize python-tds \
-        matplotlib-venn pathos pika tpot powerline-status kafka-python fbprophet xgbfir scikit-plot \
-		fire pdir2 pymssql dask-searchcv dask-ec2 libarchive pylzma hdfs cqlsh pyhive && \
-        # pycairo
-    #git clone https://github.com/hyperopt/hyperopt-sklearn.git /tmp/hyperopt-sklearn && \
-    #    cd /tmp/hyperopt-sklearn && pip install -e . && cd - && \
+        matplotlib-venn pathos pika tpot powerline-status kafka-python fbprophet xgbfir scikit-plot fire pdir2 libarchive pylzma hdfs cqlsh pyhive elasticsearch-dsl tables && \
     # set default notebook theme, font etc.
     jt -t grade3 -f sourcemed -T -N -cellw 1200 && \
     # disable notebook authentication
@@ -158,16 +123,32 @@ RUN conda config --add channels conda-forge && \
     # set freetds driver for pyodbc
     cat /tmp/odbcinst.ini >> /opt/conda/etc/odbcinst.ini && \
     layer_cleanup.sh
+
+# install graph-tool
+RUN conda install gtk3 -c pkgw-forge && \
+    conda install pygobject -y && \
+    conda install graph-tool -c ostrokach-forge -y && \
+    layer_cleanup.sh
+
+# Tmp fix for jupyter overwrite issue (https://github.com/jupyter/notebook/issues/484)
+# and matplotlib
+RUN pip install notebook --pre --upgrade --no-deps --force-reinstall && \
+    pip install --upgrade matplotlib --no-deps --force-reinstall && \
+    layer_cleanup.sh
     
 # Copy some start script into the container.
 COPY export_environment.sh \
     init.sh \
     /usr/local/bin/
 
+# fix ldconfig (libstdc++.so.6: version `CXXABI_1.3.9' not found)
+RUN echo "/opt/conda/lib" > /etc/ld.so.conf && \
+    ldconfig && \
+    layer_cleanup.sh
+
 # Fix permissions and bash-completion
 COPY bash_completion_fix.sh /tmp/
-RUN chmod +x /usr/local/bin/init.sh && \
-    chmod +x /usr/local/bin/export_environment.sh && \
+RUN chmod +x /usr/local/bin/init.sh /usr/local/bin/export_environment.sh && \
     cat /tmp/bash_completion_fix.sh >> /etc/bash.bashrc && \ 
     echo "if [ -f /etc/bash_completion ]; then" >> ~/.bash_profile && \
     echo "  . /etc/bash_completion" >> ~/.bash_profile && \
@@ -175,10 +156,12 @@ RUN chmod +x /usr/local/bin/init.sh && \
     layer_cleanup.sh
 
 # Expose jupyter notebook, jupyter labs, r-studio-server and ss port.
-EXPOSE 8888 8889 8787 22
+EXPOSE 8888 8889 8787 22 9001
 
-# Define mount volumne
+# Define mount volume
 VOLUME ["/data"]
+# write logs to volume
+VOLUME ["/var/log"]
 
 # copy supervisor conf
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
