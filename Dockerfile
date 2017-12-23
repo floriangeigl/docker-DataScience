@@ -119,7 +119,7 @@ RUN conda config --add channels conda-forge && \
     pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython implicit \
         jupyterthemes cassandra-driver sklearn-pandas geocoder readchar lightfm scikit-optimize python-tds \
         matplotlib-venn pathos pika tpot pymssql dask-searchcv dask-ec2 libarchive pylzma hdfs cqlsh pyhive \
-        "elasticsearch-dsl>=5.0.0,<6.0.0" && \
+        elasticsearch-dsl tables && \
         # pycairo
     #git clone https://github.com/hyperopt/hyperopt-sklearn.git /tmp/hyperopt-sklearn && \
     #    cd /tmp/hyperopt-sklearn && pip install -e . && cd - && \
