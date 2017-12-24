@@ -13,7 +13,7 @@ RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
     apt-get install bash-completion vim screen htop less git mercurial subversion openssh-server supervisor xvfb locate \
         fonts-texgyre gsfonts libcairo2 libjpeg62-turbo libpango-1.0-0 libpangocairo-1.0-0 libpng12-0 libtiff5 dos2unix \
         unixodbc-dev unixodbc libxtst6 tdsodbc freetds-dev libarchive-dev mongodb-clients texlive-latex-recommended \
-        -y --no-install-recommends && \ 
+        -y --no-install-recommends --no-upgrade && \ 
     # setup ssh
     mkdir /var/run/sshd && \
     echo 'root:root' | chpasswd && \
@@ -28,8 +28,9 @@ RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
 COPY package_install.jl /tmp/
 RUN apt-key update && apt-get update && \
     # install required libs
-    apt-get install -y --no-install-recommends gettext hdf5-tools libpcre3-dev build-essential \
-      gfortran m4 cmake libssl-dev libcurl4-openssl-dev libzmq3-dev && \
+    apt-get install gettext hdf5-tools libpcre3-dev build-essential \
+        gfortran m4 cmake libssl-dev libcurl4-openssl-dev libzmq3-dev \
+        -y --no-install-recommends --no-upgrade  && \
     # install julia
     conda install julia \
       -c bioconda -c compbiocore -y && \
@@ -42,7 +43,7 @@ RUN apt-key update && apt-get update && \
 # Install R, R-packages and r-server (use conda install r-cran-* packages or add your packages to package_install.r)
 COPY package_install.r Rprofile odbcinst.ini /tmp/
 RUN apt-key update && apt-get update && \
-    apt-get install unzip -y && \
+    apt-get install unzip -y --no-install-recommends --no-upgrade && \
     conda install r r-base r-essentials r-recommended -c r -y && \
     cat /tmp/Rprofile >> /root/.Rprofile && \
     conda install r-ggplot2 r-gtools r-xml r-xml2 r-plyr r-rcurl \
@@ -57,8 +58,9 @@ RUN apt-key update && apt-get update && \
     echo "rstudio:rstudio" | chpasswd && \
     cat /tmp/Rprofile >> /home/rstudio/.Rprofile && \
     chown -R rstudio /home/rstudio/ && chgrp -R rstudio /home/rstudio/ && \
-    apt-get install -y --no-install-recommends ca-certificates file git libapparmor1 libedit2 \
-        libcurl4-openssl-dev libssl-dev lsb-release psmisc python-setuptools sudo && \
+    apt-get install ca-certificates file git libapparmor1 libedit2 \
+        libcurl4-openssl-dev libssl-dev lsb-release psmisc python-setuptools sudo \
+        -y --no-install-recommends --no-upgrade && \
     VER=$(wget --no-check-certificate -qO- https://s3.amazonaws.com/rstudio-server/current.ver) && \
     wget -q http://download2.rstudio.org/rstudio-server-${VER}-amd64.deb && \
     dpkg -i rstudio-server-${VER}-amd64.deb && \
@@ -76,7 +78,7 @@ RUN apt-key update && apt-get update && \
 # Install conda/pip python3 libs and notebook extensions
 # waiting for python3 support: librabbitmq
 COPY jupyter_custom.js py_default_imports.js odbcinst.ini /tmp/
-RUN apt-get update && apt-get upgrade libev4 libev-dev -y && \
+RUN apt-get update && apt-get install libev4 libev-dev -y --no-install-recommends --no-upgrade && \
     conda config --add channels conda-forge && \
     conda install cairomm jupyterlab flake8 jupyter_contrib_nbextensions yapf ipywidgets pandasql \
     dask distributed pyodbc pymc3 geopy hdf5 h5py ffmpeg autopep8 datashader bqplot pyspark \
