@@ -53,6 +53,7 @@ RUN apt-key update && apt-get update && \
     /opt/conda/bin/Rscript /tmp/package_install.r 2>&1 | tee /var/log/r_pkg_installs.log && \
     # install r-server
     useradd -m rstudio && \
+    # set user/password for rstudio-server
     echo "rstudio:rstudio" | chpasswd && \
     cat /tmp/Rprofile >> /home/rstudio/.Rprofile && \
     chown -R rstudio /home/rstudio/ && chgrp -R rstudio /home/rstudio/ && \
@@ -70,7 +71,6 @@ RUN apt-key update && apt-get update && \
     mkdir -p /opt/pandoc/templates && unzip master.zip && \
     cp -r pandoc-templates*/* /opt/pandoc/templates && rm -rf pandoc-templates* && \
     mkdir /root/.pandoc && ln -s /opt/pandoc/templates /root/.pandoc/templates && \
-    # cleanup
     layer_cleanup.sh
         
 # Install conda/pip python3 libs and notebook extensions
@@ -136,32 +136,32 @@ RUN pip install notebook --pre --upgrade --no-deps --force-reinstall && \
     pip install --upgrade matplotlib --no-deps --force-reinstall && \
     layer_cleanup.sh
     
-# Copy some start script into the container.
-COPY export_environment.sh \
-    init.sh \
-    /usr/local/bin/
-
 # fix ldconfig (libstdc++.so.6: version `CXXABI_1.3.9' not found)
 RUN echo "/opt/conda/lib" > /etc/ld.so.conf && \
     ldconfig && \
     layer_cleanup.sh
 
+# Copy some start script into the container.
+COPY export_environment.sh \
+    init.sh \
+    /usr/local/bin/
+
 # Fix permissions and bash-completion
-COPY bash_completion_fix.sh /tmp/
+COPY append2bashprofile.sh \
+    append2bashrc.sh \
+    /tmp/
+
 RUN chmod +x /usr/local/bin/init.sh /usr/local/bin/export_environment.sh && \
-    cat /tmp/bash_completion_fix.sh >> /etc/bash.bashrc && \ 
-    echo "if [ -f /etc/bash_completion ]; then" >> ~/.bash_profile && \
-    echo "  . /etc/bash_completion" >> ~/.bash_profile && \
-    echo "fi" >> ~/.bash_profile && \
+    cat /tmp/append2bashrc.sh >> /etc/bash.bashrc && \
+    cat /tmp/append2bashrc.sh >> ~/.bashrc && \
+    cat /tmp/append2bashprofile.sh >> ~/.bash_profile && \
     layer_cleanup.sh
 
 # Expose jupyter notebook, jupyter labs, r-studio-server and ss port.
 EXPOSE 8888 8889 8787 22 9001
 
 # Define mount volume
-VOLUME ["/data"]
-# write logs to volume
-VOLUME ["/var/log"]
+VOLUME ["/data", "/var/log"]
 
 # copy supervisor conf
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
