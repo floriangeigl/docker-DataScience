@@ -25,7 +25,7 @@ RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
     layer_cleanup.sh
 
 #install julia & packages (add your packages to package_install.jl)
-COPY package_install.jl /tmp/
+COPY package_install.jl install_julia_kernel.jl /tmp/
 RUN apt-key update && apt-get update && \
     # install required libs
     apt-get install gettext hdf5-tools libpcre3-dev build-essential \
@@ -36,8 +36,9 @@ RUN apt-key update && apt-get update && \
       -c bioconda -c compbiocore -y && \
     echo "Install packages from package_install.jl..." && \
     # install julia-packages
+    dos2unix /tmp/package_install.jl && \
     julia /tmp/package_install.jl 2>&1 | tee /var/log/julia_pkg_installs.log  && \
-    # cleanup
+    julia /tmp/install_julia_kernel.jl 2>&1 | tee -a /var/log/julia_pkg_installs.log  && \
     layer_cleanup.sh
 
 # Install R, R-packages and r-server (use conda install r-cran-* packages or add your packages to package_install.r)
