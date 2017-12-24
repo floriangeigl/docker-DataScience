@@ -6,6 +6,7 @@ COPY layer_cleanup.sh /usr/local/bin/
 # Install apt stuff, graph-tool, setup ssh, set timezone and update conda
 RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
     mkdir -p /data/ && \
+    conda config --add channels conda-forge && \
     # echo "Europe/Vienna" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata && \
     # cp /etc/timezone /tz/ && cp /etc/localtime /tz/ && \
     apt-key update && apt-get update && \
@@ -25,20 +26,18 @@ RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
     layer_cleanup.sh
 
 #install julia & packages (add your packages to package_install.jl)
-COPY package_install.jl install_julia_kernel.jl /tmp/
+COPY package_install.jl /tmp/
 RUN apt-key update && apt-get update && \
     # install required libs
     apt-get install gettext hdf5-tools libpcre3-dev build-essential \
         gfortran m4 cmake libssl-dev libcurl4-openssl-dev libzmq3-dev \
         -y --no-install-recommends --no-upgrade  && \
     # install julia
-    conda install julia \
-      -c bioconda -c compbiocore -y && \
+    conda install julia -y && \
     echo "Install packages from package_install.jl..." && \
     # install julia-packages
     dos2unix /tmp/package_install.jl && \
     julia /tmp/package_install.jl 2>&1 | tee /var/log/julia_pkg_installs.log  && \
-    julia /tmp/install_julia_kernel.jl 2>&1 | tee -a /var/log/julia_pkg_installs.log  && \
     layer_cleanup.sh
 
 # Install R, R-packages and r-server (use conda install r-cran-* packages or add your packages to package_install.r)
@@ -80,7 +79,6 @@ RUN apt-key update && apt-get update && \
 # waiting for python3 support: librabbitmq
 COPY jupyter_custom.js py_default_imports.js odbcinst.ini /tmp/
 RUN apt-get update && apt-get install libev4 libev-dev -y --no-install-recommends --no-upgrade && \
-    conda config --add channels conda-forge && \
     conda install cairomm jupyterlab flake8 jupyter_contrib_nbextensions yapf ipywidgets pandasql \
     dask distributed pyodbc pymc3 geopy hdf5 h5py ffmpeg autopep8 datashader bqplot pyspark \
     bokeh python-snappy lz4 boost scipy numpy expat cgal sparsehash cairomm gxx_linux-64 -y && \

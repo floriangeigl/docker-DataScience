@@ -51,4 +51,6 @@ try Pkg.pin("MachineLearning") end
 
 Pkg.resolve()
 
+# using IJulia
+# IJulia.installkernel("Julia nodeps", "--depwarn=no")
 println("Installed all julia packages.")
