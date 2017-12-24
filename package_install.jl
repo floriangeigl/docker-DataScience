@@ -28,13 +28,15 @@ metadata_packages = [
     "TextAnalysis",
     "TimeSeries",
     "ZipFile", 
-    "IJulia"]
+    "IJulia",
+    "Plots",
+    "PyPlot"]
 
 
 Pkg.init()
 Pkg.update()
 
-for package=metadata_packages
+for package in metadata_packages
     Pkg.add(package)
 end
 
@@ -47,3 +49,7 @@ Pkg.clone("https://github.com/benhamner/MachineLearning.jl")
 Pkg.pin("MachineLearning")
 
 Pkg.resolve()
+
+Pkd.add("IJulia)
+using IJulia
+IJulia.installkernel("Julia nodeps", "--depwarn=no")
