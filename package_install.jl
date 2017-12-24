@@ -1,3 +1,5 @@
+Pkd.add("Julia)
+
 metadata_packages = [
     "BinDeps",
     "Cairo",
