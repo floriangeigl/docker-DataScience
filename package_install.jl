@@ -1,5 +1,3 @@
-Pkd.add("Julia)
-
 metadata_packages = [
     "BinDeps",
     "Cairo",
@@ -39,19 +37,20 @@ Pkg.init()
 Pkg.update()
 
 for package in metadata_packages
-    Pkg.add(package)
+    println("install $package")
+    try Pkg.add(package) end
 end
 
 # need to build XGBoost version for it to work
 Pkg.clone("https://github.com/antinucleon/XGBoost.jl.git")
-Pkg.build("XGBoost")
+try Pkg.build("XGBoost") end
 
 Pkg.clone("https://github.com/benhamner/MachineLearning.jl")
 # Pkg.clone("https://github.com/johnmyleswhite/NearestNeighbors.jl")
-Pkg.pin("MachineLearning")
+try Pkg.pin("MachineLearning") end
 
 Pkg.resolve()
 
-Pkd.add("IJulia")
-using IJulia
-IJulia.installkernel("Julia nodeps", "--depwarn=no")
+# using IJulia
+# IJulia.installkernel("Julia nodeps", "--depwarn=no")
+println("Installed all julia packages.")
