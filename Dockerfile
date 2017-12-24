@@ -27,35 +27,37 @@ RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
 
 #install julia & packages (add your packages to package_install.jl)
 COPY package_install.jl /tmp/
-RUN apt-key update && apt-get update && \
+RUN ["/bin/bash", "-c", "\
+    conda create -n julia julia --no-default-packages -y && \
+    source activate julia && \ 
+    apt-key update && apt-get update && \
     # install required libs
     apt-get install gettext hdf5-tools libpcre3-dev build-essential \
         gfortran m4 cmake libssl-dev libcurl4-openssl-dev libzmq3-dev \
         -y --no-install-recommends --no-upgrade  && \
-    # install julia
-    conda install julia -y && \
-    echo "Install packages from package_install.jl..." && \
     # install julia-packages
     dos2unix /tmp/package_install.jl && \
     julia /tmp/package_install.jl 2>&1 | tee /var/log/julia_pkg_installs.log  && \
-    layer_cleanup.sh
+    source deactivate && \
+    layer_cleanup.sh"]
 
 # Install R, R-packages and r-server (use conda install r-cran-* packages or add your packages to package_install.r)
 COPY package_install.r Rprofile odbcinst.ini /tmp/
-RUN apt-key update && apt-get update && \
+RUN ["/bin/bash", "-c", "\
+    conda create -n R r r-base r-essentials r-recommended --no-default-packages -c r -y && \
+    source activate R && \
+    apt-key update && apt-get update && \
     apt-get install unzip -y --no-install-recommends --no-upgrade && \
-    conda install r r-base r-essentials r-recommended -c r -y && \
     cat /tmp/Rprofile >> /root/.Rprofile && \
-    conda install r-ggplot2 r-gtools r-xml r-xml2 r-plyr r-rcurl \
+    conda install -n R r-ggplot2 r-gtools r-xml r-xml2 r-plyr r-rcurl \
       r-data.table r-knitr r-dplyr r-rjsonio r-nmf r-igraph r-futile.logger \
       r-zoo r-gdata r-catools r-lmtest r-gplots r-htmltools r-htmlwidgets r-dt \
       -c bioconda -c r -c BioBuilds -c conda-forge -y && \
-    echo "Install packages from package_install.r..." && \
-    /opt/conda/bin/Rscript /tmp/package_install.r 2>&1 | tee /var/log/r_pkg_installs.log && \
+    Rscript /tmp/package_install.r 2>&1 | tee /var/log/r_pkg_installs.log && \
     # install r-server
     useradd -m rstudio && \
     # set user/password for rstudio-server
-    echo "rstudio:rstudio" | chpasswd && \
+    echo 'rstudio:rstudio' | chpasswd && \
     cat /tmp/Rprofile >> /home/rstudio/.Rprofile && \
     chown -R rstudio /home/rstudio/ && chgrp -R rstudio /home/rstudio/ && \
     apt-get install ca-certificates file git libapparmor1 libedit2 \
@@ -73,7 +75,8 @@ RUN apt-key update && apt-get update && \
     mkdir -p /opt/pandoc/templates && unzip master.zip && \
     cp -r pandoc-templates*/* /opt/pandoc/templates && rm -rf pandoc-templates* && \
     mkdir /root/.pandoc && ln -s /opt/pandoc/templates /root/.pandoc/templates && \
-    layer_cleanup.sh
+    source deactivate && \
+    layer_cleanup.sh"]
         
 # Install conda/pip python3 libs and notebook extensions
 # waiting for python3 support: librabbitmq
@@ -116,22 +119,16 @@ RUN apt-get update && apt-get install libev4 libev-dev -y --no-install-recommend
     echo "c.NotebookApp.token = ''\nc.NotebookApp.password = ''\n" >> /root/.jupyter/jupyter_notebook_config.py && \
     # set freetds driver for pyodbc
     cat /tmp/odbcinst.ini >> /opt/conda/etc/odbcinst.ini && \
-    layer_cleanup.sh
-
-# install graph-tool
-RUN conda install gtk3 -c pkgw-forge && \
+    # install graph-tool
+    conda install gtk3 -c pkgw-forge && \
     conda install pygobject -y && \
     conda install graph-tool -c ostrokach-forge -y && \
-    layer_cleanup.sh
-
-# Tmp fix for jupyter overwrite issue (https://github.com/jupyter/notebook/issues/484)
-# and matplotlib
-RUN pip install notebook --pre --upgrade --no-deps --force-reinstall && \
+    # Tmp fix for jupyter overwrite issue (https://github.com/jupyter/notebook/issues/484)
+    # and matplotlib
+    pip install notebook --pre --upgrade --no-deps --force-reinstall && \
     pip install --upgrade matplotlib --no-deps --force-reinstall && \
-    layer_cleanup.sh
-    
-# fix ldconfig (libstdc++.so.6: version `CXXABI_1.3.9' not found)
-RUN echo "/opt/conda/lib" > /etc/ld.so.conf && \
+    # fix ldconfig (libstdc++.so.6: version `CXXABI_1.3.9' not found)
+    echo "/opt/conda/lib" > /etc/ld.so.conf && \
     ldconfig && \
     layer_cleanup.sh
 
