@@ -52,6 +52,6 @@ Pkg.pin("MachineLearning")
 
 Pkg.resolve()
 
-Pkd.add("IJulia)
+Pkd.add("IJulia")
 using IJulia
 IJulia.installkernel("Julia nodeps", "--depwarn=no")
