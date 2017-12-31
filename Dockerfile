@@ -2,98 +2,63 @@ FROM kaggle/python:latest
 LABEL maintainer="florian.geigl@gmail.com"
 
 COPY layer_cleanup.sh /usr/local/bin/
-
-# Install apt stuff, graph-tool, setup ssh, set timezone and update conda
+# pre-req to find fastest apt mirror
 RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
     mkdir -p /data/ && \
-    conda config --add channels conda-forge && \
+    apt-key update && apt-get update && \
+    apt-get install netselect-apt -y --no-install-recommends --no-upgrade && \
     # echo "Europe/Vienna" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata && \
     # cp /etc/timezone /tz/ && cp /etc/localtime /tz/ && \
-    apt-key update && apt-get update && \
-    # add more packages here \
-    apt-get install bash-completion vim screen htop less git mercurial subversion openssh-server supervisor xvfb locate \
-        fonts-texgyre gsfonts libcairo2 libjpeg62-turbo libpango-1.0-0 libpangocairo-1.0-0 libpng12-0 libtiff5 dos2unix \
-        unixodbc-dev unixodbc libxtst6 tdsodbc freetds-dev libarchive-dev mongodb-clients texlive-latex-recommended \
-        -y --no-install-recommends --no-upgrade && \ 
-    # setup ssh
-    mkdir /var/run/sshd && \
-    echo 'root:root' | chpasswd && \
-    sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
-    sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
-    # update conda
-    conda install conda-build pip -y && \
-    conda update conda conda-env conda-build pip -y && \
     layer_cleanup.sh
 
-#install julia & packages (add your packages to package_install.jl)
-COPY package_install.jl /tmp/
-RUN ["/bin/bash", "-c", "\
-    conda create -n julia julia --no-default-packages -y && \
-    source activate julia && \ 
-    apt-key update && apt-get update && \
-    # install required libs
-    apt-get install gettext hdf5-tools libpcre3-dev build-essential \
-        gfortran m4 cmake libssl-dev libcurl4-openssl-dev libzmq3-dev \
-        -y --no-install-recommends --no-upgrade  && \
-    # install julia-packages
-    dos2unix /tmp/package_install.jl && \
-    julia /tmp/package_install.jl 2>&1 | tee /var/log/julia_pkg_installs.log  && \
-    source deactivate && \
-    layer_cleanup.sh"]
+# Define mount volume
+VOLUME ["/data", "/var/log"]
 
-# Install R, R-packages and r-server (use conda install r-cran-* packages or add your packages to package_install.r)
-COPY package_install.r Rprofile odbcinst.ini /tmp/
-RUN ["/bin/bash", "-c", "\
-    conda create -n R r r-base r-essentials r-recommended --no-default-packages -c r -y && \
-    source activate R && \
+# Install apt stuff, graph-tool, setup ssh, set timezone and update conda
+RUN cat /etc/apt/sources.list && \
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5 && \
+    echo "deb http://repo.mongodb.org/apt/debian jessie/mongodb-org/3.6 main" | tee /etc/apt/sources.list.d/mongodb-org-3.6.list && \
+    # find fastest apt mirror
+    netselect-apt && \
+    mv ./sources.list /etc/apt/sources.list && \
+    cat /etc/apt/sources.list && \
     apt-key update && apt-get update && \
-    apt-get install unzip -y --no-install-recommends --no-upgrade && \
-    cat /tmp/Rprofile >> /root/.Rprofile && \
-    conda install -n R r-ggplot2 r-gtools r-xml r-xml2 r-plyr r-rcurl \
-      r-data.table r-knitr r-dplyr r-rjsonio r-nmf r-igraph r-futile.logger \
-      r-zoo r-gdata r-catools r-lmtest r-gplots r-htmltools r-htmlwidgets r-dt \
-      -c bioconda -c r -c BioBuilds -c conda-forge -y && \
-    Rscript /tmp/package_install.r 2>&1 | tee /var/log/r_pkg_installs.log && \
-    # install r-server
-    useradd -m rstudio && \
-    # set user/password for rstudio-server
-    echo 'rstudio:rstudio' | chpasswd && \
-    cat /tmp/Rprofile >> /home/rstudio/.Rprofile && \
-    chown -R rstudio /home/rstudio/ && chgrp -R rstudio /home/rstudio/ && \
-    apt-get install ca-certificates file git libapparmor1 libedit2 \
-        libcurl4-openssl-dev libssl-dev lsb-release psmisc python-setuptools sudo \
+    # add more packages here \
+    apt-get install bash-completion vim-tiny screen htop less git openssh-server supervisor dos2unix \
+        mongodb-org-shell mongodb-org-tools \
         -y --no-install-recommends --no-upgrade && \
-    VER=$(wget --no-check-certificate -qO- https://s3.amazonaws.com/rstudio-server/current.ver) && \
-    wget -q http://download2.rstudio.org/rstudio-server-${VER}-amd64.deb && \
-    dpkg -i rstudio-server-${VER}-amd64.deb && \
-    rm rstudio-server-*-amd64.deb && \
-    ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc /usr/local/bin && \
-    ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc-citeproc /usr/local/bin && \
-    # configure FreeTDS Driver (r-odbc sql driver)
-    cat /tmp/odbcinst.ini >> /etc/odbcinst.ini && \
-    wget https://github.com/jgm/pandoc-templates/archive/master.zip && \
-    mkdir -p /opt/pandoc/templates && unzip master.zip && \
-    cp -r pandoc-templates*/* /opt/pandoc/templates && rm -rf pandoc-templates* && \
-    mkdir /root/.pandoc && ln -s /opt/pandoc/templates /root/.pandoc/templates && \
-    source deactivate && \
-    layer_cleanup.sh"]
-        
+    # setup ssh
+    mkdir /var/run/sshd && \
+    echo 'root:datascience' | chpasswd && \
+    sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+    sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
+    conda config --add channels conda-forge && \
+    # fix ldconfig (libstdc++.so.6: version `CXXABI_1.3.9' not found)
+    echo "/opt/conda/lib" > /etc/ld.so.conf && \
+    ldconfig && \
+    layer_cleanup.sh
+       
 # Install conda/pip python3 libs and notebook extensions
-# waiting for python3 support: librabbitmq
-COPY jupyter_custom.js py_default_imports.js odbcinst.ini /tmp/
-RUN apt-get update && apt-get install libev4 libev-dev -y --no-install-recommends --no-upgrade && \
-    conda install cairomm jupyterlab flake8 jupyter_contrib_nbextensions yapf ipywidgets pandasql \
-    dask distributed pyodbc pymc3 geopy hdf5 h5py ffmpeg autopep8 datashader bqplot pyspark \
-    bokeh python-snappy lz4 boost scipy numpy expat cgal sparsehash cairomm gxx_linux-64 -y && \
+COPY jupyter_custom.js py_default_imports.js /tmp/
+RUN conda install libev jupyterlab flake8 jupyter_contrib_nbextensions yapf ipywidgets pandasql \
+        dask distributed pyodbc pymc3 geopy hdf5 h5py ffmpeg autopep8 datashader bqplot pyspark \
+        bokeh python-snappy lz4 gxx_linux-64 pika pathos pymssql tabulate gensim textblob \
+        geocoder scikit-optimize matplotlib-venn dask-searchcv jupyterthemes \
+        libarchive pyhive elasticsearch-dsl libpng libtiff jupyter_latex_envs tmux \
+        kafka-python scikit-plot fire pdir2 \
+        -y --no-channel-priority && \ 
+        # --no-update-deps
+    conda install -c damianavila82 rise -y && \
     jupyter serverextension enable --py jupyterlab --sys-prefix && \
     jupyter contrib nbextension install --sys-prefix && \
     git clone https://github.com/Calysto/notebook-extensions.git /opt/calysto_notebook-extensions && \
         cd /opt/calysto_notebook-extensions && jupyter nbextension install calysto --sys-prefix && \
     echo "codefolding/main code_font_size/code_font_size toc2/main autosavetime/main \
-        code_prettify/autopep8 scratchpad/main search-replace/main comment-uncomment/main select_keymap/main \
+        scratchpad/main search-replace/main comment-uncomment/main select_keymap/main \
         spellchecker/main toggle_all_line_numbers/main chrome-clipboard/main execute_time/ExecuteTime \
         notify/notify tree-filter/index printview/main table_beautifier/main highlighter/highlighter \
         navigation-hotkeys/main addbefore/main snippets_menu/main datestamper/main help_panel/help_panel \
+        hide_header/main freeze/main limit_output/main varInspector/main \
         # calysto
         calysto/cell-tools/main calysto/document-tools/main" \
         # install cmd
@@ -106,30 +71,18 @@ RUN apt-get update && apt-get install libev4 libev-dev -y --no-install-recommend
     mv /tmp/py_default_imports.js /tmp/py_default_imports/main.js && \
     jupyter nbextension install --sys-prefix /tmp/py_default_imports && \
     jupyter nbextension enable --sys-prefix py_default_imports/main && \
-    # cassandra driver performance stuff
-    pip install scales && \
-    # currently not working: limit_output/main hinterland/hinterland
-    pip install tabulate ftfy pyflux cookiecutter segtok gensim textblob pandas-ply influxdb bpython implicit \
-        jupyterthemes cassandra-driver sklearn-pandas geocoder readchar lightfm scikit-optimize python-tds \
-        matplotlib-venn pathos pika tpot pymssql dask-searchcv dask-ec2 libarchive pylzma hdfs cqlsh pyhive \
-        elasticsearch-dsl tables && \
+    pip install ftfy scales pyflux cookiecutter segtok pandas-ply influxdb bpython implicit \
+        cassandra-driver sklearn-pandas readchar lightfm python-tds tpot dask-ec2 pylzma \
+        hdfs cqlsh tables xgbfir && \
     # set default notebook theme, font etc.
     jt -t grade3 -f sourcemed -T -N -cellw 1200 && \
     # disable notebook authentication
     echo "c.NotebookApp.token = ''\nc.NotebookApp.password = ''\n" >> /root/.jupyter/jupyter_notebook_config.py && \
-    # set freetds driver for pyodbc
-    cat /tmp/odbcinst.ini >> /opt/conda/etc/odbcinst.ini && \
     # install graph-tool
-    conda install gtk3 -c pkgw-forge && \
-    conda install pygobject -y && \
-    conda install graph-tool -c ostrokach-forge -y && \
-    # Tmp fix for jupyter overwrite issue (https://github.com/jupyter/notebook/issues/484)
-    # and matplotlib
-    pip install notebook --pre --upgrade --no-deps --force-reinstall && \
-    pip install --upgrade matplotlib --no-deps --force-reinstall && \
-    # fix ldconfig (libstdc++.so.6: version `CXXABI_1.3.9' not found)
-    echo "/opt/conda/lib" > /etc/ld.so.conf && \
-    ldconfig && \
+    conda install gtk3 -c pkgw-forge --no-update-deps --no-channel-priority -y && \
+    conda install pygobject --no-update-deps --no-channel-priority -y && \
+    conda install graph-tool -c ostrokach-forge --no-update-deps --no-channel-priority -y && \
+    conda upgrade notebook --no-channel-priority --no-update-deps -y && \
     layer_cleanup.sh
 
 # Copy some start script into the container.
@@ -148,11 +101,8 @@ RUN chmod +x /usr/local/bin/init.sh /usr/local/bin/export_environment.sh && \
     cat /tmp/append2bashprofile.sh >> ~/.bash_profile && \
     layer_cleanup.sh
 
-# Expose jupyter notebook, jupyter labs, r-studio-server and ss port.
-EXPOSE 8888 8889 8787 22 9001
-
-# Define mount volume
-VOLUME ["/data", "/var/log"]
+# Expose jupyter notebook (8888), jupyter labs (8889), ss port (22) and supervisor web interface (9001).
+EXPOSE 8888 8889 22 9001
 
 # copy supervisor conf
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf

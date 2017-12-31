@@ -1,0 +1,13 @@
+# fix line endings for linux scripts on windoof
+*.sh text eol=lf
+*.js text eol=lf
+*.conf text eol=lf
+*.r text eol=lf
+r/Rprofile  text eol=lf
+*.jl text eol=lf
+*.py text eol=lf
+*.toml text eol=lf
+pypirc eol=lf
+*.json
+Dockerfile
+DockerfileFull

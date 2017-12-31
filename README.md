@@ -1,5 +1,5 @@
-# Massive Data Science Image
-Dockerfile containing lots of tools for Data Science (python2/3, Julia, jupyter, R, R-Studio-Server...)
+# Data Science Image
+Dockerfile containing lots of tools for Data Science
 
 ## Run
 ```
@@ -15,7 +15,11 @@ docker run --rm -i -t
 ```
 
 ## Ports
-After starting the container you should be able to access jupyter (python2/3, julia & R) over [http://localhost:8888](http://localhost:8888) (jupyter labs (alpha) runs on 8889). Furthermore, you can access an r-studio-server at [http://localhost:8787](http://localhost:8787). Supervisord webservice (service status; restart services; logs; ...) on 9001. If you want to ssh into the container simply use port 2222.
+After starting the container you should be able to access jupyter (python 3, julia & R) over [http://localhost:8888](http://localhost:8888) (jupyter labs runs on 8889). Furthermore, you can access an r-studio-server at [http://localhost:8787](http://localhost:8787). Supervisord webservice (service status; restart services; logs; ...) on 9001. If you want to ssh into the container simply use port 2222.
+
+## Credentials
+### SSh credentials
+root:datascience
 
 ## Tips & Tricks
 

@@ -1,4 +1,5 @@
 metadata_packages = [
+    "Rmath",
     "BinDeps",
     "Cairo",
     "Calculus",
