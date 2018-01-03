@@ -45,7 +45,7 @@ RUN conda install libev jupyterlab flake8 jupyter_contrib_nbextensions yapf ipyw
         bokeh python-snappy lz4 gxx_linux-64 pika pathos pymssql tabulate gensim textblob \
         geocoder scikit-optimize matplotlib-venn dask-searchcv jupyterthemes \
         libarchive pyhive elasticsearch-dsl libpng libtiff jupyter_latex_envs tmux \
-        kafka-python scikit-plot fire pdir2 \
+        kafka-python scikit-plot fire pdir2 h2o \
         -y --no-channel-priority && \ 
         # --no-update-deps
     conda install -c damianavila82 rise -y && \
