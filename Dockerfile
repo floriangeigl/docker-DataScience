@@ -19,8 +19,8 @@ RUN cat /etc/apt/sources.list && \
     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5 && \
     echo "deb http://repo.mongodb.org/apt/debian jessie/mongodb-org/3.6 main" | tee /etc/apt/sources.list.d/mongodb-org-3.6.list && \
     # find fastest apt mirror
-    netselect-apt && \
-    mv ./sources.list /etc/apt/sources.list && \
+    # netselect-apt && \
+    # mv ./sources.list /etc/apt/sources.list && \
     cat /etc/apt/sources.list && \
     apt-key update && apt-get update && \
     # add more packages here \
@@ -79,10 +79,10 @@ RUN conda install libev jupyterlab flake8 jupyter_contrib_nbextensions yapf ipyw
     # disable notebook authentication
     echo "c.NotebookApp.token = ''\nc.NotebookApp.password = ''\n" >> /root/.jupyter/jupyter_notebook_config.py && \
     # install graph-tool
-    conda install gtk3 -c pkgw-forge --no-update-deps --no-channel-priority -y && \
-    conda install pygobject --no-update-deps --no-channel-priority -y && \
-    conda install graph-tool -c ostrokach-forge --no-update-deps --no-channel-priority -y && \
-    conda upgrade notebook --no-channel-priority --no-update-deps -y && \
+    conda install gtk3 -c pkgw-forge --no-channel-priority -y && \
+    conda install pygobject --no-channel-priority -y && \
+    conda install graph-tool -c ostrokach-forge --no-channel-priority -y && \
+    conda update jupyter notebook jupyter_core --no-channel-priority  -y && \
     layer_cleanup.sh
 
 # Copy some start script into the container.
@@ -106,6 +106,12 @@ EXPOSE 8888 8889 22 9001
 
 # copy supervisor conf
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# test basic notebook
+COPY tests/py3_test_notebook.ipynb /tmp/
+RUN cd /tmp/ && \
+    jupyter nbconvert --ExecutePreprocessor.timeout=600 --to notebook --execute py3_test_notebook.ipynb && \
+    layer_cleanup.sh
 
 # Start all scripts
 ENTRYPOINT ["init.sh"]
