@@ -40,7 +40,9 @@ Add an alias with the following command (notice the differnce with pwd)
 dsdocker='docker run --rm -it -p 8888:8888 -p 8889:8889 -p 8787:8787 -p 2222:22 -p 9001:9001 -v $(pwd):/data --name dsdocker floriangeigl/datascience /bin/bash'
 ```
 ### Cygwin Shortcut
+```
 dsdocker='docker run --rm -it -p 8888:8888 -p 8889:8889 -p 8787:8787 -p 2222:22 -p 9001:9001 -v $(cygpath -aw $(pwd)):/data --name dsdocker floriangeigl/datascience /bin/bash'
+```
 
 
 No you can simple fire up a Data Science container by typing ```dsdocker``` in your powershell. This will also mount the working directory into /data/ in the docker container.
