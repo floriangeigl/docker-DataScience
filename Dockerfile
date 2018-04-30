@@ -84,7 +84,7 @@ RUN conda install libev jupyterlab flake8 jupyter_contrib_nbextensions yapf ipyw
     conda install graph-tool -c ostrokach-forge --no-channel-priority -y && \
     conda update jupyter notebook jupyter_core --no-channel-priority  -y && \
     # tmp fixes for tensorflow
-    pip install --upgrade keras tensorflow -y && \
+    pip install --upgrade tensorflow -y && \
     layer_cleanup.sh
 
 # Copy some start script into the container.
