@@ -74,16 +74,16 @@ RUN pip install --upgrade pip && \
     jupyter nbextension enable --sys-prefix py_default_imports/main && \
     pip install ftfy scales pyflux cookiecutter segtok pandas-ply influxdb bpython implicit \
         cassandra-driver sklearn-pandas readchar lightfm python-tds tpot dask-ec2 pylzma \
-        hdfs cqlsh tables xgbfir pygelf featexp && \
+        hdfs cqlsh tables xgbfir pygelf featexp pycm && \
     # set default notebook theme, font etc.
     jt -t grade3 -f sourcemed -T -N -cellw 1200 && \
     # disable notebook authentication
     echo "c.NotebookApp.token = ''\nc.NotebookApp.password = ''\n" >> /root/.jupyter/jupyter_notebook_config.py && \
     # install graph-tool
-    conda install gtk3 -c pkgw-forge --no-channel-priority -y && \
-    conda install pygobject --no-channel-priority -y && \
-    conda install graph-tool -c ostrokach-forge --no-channel-priority -y && \
-    conda update jupyter notebook jupyter_core --no-channel-priority  -y && \
+    # conda install gtk3 -c pkgw-forge --no-channel-priority -y && \
+    # conda install pygobject --no-channel-priority -y && \
+    # conda install graph-tool -c ostrokach-forge --no-channel-priority -y && \
+    # conda update jupyter notebook jupyter_core --no-channel-priority  -y && \
     # tmp fixes for tensorflow
     # pip install --upgrade pip && \
     # pip install --upgrade tensorflow && \
