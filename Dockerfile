@@ -74,7 +74,7 @@ RUN pip install --upgrade pip && \
     jupyter nbextension enable --sys-prefix py_default_imports/main && \
     pip install ftfy scales pyflux cookiecutter segtok pandas-ply influxdb bpython implicit \
         cassandra-driver sklearn-pandas readchar lightfm python-tds tpot dask-ec2 pylzma \
-        hdfs cqlsh tables xgbfir pygelf featexp pycm && \
+        hdfs cqlsh tables xgbfir pygelf featexp pycm awscli && \
     # set default notebook theme, font etc.
     jt -t grade3 -f sourcemed -T -N -cellw 1200 && \
     # disable notebook authentication
