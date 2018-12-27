@@ -1,4 +1,4 @@
-FROM kaggle/python:latest
+FROM gcr.io/kaggle-images/python
 LABEL maintainer="florian.geigl@gmail.com"
 
 COPY layer_cleanup.sh /usr/local/bin/
