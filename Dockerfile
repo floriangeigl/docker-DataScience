@@ -18,6 +18,7 @@ VOLUME ["/data", "/var/log"]
 RUN cat /etc/apt/sources.list && \
     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5 && \
     echo "deb http://repo.mongodb.org/apt/debian jessie/mongodb-org/3.6 main" | tee /etc/apt/sources.list.d/mongodb-org-3.6.list && \
+    echo "deb http://ftp.debian.org/debian jessie-backports main" | tee /etc/apt/sources.list.d/jessie-backports.list && \
     # find fastest apt mirror
     # netselect-apt && \
     # mv ./sources.list /etc/apt/sources.list && \
