@@ -112,12 +112,12 @@ EXPOSE 8888 8889 22 9001
 # copy supervisor conf
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
+# Start all scripts
+ENTRYPOINT ["init.sh"]
+CMD [""]
+
 # test basic notebook
 COPY tests/py3_test_notebook.ipynb /tmp/
 RUN cd /tmp/ && \
     jupyter nbconvert --ExecutePreprocessor.timeout=600 --to notebook --execute py3_test_notebook.ipynb && \
     layer_cleanup.sh
-
-# Start all scripts
-ENTRYPOINT ["init.sh"]
-CMD [""]
