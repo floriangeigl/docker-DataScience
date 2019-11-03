@@ -119,5 +119,6 @@ CMD [""]
 # test basic notebook
 COPY tests/py3_test_notebook.ipynb /tmp/
 RUN cd /tmp/ && \
-    sh -c "jupyter nbconvert --ExecutePreprocessor.timeout=600 --to notebook --execute py3_test_notebook.ipynb" && \
+    pip install --upgrade nbconvert jupyter_client && \
+    jupyter nbconvert --ExecutePreprocessor.timeout=600 --to notebook --execute py3_test_notebook.ipynb && \
     layer_cleanup.sh
