@@ -119,5 +119,5 @@ CMD [""]
 # test basic notebook
 COPY tests/py3_test_notebook.ipynb /tmp/
 RUN cd /tmp/ && \
-    jupyter nbconvert --execute /tmp/py3_test_notebook.ipynb && \
+    /bin/bash -c "jupyter nbconvert --execute /tmp/py3_test_notebook.ipynb" && \
     layer_cleanup.sh
