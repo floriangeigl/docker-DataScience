@@ -47,7 +47,7 @@ RUN pip install --upgrade pip && \
         bokeh python-snappy lz4 gxx_linux-64 pika pathos pymssql tabulate gensim textblob \
         geocoder scikit-optimize matplotlib-venn dask-searchcv jupyterthemes \
         libarchive pyhive elasticsearch-dsl libpng libtiff jupyter_latex_envs tmux \
-        kafka-python scikit-plot fire pdir2 h2o turbodbc \
+        kafka-python scikit-plot fire pdir2 h2o turbodbc ipympl \
         -y --no-channel-priority && \ 
         # --no-update-deps
     conda install -c damianavila82 rise -y && \
