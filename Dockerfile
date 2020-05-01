@@ -2,14 +2,8 @@ FROM gcr.io/kaggle-images/python
 LABEL maintainer="florian.geigl@gmail.com"
 
 COPY layer_cleanup.sh /usr/local/bin/
-# pre-req to find fastest apt mirror
-RUN chmod +x /usr/local/bin/layer_cleanup.sh && \
-    mkdir -p /data/ && \
-    apt-key update && apt-get update && \
-    apt-get install netselect-apt -y --no-install-recommends --no-upgrade && \
-    # echo "Europe/Vienna" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata && \
-    # cp /etc/timezone /tz/ && cp /etc/localtime /tz/ && \
-    layer_cleanup.sh
+RUN mkdir -p /data/ && \
+    chmod +x /usr/local/bin/layer_cleanup.sh
 
 # Define mount volume
 VOLUME ["/data", "/var/log"]
