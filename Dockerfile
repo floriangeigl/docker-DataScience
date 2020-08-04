@@ -44,7 +44,7 @@ RUN pip install --upgrade pip && \
         geocoder scikit-optimize matplotlib-venn dask-searchcv jupyterthemes \
         libarchive pyhive elasticsearch-dsl libpng libtiff jupyter_latex_envs tmux \
         kafka-python scikit-plot fire pdir2 h2o turbodbc ipympl lime pygelf cassandra-driver influxdb \
-        readchar awscli tpot dask-ec2 implicit segtok cookiecutter ftfy \
+        readchar awscli tpot dask-ec2 implicit segtok cookiecutter ftfy cython \
         -y --no-channel-priority && \ 
         # --no-update-deps
     conda install -c damianavila82 rise -y && \
