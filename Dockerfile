@@ -43,7 +43,8 @@ RUN pip install --upgrade pip && \
         bokeh python-snappy lz4 gxx_linux-64 pika pathos pymssql tabulate gensim textblob \
         geocoder scikit-optimize matplotlib-venn dask-searchcv jupyterthemes \
         libarchive pyhive elasticsearch-dsl libpng libtiff jupyter_latex_envs tmux \
-        kafka-python scikit-plot fire pdir2 h2o turbodbc ipympl \
+        kafka-python scikit-plot fire pdir2 h2o turbodbc ipympl lime pygelf cassandra-driver influxdb \
+        readchar awscli tpot dask-ec2 implicit segtok cookiecutter ftfy \
         -y --no-channel-priority && \ 
         # --no-update-deps
     conda install -c damianavila82 rise -y && \
@@ -69,9 +70,8 @@ RUN pip install --upgrade pip && \
     mv /tmp/py_default_imports.js /tmp/py_default_imports/main.js && \
     jupyter nbextension install --sys-prefix /tmp/py_default_imports && \
     jupyter nbextension enable --sys-prefix py_default_imports/main && \
-    pip install ftfy scales pyflux cookiecutter segtok pandas-ply influxdb bpython implicit \
-        cassandra-driver sklearn-pandas readchar lightfm python-tds tpot dask-ec2 pylzma \
-        hdfs cqlsh tables xgbfir pygelf featexp pycm awscli lime sweetviz pycaret && \
+    pip install scales pyflux pandas-ply bpython sklearn-pandas lightfm python-tds pylzma \
+        hdfs cqlsh tables xgbfir featexp pycm sweetviz pycaret && \
     # set default notebook theme, font etc.
     jt -t grade3 -f sourcemed -T -N -cellw 1200 && \
     # disable notebook authentication
