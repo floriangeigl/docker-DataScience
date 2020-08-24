@@ -70,7 +70,7 @@ RUN pip install --upgrade pip && \
     mv /tmp/py_default_imports.js /tmp/py_default_imports/main.js && \
     jupyter nbextension install --sys-prefix /tmp/py_default_imports && \
     jupyter nbextension enable --sys-prefix py_default_imports/main && \
-    pip install scales pyflux pandas-ply bpython sklearn-pandas lightfm python-tds pylzma \
+    pip install scales git+https://github.com/RJT1990/pyflux pandas-ply bpython sklearn-pandas lightfm python-tds pylzma \
         hdfs cqlsh tables xgbfir featexp pycm sweetviz pycaret && \
     # set default notebook theme, font etc.
     jt -t grade3 -f sourcemed -T -N -cellw 1200 && \
