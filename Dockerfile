@@ -47,7 +47,7 @@ RUN pip install --upgrade pip && \
         readchar awscli tpot dask-ec2 implicit segtok cookiecutter ftfy cython \
         -y --no-channel-priority && \ 
         # --no-update-deps
-    conda install -c damianavila82 rise -y && \
+    # conda install -c damianavila82 rise -y && \
     jupyter serverextension enable --py jupyterlab --sys-prefix && \
     jupyter contrib nbextension install --sys-prefix && \
     git clone https://github.com/Calysto/notebook-extensions.git /opt/calysto_notebook-extensions && \
