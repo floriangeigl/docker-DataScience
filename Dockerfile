@@ -1,12 +1,13 @@
 FROM gcr.io/kaggle-images/python
 LABEL maintainer="florian.geigl@gmail.com"
 
-COPY layer_cleanup.sh /usr/local/bin/
+# COPY layer_cleanup.sh /usr/local/bin/
 RUN mkdir -p /data/ && \
     apt update && apt install dirmngr -y && \
-    chmod +x /usr/local/bin/layer_cleanup.sh && \
+    # chmod +x /usr/local/bin/layer_cleanup.sh && \
     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7638D0442B90D010 && \
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC && \
+    /tmp/clean-layer.sh
 
 # Define mount volume
 VOLUME ["/data", "/var/log"]
@@ -35,7 +36,7 @@ RUN cat /etc/apt/sources.list && \
     # fix ldconfig (libstdc++.so.6: version `CXXABI_1.3.9' not found)
     echo "/opt/conda/lib" > /etc/ld.so.conf && \
     ldconfig && \
-    layer_cleanup.sh
+    /tmp/clean-layer.sh
        
 # Install conda/pip python3 libs and notebook extensions
 COPY jupyter_custom.js py_default_imports.js /tmp/
@@ -86,7 +87,7 @@ RUN pip install --upgrade pip && \
     # tmp fixes for tensorflow
     # pip install --upgrade pip && \
     # pip install --upgrade tensorflow && \
-    layer_cleanup.sh
+    /tmp/clean-layer.sh
 
 # Copy some start script into the container.
 COPY export_environment.sh \
@@ -102,7 +103,7 @@ RUN chmod +x /usr/local/bin/init.sh /usr/local/bin/export_environment.sh && \
     cat /tmp/append2bashrc.sh >> /etc/bash.bashrc && \
     cat /tmp/append2bashrc.sh >> ~/.bashrc && \
     cat /tmp/append2bashprofile.sh >> ~/.bash_profile && \
-    layer_cleanup.sh
+    /tmp/clean-layer.sh
 
 # Expose jupyter notebook (8888), jupyter labs (8889), ss port (22) and supervisor web interface (9001).
 EXPOSE 8888 8889 22 9001
