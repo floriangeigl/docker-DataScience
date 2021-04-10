@@ -3,9 +3,10 @@ LABEL maintainer="florian.geigl@gmail.com"
 
 COPY layer_cleanup.sh /usr/local/bin/
 RUN mkdir -p /data/ && \
-    chmod +x /usr/local/bin/layer_cleanup.sh && \
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7638D0442B90D010 && \
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC
+    chmod +x /usr/local/bin/layer_cleanup.sh 
+    # && \
+    # apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7638D0442B90D010 && \
+    # apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC
 
 # Define mount volume
 VOLUME ["/data", "/var/log"]
