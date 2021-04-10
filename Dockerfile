@@ -20,7 +20,8 @@ RUN cat /etc/apt/sources.list && \
     # netselect-apt && \
     # mv ./sources.list /etc/apt/sources.list && \
     cat /etc/apt/sources.list && \
-    apt-key update && apt-get update && \
+    # apt-key update && 
+    apt-get update && \
     # add more packages here \
     apt-get install bash-completion vim-tiny screen htop less git openssh-server supervisor dos2unix \
         mongodb-org-shell mongodb-org-tools \
