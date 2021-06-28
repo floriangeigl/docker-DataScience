@@ -25,7 +25,7 @@ RUN cat /etc/apt/sources.list && \
     apt-get update && \
     # add more packages here \
     apt-get install bash-completion vim-tiny screen htop less git openssh-server supervisor dos2unix \
-        mongodb-org-shell mongodb-org-tools \
+        mongodb-org-shell mongodb-org-tools libpthread-stubs0-dev \
         -y --no-install-recommends --no-upgrade && \
     # setup ssh
     mkdir /var/run/sshd && \
