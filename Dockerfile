@@ -3,7 +3,7 @@ LABEL maintainer="florian.geigl@gmail.com"
 
 # COPY layer_cleanup.sh /usr/local/bin/
 RUN mkdir -p /data/ && \
-    apt update && apt install dirmngr gpg -y && \
+    apt update && apt install dirmngr gpg gnupg -y && \
     # chmod +x /usr/local/bin/layer_cleanup.sh && \
     /tmp/clean-layer.sh
 
