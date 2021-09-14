@@ -3,10 +3,8 @@ LABEL maintainer="florian.geigl@gmail.com"
 
 # COPY layer_cleanup.sh /usr/local/bin/
 RUN mkdir -p /data/ && \
-    apt update && apt install dirmngr -y && \
+    apt update && apt install dirmngr gpg -y && \
     # chmod +x /usr/local/bin/layer_cleanup.sh && \
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7638D0442B90D010 && \
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC && \
     /tmp/clean-layer.sh
 
 # Define mount volume
