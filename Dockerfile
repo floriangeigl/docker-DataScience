@@ -47,7 +47,7 @@ RUN pip install --upgrade pip && \
         geocoder scikit-optimize matplotlib-venn dask-searchcv jupyterthemes \
         libarchive pyhive elasticsearch-dsl libpng libtiff jupyter_latex_envs tmux \
         kafka-python scikit-plot fire pdir2 h2o turbodbc ipympl lime pygelf cassandra-driver influxdb \
-        readchar awscli tpot dask-ec2 implicit segtok cookiecutter ftfy cython \
+        readchar awscli tpot dask-ec2 implicit segtok cookiecutter ftfy cython prophet \
         -y --no-channel-priority && \ 
         # --no-update-deps
     # conda install -c damianavila82 rise -y && \
@@ -76,7 +76,7 @@ RUN pip install --upgrade pip && \
     pip install scales pandas-ply bpython sklearn-pandas lightfm python-tds \
         hdfs cqlsh tables xgbfir featexp pycm sweetviz pycaret && \
     # install timeseries tools
-    pip install sktime tsfresh autots prophet darts atspy kats && \
+    pip install sktime tsfresh autots darts atspy kats && \
     # set default notebook theme, font etc.
     jt -t grade3 -f sourcemed -T -N -cellw 1200 && \
     # disable notebook authentication
