@@ -14,6 +14,7 @@ VOLUME ["/data", "/var/log"]
 RUN cat /etc/apt/sources.list && \
     apt-get update && \
     apt-get install --reinstall ca-certificates -y && \
+    apt-get install gcc gfortran python3-dev libopenblas-dev liblapack-dev -y && \
     lsb_release -dc && \
     wget -qO - https://www.mongodb.org/static/pgp/server-5.0.asc | apt-key add - && \
     echo "deb [ arch=amd64,arm64 ] http://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/5.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org.list && \
