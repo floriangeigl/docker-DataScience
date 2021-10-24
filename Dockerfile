@@ -40,14 +40,14 @@ RUN cat /etc/apt/sources.list && \
        
 # Install conda/pip python3 libs and notebook extensions
 COPY jupyter_custom.js py_default_imports.js /tmp/
-RUN pip install --upgrade pip && \
+RUN pip install --upgrade pip setuptools wheel && \
     conda install libev jupyterlab flake8 jupyter_contrib_nbextensions yapf ipywidgets pandasql \
         dask distributed pyodbc pymc3 geopy hdf5 h5py ffmpeg autopep8 datashader bqplot pyspark \
         bokeh python-snappy lz4 gxx_linux-64 pika pathos pymssql tabulate gensim textblob \
         geocoder scikit-optimize matplotlib-venn dask-searchcv jupyterthemes \
         libarchive pyhive elasticsearch-dsl libpng libtiff jupyter_latex_envs tmux \
         kafka-python scikit-plot fire pdir2 h2o turbodbc ipympl lime pygelf cassandra-driver influxdb \
-        readchar awscli tpot dask-ec2 implicit segtok cookiecutter ftfy cython prophet \
+        readchar awscli tpot dask-ec2 implicit segtok cookiecutter ftfy cython prophet scipy llvmlite \
         -y --no-channel-priority && \ 
         # --no-update-deps
     # conda install -c damianavila82 rise -y && \
