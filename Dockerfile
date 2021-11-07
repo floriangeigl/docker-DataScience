@@ -42,7 +42,7 @@ RUN cat /etc/apt/sources.list && \
 # Install conda/pip python3 libs and notebook extensions
 COPY jupyter_custom.js py_default_imports.js /tmp/
 RUN pip install --upgrade pip setuptools wheel && \
-    pip install llvmlite --ignore installed && \
+    pip install llvmlite --ignore-installed && \
     conda install libev jupyterlab flake8 jupyter_contrib_nbextensions yapf ipywidgets pandasql \
         dask distributed pyodbc pymc3 geopy hdf5 h5py ffmpeg autopep8 datashader bqplot pyspark \
         bokeh python-snappy lz4 gxx_linux-64 pika pathos pymssql tabulate gensim textblob \
